@@ -1,0 +1,135 @@
+# SwitchBoard Policy Configuration
+# Section 6.3
+#
+# Rules are evaluated in ascending priority order (lower number = evaluated first).
+# The first rule whose conditions ALL match the SelectionContext wins.
+# If no rule matches, the fallback_profile is used.
+#
+# Condition keys map directly to SelectionContext attributes:
+#   stream            boolean
+#   tools_present     boolean
+#   priority          string  (from X-SwitchBoard-Priority header)
+#   tenant_id         string  (from X-SwitchBoard-Tenant-ID header)
+#   model_hint        string  (the model field the caller sent)
+#   min_estimated_tokens  integer (context.estimated_tokens >= value)
+#   max_estimated_tokens  integer (context.estimated_tokens <= value)
+#   min_max_tokens        integer (context.max_tokens >= value)
+#
+# List values use "any of" semantics.
+
+version: "1"
+fallback_profile: "default"
+
+rules:
+
+  # ------------------------------------------------------------------
+  # Priority 10 — explicit caller overrides
+  # ------------------------------------------------------------------
+
+  - name: caller_requests_capable
+    priority: 10
+    profile: capable
+    description: >
+      Caller explicitly requested the capable profile via model hint.
+    conditions:
+      model_hint: ["capable", "gpt-4o", "claude-3-5-sonnet"]
+
+  - name: caller_requests_local
+    priority: 11
+    profile: local
+    description: >
+      Caller explicitly requested the local/private profile.
+    conditions:
+      model_hint: ["local", "private", "llama3", "ollama"]
+
+  # ------------------------------------------------------------------
+  # Priority 20 — high-priority tenants always get the capable model
+  # ------------------------------------------------------------------
+
+  - name: high_priority_tenant
+    priority: 20
+    profile: capable
+    description: >
+      Requests from high-priority tenants are always routed to the capable model
+      regardless of estimated token count.
+    conditions:
+      priority: "high"
+
+  # ------------------------------------------------------------------
+  # Priority 30 — tool use requires a model with function-calling support
+  # ------------------------------------------------------------------
+
+  - name: tool_use
+    priority: 30
+    profile: capable
+    description: >
+      Requests that include a tools array need a model with reliable
+      function-calling capability.
+    conditions:
+      tools_present: true
+
+  # ------------------------------------------------------------------
+  # Priority 40 — streaming short requests go to the fast model
+  # ------------------------------------------------------------------
+
+  - name: streaming_short
+    priority: 40
+    profile: fast
+    description: >
+      Short streaming requests (≤ 512 estimated tokens) go to the fast
+      low-latency model to minimise time-to-first-token.
+    conditions:
+      stream: true
+      max_estimated_tokens: 512
+
+  # ------------------------------------------------------------------
+  # Priority 50 — large context requests go to the capable model
+  # ------------------------------------------------------------------
+
+  - name: large_context
+    priority: 50
+    profile: capable
+    description: >
+      Requests with a large estimated token count (> 4096) require a
+      model with a large context window.
+    conditions:
+      min_estimated_tokens: 4096
+
+  # ------------------------------------------------------------------
+  # Priority 60 — long requested output goes to capable
+  # ------------------------------------------------------------------
+
+  - name: long_output_requested
+    priority: 60
+    profile: capable
+    description: >
+      Caller requested more than 2048 output tokens; route to the capable
+      model which handles long outputs more reliably.
+    conditions:
+      min_max_tokens: 2048
+
+  # ------------------------------------------------------------------
+  # Priority 70 — low-priority / background tasks go to local model
+  # ------------------------------------------------------------------
+
+  - name: low_priority_local
+    priority: 70
+    profile: local
+    description: >
+      Low-priority background requests are sent to the local model to
+      minimise cloud API spend.
+    conditions:
+      priority: "low"
+
+  # ------------------------------------------------------------------
+  # Priority 100 — catch-all fast path for ordinary short requests
+  # ------------------------------------------------------------------
+
+  - name: default_short_request
+    priority: 100
+    profile: fast
+    description: >
+      Ordinary short requests (≤ 4096 estimated tokens, no special requirements)
+      go to the fast model.
+    conditions:
+      max_estimated_tokens: 4096

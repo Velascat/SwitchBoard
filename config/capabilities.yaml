@@ -1,0 +1,48 @@
+# SwitchBoard Capability Registry
+# Section 6.5
+#
+# Maps profile names to the concrete downstream model identifiers that 9router
+# will use when routing to providers.  This is the single place where abstract
+# profile names are bound to real model strings.
+#
+# Changing the downstream_model here immediately affects all routing without
+# touching policy rules or application code (the registry is reloaded on next
+# request after a process restart, or via the reload API when implemented).
+#
+# Schema per profile entry:
+#   downstream_model    The model identifier string sent to 9router / the provider.
+#   provider_hint       Optional hint to 9router about which provider to use.
+#                       9router may ignore this if it has its own routing logic.
+#   notes               Optional human-readable notes about this mapping.
+
+version: "1"
+
+profiles:
+
+  fast:
+    downstream_model: gpt-4o-mini
+    provider_hint: openai
+    notes: >
+      OpenAI gpt-4o-mini — fast, cheap, good for short turns.
+      Switch to gpt-4.1-mini when available and stable.
+
+  capable:
+    downstream_model: gpt-4o
+    provider_hint: openai
+    notes: >
+      OpenAI gpt-4o — best quality available via OpenAI API.
+      Can be swapped to claude-3-5-sonnet or gemini-1.5-pro-002
+      by changing downstream_model here.
+
+  local:
+    downstream_model: llama3
+    provider_hint: ollama
+    notes: >
+      Meta Llama 3 8B running via Ollama on the local network.
+      Adjust to llama3:70b for better quality at higher cost.
+
+  default:
+    downstream_model: gpt-4o-mini
+    provider_hint: openai
+    notes: >
+      Same as the 'fast' profile; used when policy falls back with no rule match.

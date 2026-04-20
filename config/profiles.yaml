@@ -1,0 +1,97 @@
+# SwitchBoard Model Profiles
+# Section 6.4
+#
+# Each profile is a named set of requirements and preferences.
+# Profiles decouple the policy rules from the actual downstream model
+# identifiers — you can change the upstream model without touching the
+# policy rules.
+#
+# Schema per profile:
+#   description         Human-readable explanation.
+#   tags                Free-form list of capability tags for documentation.
+#   preferred_provider  Hint to 9router about which provider to prefer.
+#   max_context_tokens  Maximum supported context window (informational).
+#   supports_tools      Whether this profile's model reliably supports tool use.
+#   supports_vision     Whether this profile's model supports image inputs.
+#   cost_tier           Relative cost tier: low | medium | high
+#   latency_tier        Relative latency tier: low | medium | high
+#                         low = fast/cheap, high = slow/capable
+
+version: "1"
+
+profiles:
+
+  # ------------------------------------------------------------------
+  # fast — low-latency, low-cost model for short routine requests
+  # ------------------------------------------------------------------
+  fast:
+    description: >
+      Low-latency, cost-efficient model suitable for short conversational
+      turns, summarisation, and classification tasks.
+    tags:
+      - general
+      - chat
+      - summarisation
+      - classification
+    preferred_provider: openai
+    max_context_tokens: 128000
+    supports_tools: true
+    supports_vision: false
+    cost_tier: low
+    latency_tier: low
+
+  # ------------------------------------------------------------------
+  # capable — high-quality model for complex or long-context tasks
+  # ------------------------------------------------------------------
+  capable:
+    description: >
+      High-capability model for complex reasoning, long-context tasks,
+      code generation, and multi-step tool use.
+    tags:
+      - reasoning
+      - code
+      - long-context
+      - tool-use
+      - complex
+    preferred_provider: openai
+    max_context_tokens: 128000
+    supports_tools: true
+    supports_vision: true
+    cost_tier: high
+    latency_tier: medium
+
+  # ------------------------------------------------------------------
+  # local — on-premise model for private or low-priority workloads
+  # ------------------------------------------------------------------
+  local:
+    description: >
+      Locally hosted open-weight model.  No data leaves the network.
+      Suitable for sensitive data, batch/background tasks, and cost
+      reduction for low-priority requests.
+    tags:
+      - private
+      - on-premise
+      - low-cost
+      - batch
+    preferred_provider: ollama
+    max_context_tokens: 8192
+    supports_tools: false
+    supports_vision: false
+    cost_tier: low
+    latency_tier: medium
+
+  # ------------------------------------------------------------------
+  # default — generic fallback used when no rule matches
+  # ------------------------------------------------------------------
+  default:
+    description: >
+      Generic fallback profile.  Resolves to the same downstream model
+      as the 'fast' profile but signals that no explicit rule was matched.
+    tags:
+      - fallback
+    preferred_provider: openai
+    max_context_tokens: 128000
+    supports_tools: true
+    supports_vision: false
+    cost_tier: low
+    latency_tier: low

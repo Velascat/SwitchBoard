@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+*.egg-link
+*.pth
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+lib/
+lib64/
+*.dist-info/
+
+# Pytest / test cache
+.pytest_cache/
+.cache/
+pytest_cache/
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+nosetests.xml
+test-results/
+junit.xml
+
+# MyPy / type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Ruff
+.ruff_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs and runtime data
+*.log
+logs/
+decisions.jsonl
+*.jsonl
+
+# Secrets / credentials
+*.pem
+*.key
+secrets/
+
+# Hatch
+.hatch/
