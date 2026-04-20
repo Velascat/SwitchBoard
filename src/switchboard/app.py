@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from switchboard.config import load_settings
 from switchboard.observability.logging import configure_logging, get_logger
 from switchboard.services.capability_registry import CapabilityRegistry
-from switchboard.services.decision_log import DecisionLog
+from switchboard.services.decision_logger import DecisionLogger
 from switchboard.services.policy_engine import PolicyEngine
 from switchboard.adapters.file_policy_store import FilePolicyStore
 from switchboard.adapters.file_profile_store import FileProfileStore
@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     profile_store = FileProfileStore(settings.resolve_path("profiles_path"))
     capability_registry = CapabilityRegistry(settings.resolve_path("capabilities_path"))
     gateway = HttpNineRouterGateway(settings.nine_router_url)
-    decision_log = DecisionLog(
+    decision_logger = DecisionLogger(
         settings.resolve_path("decision_log_path") if settings.decision_log_path else None
     )
 
@@ -50,7 +50,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     policy_engine = PolicyEngine(policy_store)
     classifier = RequestClassifier()
     selector = Selector(policy_engine, capability_registry)
-    forwarder = Forwarder(gateway, decision_log)
+    forwarder = Forwarder(gateway, decision_logger)
 
     # --- Attach to app state so routers can access them ----------------------
     app.state.settings = settings
@@ -60,7 +60,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.classifier = classifier
     app.state.selector = selector
     app.state.forwarder = forwarder
-    app.state.decision_log = decision_log
+    # Expose under both names so existing routes using either name work.
+    app.state.decision_log = decision_logger
+    app.state.decision_logger = decision_logger
     app.state.gateway = gateway
 
     logger.info("SwitchBoard ready")
@@ -69,6 +71,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # --- Shutdown ------------------------------------------------------------
     logger.info("SwitchBoard shutting down")
     await gateway.close()
+    decision_logger.close()
 
 
 # ---------------------------------------------------------------------------

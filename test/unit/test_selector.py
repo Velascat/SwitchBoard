@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from switchboard.domain.models import SelectionContext
+from switchboard.domain.selection_context import SelectionContext
 from switchboard.services.selector import Selector
 
 

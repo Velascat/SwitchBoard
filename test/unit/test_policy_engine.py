@@ -2,8 +2,8 @@
 
 import pytest
 
-from switchboard.domain.models import SelectionContext
-from switchboard.domain.policy_types import PolicyConfig, PolicyRule
+from switchboard.domain.policy_rule import PolicyConfig, PolicyRule
+from switchboard.domain.selection_context import SelectionContext
 from switchboard.services.policy_engine import PolicyEngine
 
 

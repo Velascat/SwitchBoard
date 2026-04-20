@@ -20,7 +20,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from switchboard.domain.models import SelectionContext
+from switchboard.domain.selection_context import SelectionContext
 
 
 # Header names (lowercased for case-insensitive matching)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from switchboard.domain.policy_types import PolicyConfig
+from switchboard.domain.policy_rule import PolicyConfig
 
 
 @runtime_checkable

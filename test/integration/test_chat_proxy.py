@@ -14,7 +14,8 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from switchboard.app import create_app
-from switchboard.domain.models import SelectionContext, SelectionResult
+from switchboard.domain.selection_context import SelectionContext
+from switchboard.domain.selection_result import SelectionResult
 
 
 # ---------------------------------------------------------------------------

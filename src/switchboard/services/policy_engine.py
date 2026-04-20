@@ -23,8 +23,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from switchboard.domain.models import SelectionContext
-from switchboard.domain.policy_types import PolicyConfig, PolicyRule
+from switchboard.domain.policy_rule import PolicyConfig, PolicyRule
+from switchboard.domain.selection_context import SelectionContext
 from switchboard.observability.logging import get_logger
 from switchboard.ports.policy_store import PolicyStore
 
@@ -62,8 +62,9 @@ class PolicyEngine:
 
         for rule in config.sorted_rules():
             if self._rule_matches(rule, context):
-                logger.debug("Rule matched: %s → profile %s", rule.name, rule.profile)
-                return rule.profile, rule.name
+                profile = rule.resolved_profile
+                logger.debug("Rule matched: %s → profile %s", rule.name, profile)
+                return profile, rule.name
 
         logger.debug("No rule matched; using fallback profile: %s", config.fallback_profile)
         return config.fallback_profile, "fallback"
@@ -90,7 +91,7 @@ class PolicyEngine:
     @staticmethod
     def _rule_matches(rule: PolicyRule, context: SelectionContext) -> bool:
         """Return True if every condition in the rule is satisfied by the context."""
-        for key, expected in rule.conditions.items():
+        for key, expected in rule.resolved_conditions.items():
             if not _condition_matches(key, expected, context):
                 return False
         return True

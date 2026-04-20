@@ -1,48 +1,71 @@
 # SwitchBoard Capability Registry
 # Section 6.5
 #
-# Maps profile names to the concrete downstream model identifiers that 9router
-# will use when routing to providers.  This is the single place where abstract
-# profile names are bound to real model strings.
+# Describes the capabilities of each downstream model that 9router can route to.
+# This is separate from profiles.yaml: profiles map names → models, while
+# capabilities.yaml describes what each model can do.
 #
-# Changing the downstream_model here immediately affects all routing without
-# touching policy rules or application code (the registry is reloaded on next
-# request after a process restart, or via the reload API when implemented).
+# The capability registry is used by the policy engine and profile registry to
+# make routing decisions based on model features.
 #
-# Schema per profile entry:
-#   downstream_model    The model identifier string sent to 9router / the provider.
-#   provider_hint       Optional hint to 9router about which provider to use.
-#                       9router may ignore this if it has its own routing logic.
-#   notes               Optional human-readable notes about this mapping.
+# Schema per model entry:
+#   supports_tools          Whether the model reliably supports function calling.
+#   supports_streaming      Whether the model supports SSE streaming responses.
+#   supports_long_context   Whether the model has a large context window (> 32 k).
+#   quality                 Relative quality tier: low | medium | high
+#   cost_tier               Relative cost tier: low | medium | high
 
 version: "1"
+
+models:
+
+  gpt-4o-mini:
+    supports_tools: true
+    supports_streaming: true
+    supports_long_context: true
+    quality: medium
+    cost_tier: low
+
+  gpt-4o:
+    supports_tools: true
+    supports_streaming: true
+    supports_long_context: true
+    quality: high
+    cost_tier: high
+
+  llama3:
+    supports_tools: false
+    supports_streaming: true
+    supports_long_context: false
+    quality: medium
+    cost_tier: low
+
+  claude-3-5-sonnet:
+    supports_tools: true
+    supports_streaming: true
+    supports_long_context: true
+    quality: high
+    cost_tier: high
+
+# ---------------------------------------------------------------------------
+# Legacy profiles section — kept for backward-compat with CapabilityRegistry
+# which reads the ``profiles`` key to resolve profile → downstream_model.
+# ---------------------------------------------------------------------------
 
 profiles:
 
   fast:
     downstream_model: gpt-4o-mini
     provider_hint: openai
-    notes: >
-      OpenAI gpt-4o-mini — fast, cheap, good for short turns.
-      Switch to gpt-4.1-mini when available and stable.
 
   capable:
     downstream_model: gpt-4o
     provider_hint: openai
-    notes: >
-      OpenAI gpt-4o — best quality available via OpenAI API.
-      Can be swapped to claude-3-5-sonnet or gemini-1.5-pro-002
-      by changing downstream_model here.
 
   local:
     downstream_model: llama3
     provider_hint: ollama
-    notes: >
-      Meta Llama 3 8B running via Ollama on the local network.
-      Adjust to llama3:70b for better quality at higher cost.
 
   default:
     downstream_model: gpt-4o-mini
     provider_hint: openai
-    notes: >
-      Same as the 'fast' profile; used when policy falls back with no rule match.

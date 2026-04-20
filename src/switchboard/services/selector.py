@@ -14,7 +14,8 @@ injected collaborators, making it easy to unit test.
 
 from __future__ import annotations
 
-from switchboard.domain.models import SelectionContext, SelectionResult
+from switchboard.domain.selection_context import SelectionContext
+from switchboard.domain.selection_result import SelectionResult
 from switchboard.observability.logging import get_logger
 from switchboard.services.capability_registry import CapabilityRegistry
 from switchboard.services.policy_engine import PolicyEngine
@@ -40,8 +41,8 @@ class Selector:
             context: The :class:`SelectionContext` produced by the classifier.
 
         Returns:
-            A :class:`SelectionResult` with ``profile_name``, ``downstream_model``,
-            and ``rule_name`` populated.
+            A :class:`SelectionResult` with ``profile``, ``profile_name``,
+            ``downstream_model``, and ``rule_name`` populated.
 
         Raises:
             KeyError: If the selected profile is not present in the capability registry.
@@ -81,6 +82,7 @@ class Selector:
         )
 
         return SelectionResult(
+            profile=profile_name,
             profile_name=profile_name,
             downstream_model=downstream_model,
             rule_name=rule_name,

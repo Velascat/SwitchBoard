@@ -18,10 +18,10 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from switchboard.domain.models import SelectionResult
+from switchboard.domain.selection_result import SelectionResult
 from switchboard.observability.logging import get_logger
 from switchboard.ports.model_gateway import ModelGateway
-from switchboard.services.decision_log import DecisionLog, make_decision_record
+from switchboard.services.decision_logger import DecisionLogger, make_decision_record
 
 logger = get_logger(__name__)
 
@@ -29,9 +29,9 @@ logger = get_logger(__name__)
 class Forwarder:
     """Forwards a rewritten request to 9router and records the routing decision."""
 
-    def __init__(self, gateway: ModelGateway, decision_log: DecisionLog) -> None:
+    def __init__(self, gateway: ModelGateway, decision_logger: DecisionLogger) -> None:
         self._gateway = gateway
-        self._decision_log = decision_log
+        self._decision_log = decision_logger
 
     async def forward(
         self,
@@ -61,11 +61,13 @@ class Forwarder:
         error_str: str | None = None
         response_data: dict[str, Any] = {}
 
+        profile_name = selection_result.profile_name or selection_result.profile
+
         try:
             logger.debug(
                 "Forwarding request to 9router: model=%s profile=%s rule=%s",
                 request_body.get("model"),
-                selection_result.profile_name,
+                profile_name,
                 selection_result.rule_name,
             )
             response_data = await self._gateway.create_chat_completion(request_body)
@@ -83,7 +85,7 @@ class Forwarder:
             self._decision_log.append(record)
             logger.info(
                 "Decision: profile=%s model=%s rule=%s latency=%.1fms",
-                selection_result.profile_name,
+                profile_name,
                 selection_result.downstream_model,
                 selection_result.rule_name,
                 latency_ms,

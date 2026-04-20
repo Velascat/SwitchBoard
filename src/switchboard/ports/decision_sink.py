@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from switchboard.domain.models import DecisionRecord
+from switchboard.domain.decision_record import DecisionRecord
 
 
 @runtime_checkable

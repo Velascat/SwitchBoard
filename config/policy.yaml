@@ -2,15 +2,17 @@
 # Section 6.3
 #
 # Rules are evaluated in ascending priority order (lower number = evaluated first).
-# The first rule whose conditions ALL match the SelectionContext wins.
+# The first rule whose ``when`` conditions ALL match the SelectionContext wins.
 # If no rule matches, the fallback_profile is used.
 #
-# Condition keys map directly to SelectionContext attributes:
-#   stream            boolean
-#   tools_present     boolean
-#   priority          string  (from X-SwitchBoard-Priority header)
-#   tenant_id         string  (from X-SwitchBoard-Tenant-ID header)
-#   model_hint        string  (the model field the caller sent)
+# Condition keys map to SelectionContext attributes:
+#   stream                boolean
+#   tools_present         boolean
+#   priority              string  (from X-SwitchBoard-Priority header)
+#   tenant_id             string  (from X-SwitchBoard-Tenant-ID header)
+#   model_hint            string  (the model field the caller sent)
+#   requires_tools        boolean
+#   requires_long_context boolean
 #   min_estimated_tokens  integer (context.estimated_tokens >= value)
 #   max_estimated_tokens  integer (context.estimated_tokens <= value)
 #   min_max_tokens        integer (context.max_tokens >= value)
@@ -28,18 +30,18 @@ rules:
 
   - name: caller_requests_capable
     priority: 10
-    profile: capable
+    select_profile: capable
     description: >
       Caller explicitly requested the capable profile via model hint.
-    conditions:
+    when:
       model_hint: ["capable", "gpt-4o", "claude-3-5-sonnet"]
 
   - name: caller_requests_local
     priority: 11
-    profile: local
+    select_profile: local
     description: >
       Caller explicitly requested the local/private profile.
-    conditions:
+    when:
       model_hint: ["local", "private", "llama3", "ollama"]
 
   # ------------------------------------------------------------------
@@ -48,11 +50,11 @@ rules:
 
   - name: high_priority_tenant
     priority: 20
-    profile: capable
+    select_profile: capable
     description: >
       Requests from high-priority tenants are always routed to the capable model
       regardless of estimated token count.
-    conditions:
+    when:
       priority: "high"
 
   # ------------------------------------------------------------------
@@ -61,11 +63,11 @@ rules:
 
   - name: tool_use
     priority: 30
-    profile: capable
+    select_profile: capable
     description: >
       Requests that include a tools array need a model with reliable
       function-calling capability.
-    conditions:
+    when:
       tools_present: true
 
   # ------------------------------------------------------------------
@@ -74,11 +76,11 @@ rules:
 
   - name: streaming_short
     priority: 40
-    profile: fast
+    select_profile: fast
     description: >
       Short streaming requests (≤ 512 estimated tokens) go to the fast
       low-latency model to minimise time-to-first-token.
-    conditions:
+    when:
       stream: true
       max_estimated_tokens: 512
 
@@ -88,11 +90,11 @@ rules:
 
   - name: large_context
     priority: 50
-    profile: capable
+    select_profile: capable
     description: >
       Requests with a large estimated token count (> 4096) require a
       model with a large context window.
-    conditions:
+    when:
       min_estimated_tokens: 4096
 
   # ------------------------------------------------------------------
@@ -101,11 +103,11 @@ rules:
 
   - name: long_output_requested
     priority: 60
-    profile: capable
+    select_profile: capable
     description: >
       Caller requested more than 2048 output tokens; route to the capable
       model which handles long outputs more reliably.
-    conditions:
+    when:
       min_max_tokens: 2048
 
   # ------------------------------------------------------------------
@@ -114,11 +116,11 @@ rules:
 
   - name: low_priority_local
     priority: 70
-    profile: local
+    select_profile: local
     description: >
       Low-priority background requests are sent to the local model to
       minimise cloud API spend.
-    conditions:
+    when:
       priority: "low"
 
   # ------------------------------------------------------------------
@@ -127,9 +129,9 @@ rules:
 
   - name: default_short_request
     priority: 100
-    profile: fast
+    select_profile: fast
     description: >
       Ordinary short requests (≤ 4096 estimated tokens, no special requirements)
       go to the fast model.
-    conditions:
+    when:
       max_estimated_tokens: 4096

@@ -4,6 +4,10 @@ Implements the :class:`~switchboard.ports.policy_store.PolicyStore` port.
 
 The YAML file is read once and cached.  Call :meth:`reload` to force a fresh
 read (useful after the file is edited without restarting the service).
+
+Supports both the new rule shape (``when`` / ``select_profile``) and the legacy
+shape (``conditions`` / ``profile``) so that policy files written in either
+format load correctly.
 """
 
 from __future__ import annotations
@@ -13,7 +17,7 @@ from typing import Any
 
 import yaml
 
-from switchboard.domain.policy_types import PolicyConfig, PolicyRule
+from switchboard.domain.policy_rule import PolicyConfig, PolicyRule
 from switchboard.observability.logging import get_logger
 
 logger = get_logger(__name__)
@@ -65,15 +69,29 @@ class FilePolicyStore:
 
         rules: list[PolicyRule] = []
         for i, r in enumerate(raw_rules):
-            if "name" not in r or "profile" not in r:
-                logger.warning("Policy rule at index %d missing 'name' or 'profile'; skipping.", i)
+            # Support both new (select_profile/when) and legacy (profile/conditions) shapes.
+            select_profile = r.get("select_profile", "")
+            profile = r.get("profile", "")
+            when = r.get("when", {})
+            conditions = r.get("conditions", {})
+
+            if not (select_profile or profile):
+                logger.warning(
+                    "Policy rule at index %d missing 'select_profile'/'profile'; skipping.", i
+                )
                 continue
+            if "name" not in r:
+                logger.warning("Policy rule at index %d missing 'name'; skipping.", i)
+                continue
+
             rules.append(
                 PolicyRule(
                     name=r["name"],
                     priority=int(r.get("priority", 100)),
-                    profile=r["profile"],
-                    conditions=r.get("conditions", {}),
+                    select_profile=select_profile,
+                    profile=profile,
+                    when=when,
+                    conditions=conditions,
                     description=r.get("description", ""),
                 )
             )
