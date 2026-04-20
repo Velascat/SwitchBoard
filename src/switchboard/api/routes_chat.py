@@ -14,12 +14,10 @@ Flow (section 9.5):
 
 from __future__ import annotations
 
-import logging
-import time
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from switchboard.observability.logging import get_logger
 
@@ -80,11 +78,26 @@ async def chat_completions(request: Request) -> JSONResponse:
     # 5 & 6. Forward and return
     # ------------------------------------------------------------------
     forwarder = request.app.state.forwarder
+    original_model_hint = body.get("model", "")
+
+    if rewritten_body.get("stream"):
+        # Streaming path — proxy SSE chunks verbatim to the client.
+        async def _event_stream():
+            async for chunk in forwarder.stream(
+                request_body=rewritten_body,
+                selection_result=result,
+                original_model_hint=original_model_hint,
+            ):
+                yield chunk
+
+        return StreamingResponse(_event_stream(), media_type="text/event-stream")
+
+    # Non-streaming path (existing behaviour).
     try:
         response_data = await forwarder.forward(
             request_body=rewritten_body,
             selection_result=result,
-            original_model_hint=body.get("model", ""),
+            original_model_hint=original_model_hint,
         )
     except Exception as exc:
         logger.error("Forwarding failed: %s", exc, exc_info=True)

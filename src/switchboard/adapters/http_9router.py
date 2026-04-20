@@ -14,6 +14,7 @@ The gateway:
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
 from typing import Any
 
 import httpx
@@ -69,6 +70,33 @@ class HttpNineRouterGateway:
         response = await self._client.post(url, json=request_body)
         response.raise_for_status()
         return response.json()
+
+    async def stream_chat_completion(
+        self, request_body: dict[str, Any]
+    ) -> AsyncGenerator[bytes, None]:
+        """Stream a chat completion response from 9router as raw SSE bytes.
+
+        Args:
+            request_body: OpenAI-compatible request dict with ``stream: true``.
+
+        Yields:
+            Raw response bytes (Server-Sent Events chunks) from 9router.
+
+        Raises:
+            httpx.HTTPStatusError: If 9router responds with a non-2xx status.
+            httpx.RequestError:    If the connection cannot be established.
+        """
+        url = "/v1/chat/completions"
+        logger.debug(
+            "POST %s%s (streaming) model=%s",
+            self._base_url,
+            url,
+            request_body.get("model", "<unset>"),
+        )
+        async with self._client.stream("POST", url, json=request_body) as response:
+            response.raise_for_status()
+            async for chunk in response.aiter_bytes():
+                yield chunk
 
     async def close(self) -> None:
         """Close the underlying httpx.AsyncClient and drain connections."""

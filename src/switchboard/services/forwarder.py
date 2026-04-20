@@ -16,6 +16,7 @@ verbatim so that provider-specific fields are preserved.
 from __future__ import annotations
 
 import time
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from switchboard.domain.selection_result import SelectionResult
@@ -92,3 +93,62 @@ class Forwarder:
             )
 
         return response_data
+
+    async def stream(
+        self,
+        *,
+        request_body: dict[str, Any],
+        selection_result: SelectionResult,
+        original_model_hint: str,
+    ) -> AsyncGenerator[bytes, None]:
+        """Stream ``request_body`` to 9router and yield raw SSE bytes to the caller.
+
+        Decision logging happens in the ``finally`` block so the record is always
+        written even if the client disconnects mid-stream.
+
+        Args:
+            request_body:        The (possibly rewritten) request body.
+                                 Must include ``"stream": true``.
+            selection_result:    The :class:`SelectionResult` from the Selector.
+            original_model_hint: The ``model`` value originally sent by the caller.
+
+        Yields:
+            Raw SSE bytes forwarded verbatim from 9router.
+
+        Raises:
+            httpx.HTTPStatusError: If 9router responds with a non-2xx status.
+            httpx.RequestError:    If the connection to 9router fails.
+        """
+        start = time.monotonic()
+        error_str: str | None = None
+        profile_name = selection_result.profile_name or selection_result.profile
+
+        logger.debug(
+            "Streaming request to 9router: model=%s profile=%s rule=%s",
+            request_body.get("model"),
+            profile_name,
+            selection_result.rule_name,
+        )
+
+        try:
+            async for chunk in self._gateway.stream_chat_completion(request_body):
+                yield chunk
+        except Exception as exc:
+            error_str = str(exc)
+            raise
+        finally:
+            latency_ms = (time.monotonic() - start) * 1000
+            record = make_decision_record(
+                result=selection_result,
+                original_model_hint=original_model_hint,
+                latency_ms=round(latency_ms, 2),
+                error=error_str,
+            )
+            self._decision_log.append(record)
+            logger.info(
+                "Decision (stream): profile=%s model=%s rule=%s latency=%.1fms",
+                profile_name,
+                selection_result.downstream_model,
+                selection_result.rule_name,
+                latency_ms,
+            )
