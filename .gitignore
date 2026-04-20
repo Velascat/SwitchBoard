@@ -88,6 +88,10 @@ decisions.jsonl
 *.key
 secrets/
 
+# Live config (copy from *.example.* to use locally)
+config/*.yaml
+!config/*.example.yaml
+
 # Hatch
 .hatch/
 
