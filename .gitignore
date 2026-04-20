@@ -90,3 +90,7 @@ secrets/
 
 # Hatch
 .hatch/
+
+# FOB operator state
+.fob/
+!.fob/*.example*
