@@ -14,6 +14,7 @@ SwitchBoard follows a **hexagonal architecture** (ports and adapters). The core 
                               │ POST /v1/chat/completions
                               │ GET  /v1/models  GET /health
                               │ GET  /admin/decisions/recent
+                              │ GET  /admin/decisions/{request_id}
                               │ GET  /admin/summary
                               │ GET/POST /admin/adaptive[/*]
 ╔═════════════════════════════▼════════════════════════════════════════╗

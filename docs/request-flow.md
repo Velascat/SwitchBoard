@@ -185,6 +185,6 @@ All errors use the OpenAI error format: `{"error": {"type": "...", "code": "..."
 | `X-SwitchBoard-Profile` | Forces a specific profile; bypasses all rules, A/B routing, and adaptive routing |
 | `X-SwitchBoard-Priority` | Sets `context.priority`; matched by `priority` rule condition |
 | `X-SwitchBoard-Tenant-ID` | Sets `context.tenant_id`; matched by `tenant_id` rule condition |
-| `X-SwitchBoard-Cost-Sensitivity` | `"high"` shifts profile scorer to favour low-cost profiles |
-| `X-SwitchBoard-Latency-Sensitivity` | `"high"` shifts profile scorer to favour low-latency profiles |
+| `X-SwitchBoard-Cost-Sensitivity` | `"high"` shifts scorer to favour cheap profiles; `"low"` de-prioritises cost in favour of quality |
+| `X-SwitchBoard-Latency-Sensitivity` | `"high"` shifts scorer to favour fast profiles; `"low"` de-prioritises latency |
 | `X-Request-ID` | Captured as `request_id`; echoed in error responses and decision log |

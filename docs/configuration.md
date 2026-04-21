@@ -50,7 +50,7 @@ SWITCHBOARD_DECISION_LOG_PATH=./runtime/decisions.jsonl
 # 9router connection
 ROUTER9_BASE_URL=http://localhost:20128
 ROUTER9_CHAT_COMPLETIONS_PATH=/v1/chat/completions
-ROUTER9_TIMEOUT_S=120              # per-attempt timeout in seconds (retries excluded)
+ROUTER9_TIMEOUT_S=120              # read timeout per attempt in seconds; connect=5s, write=10s are hardcoded
 ```
 
 ---
@@ -205,8 +205,8 @@ Callers can influence routing without changing the policy by sending these heade
 | Header | Values | Effect |
 |--------|--------|--------|
 | `X-SwitchBoard-Priority` | `high`, `low` | Matches `priority` condition in rules |
-| `X-SwitchBoard-Cost-Sensitivity` | `high` | Matches `cost_sensitivity` condition |
-| `X-SwitchBoard-Latency-Sensitivity` | `high` | Matches `latency_sensitivity` condition |
+| `X-SwitchBoard-Cost-Sensitivity` | `high`, `low` | `high`: favour cheap profiles; `low`: favour quality over cost |
+| `X-SwitchBoard-Latency-Sensitivity` | `high`, `low` | `high`: favour fast profiles; `low`: de-prioritise latency |
 | `X-SwitchBoard-Tenant-ID` | any string | Matches `tenant_id` condition |
 | `X-Request-ID` | any string | Preserved in decision log and error responses |
 
