@@ -146,6 +146,51 @@ See **[CONTRIBUTING.md](CONTRIBUTING.md)** for repo layout, architecture boundar
 
 ---
 
+## Aider reference client
+
+Aider is included as a bootstrap reference client for validating OpenAI-compatible connectivity. It is **not** required for SwitchBoard to function — all routing logic is client-agnostic.
+
+**What it is used for:**
+- Smoke-testing the full request path (Aider → SwitchBoard → 9router → provider)
+- Validating that SwitchBoard's OpenAI-compatible API handles the request shape that Aider (via LiteLLM) sends
+- Interactive development sessions routed through SwitchBoard
+
+**It is optional.** Bootstrap once if you want to use the Aider scripts:
+
+```bash
+bash scripts/bootstrap_aider.sh   # creates .venv-aider, installs aider-chat
+```
+
+**Smoke test (one-shot connectivity proof):**
+
+```bash
+make smoke-aider
+# or directly:
+bash scripts/aider_smoke.sh
+bash scripts/aider_smoke.sh --profile capable
+```
+
+**Interactive session:**
+
+```bash
+bash scripts/aider.sh              # uses 'fast' profile by default
+bash scripts/aider.sh --profile capable
+```
+
+SwitchBoard's routing logic contains no Aider-specific code. The compatibility tests in `test/integration/test_aider_compat.py` verify that the API handles Aider's request format correctly — they do not depend on Aider being installed.
+
+---
+
+## Ownership boundary
+
+SwitchBoard owns everything about how routing decisions are made: request classification, policy evaluation, model-selection logic, profile and capability schemas, and the Aider reference client scripts that validate API compatibility.
+
+SwitchBoard does **not** own the Dockerfile or compose service definition used to run it in the shared stack — those belong to [WorkStation](https://github.com/Velascat/WorkStation). SwitchBoard's `.env.example` documents the environment contract that WorkStation satisfies at runtime.
+
+For the full platform ownership model see `WorkStation/docs/architecture/ownership.md`.
+
+---
+
 ## License
 
 GNU Affero General Public License v3.0 — see [LICENSE](LICENSE).
