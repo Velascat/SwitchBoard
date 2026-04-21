@@ -62,7 +62,8 @@ For the complete step-by-step guide with expected output at each step, see the [
 | [Quickstart](quickstart.md) | New user — first-time setup and verification |
 | [Configuration](configuration.md) | Operator — env vars, policy rules, profiles |
 | [API Reference](api.md) | Integrator — all endpoints with request/response schemas |
-| [Architecture](architecture.md) | Contributor — layer diagram, service responsibilities, request flow |
+| [Architecture](architecture.md) | Contributor — layer diagram, service responsibilities |
+| [Request Flow](request-flow.md) | Contributor — step-by-step request lifecycle with error handling |
 | [Observability](observability.md) | Operator — decision log format, admin API, adaptive monitoring |
 | [Troubleshooting](troubleshooting.md) | Operator — common failure cases with fixes |
 | [Policies](policies.md) | Policy author — rule conditions reference |
