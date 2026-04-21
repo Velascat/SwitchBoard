@@ -90,8 +90,8 @@ After a rule matches, these checks still apply in order:
 | `model_hint` | `model` field in request body | `model_hint: ["capable", "gpt-4o"]` |
 | `priority` | `X-SwitchBoard-Priority` header | `priority: "high"` |
 | `tenant_id` | `X-SwitchBoard-Tenant-ID` header | `tenant_id: "acme"` |
-| `cost_sensitivity` | `X-SwitchBoard-Cost-Sensitivity` header | `cost_sensitivity: "high"` |
-| `latency_sensitivity` | `X-SwitchBoard-Latency-Sensitivity` header | `latency_sensitivity: "high"` |
+| `cost_sensitivity` | `X-SwitchBoard-Cost-Sensitivity` header | `cost_sensitivity: "high"` or `cost_sensitivity: "low"` |
+| `latency_sensitivity` | `X-SwitchBoard-Latency-Sensitivity` header | `latency_sensitivity: "high"` or `latency_sensitivity: "low"` |
 
 ### List values ("any of")
 

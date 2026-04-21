@@ -86,8 +86,8 @@ rules:
 | `complexity` | string | `"low"`, `"medium"`, `"high"` |
 | `stream` | boolean | Whether the caller requested SSE streaming |
 | `tools_present` | boolean | Whether the request includes a `tools` array |
-| `cost_sensitivity` | string | `"high"` — from `X-SwitchBoard-Cost-Sensitivity` header |
-| `latency_sensitivity` | string | `"high"` — from `X-SwitchBoard-Latency-Sensitivity` header |
+| `cost_sensitivity` | string | `"high"` or `"low"` — from `X-SwitchBoard-Cost-Sensitivity` header |
+| `latency_sensitivity` | string | `"high"` or `"low"` — from `X-SwitchBoard-Latency-Sensitivity` header |
 | `priority` | string | `"high"`, `"low"` — from `X-SwitchBoard-Priority` header |
 | `model_hint` | string or list | The `model` field sent by the caller |
 | `min_estimated_tokens` | integer | Context tokens ≥ value |

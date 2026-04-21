@@ -9,16 +9,20 @@
 #   tools_present         boolean
 #   requires_tools        boolean
 #   requires_long_context boolean
-#   task_type             string  — "code" | "planning" | "summarization" | "chat"
-#   complexity            string  — "low" | "medium" | "high"
-#   cost_sensitivity      string  — "low" | "high"  (from X-SwitchBoard-Cost-Sensitivity header)
-#   latency_sensitivity   string  — "low" | "high"  (from X-SwitchBoard-Latency-Sensitivity header)
-#   priority              string  (from X-SwitchBoard-Priority header)
-#   tenant_id             string  (from X-SwitchBoard-Tenant-ID header)
-#   model_hint            string  (the model field the caller sent)
-#   min_estimated_tokens  integer (context.estimated_tokens >= value)
-#   max_estimated_tokens  integer (context.estimated_tokens <= value)
-#   min_max_tokens        integer (context.max_tokens >= value)
+#   task_type                    string  — "code" | "analysis" | "planning" | "summarization" | "chat"
+#   complexity                   string  — "low" | "medium" | "high"
+#   cost_sensitivity             string  — "low" | "high"  (from X-SwitchBoard-Cost-Sensitivity header)
+#   latency_sensitivity          string  — "low" | "high"  (from X-SwitchBoard-Latency-Sensitivity header)
+#   priority                     string  (from X-SwitchBoard-Priority header)
+#   tenant_id                    string  (from X-SwitchBoard-Tenant-ID header)
+#   model_hint                   string  (the model field the caller sent)
+#   min_estimated_tokens         integer (context.estimated_tokens >= value)
+#   max_estimated_tokens         integer (context.estimated_tokens <= value)
+#   min_max_tokens               integer (context.max_tokens >= value)
+#   max_max_tokens               integer (context.max_tokens <= value)
+#   requires_structured_output   boolean (true when response_format is json_object or json_schema)
+#   requires_long_context        boolean (true when estimated_tokens > 6 000)
+#   requires_tools               boolean (true when a non-empty tools array is present)
 #
 # List values use "any of" semantics: task_type: ["code", "planning"] matches either.
 
