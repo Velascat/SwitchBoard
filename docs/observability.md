@@ -138,7 +138,7 @@ Full request/response schemas: [docs/api.md](api.md).
 
 ## Adaptive routing observability
 
-The adaptive system monitors per-profile error rates and latency and adjusts routing automatically.
+The adaptive system tracks per-profile error rates and latency. Adjustments are applied to routing decisions once computed, but are only recomputed when an operator calls `POST /admin/adaptive/refresh`.
 
 Check the current state:
 
@@ -166,7 +166,7 @@ A demoted profile looks like:
 }
 ```
 
-Adjustments are recomputed every 300 seconds from recent decision records. To reset all profiles to neutral immediately:
+Adjustments are only recomputed when an operator explicitly calls `POST /admin/adaptive/refresh` — there is no automatic background refresh. To reset all profiles to neutral immediately:
 
 ```bash
 curl -s -X POST http://localhost:20401/admin/adaptive/reset

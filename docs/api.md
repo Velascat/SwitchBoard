@@ -299,8 +299,7 @@ The Selector will ignore adjustments until re-enabled.
 
 ## POST /admin/adaptive/reset
 
-Clears all current adjustments. Useful when a profile recovers and you want
-to re-enable it immediately without waiting for the TTL to expire.
+Clears all current adjustments and returns all profiles to neutral immediately.
 
 **Status codes:** `200`.
 
