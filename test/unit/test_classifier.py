@@ -2,7 +2,12 @@
 
 import pytest
 
-from switchboard.services.classifier import RequestClassifier, _estimate_tokens
+from switchboard.services.classifier import (
+    RequestClassifier,
+    _estimate_tokens,
+    _infer_task_type,
+    _infer_complexity,
+)
 
 
 @pytest.fixture()
@@ -175,3 +180,149 @@ class TestEstimateTokens:
         msgs = [{"role": "user", "content": None}]
         result = _estimate_tokens(msgs)
         assert result >= 1  # should not raise
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 — task_type inference
+# ---------------------------------------------------------------------------
+
+
+class TestTaskTypeInference:
+    def test_code_fence_signals_code(self) -> None:
+        msgs = [{"role": "user", "content": "Please review this:\n```python\ndef foo(): pass\n```"}]
+        assert _infer_task_type(msgs) == "code"
+
+    def test_implement_phrase_signals_code(self) -> None:
+        msgs = [{"role": "user", "content": "Can you implement a binary search function?"}]
+        assert _infer_task_type(msgs) == "code"
+
+    def test_refactor_phrase_signals_code(self) -> None:
+        msgs = [{"role": "user", "content": "Refactor this class to use dataclasses."}]
+        assert _infer_task_type(msgs) == "code"
+
+    def test_write_a_function_signals_code(self) -> None:
+        msgs = [{"role": "user", "content": "Write a function that reverses a string."}]
+        assert _infer_task_type(msgs) == "code"
+
+    def test_architecture_signals_planning(self) -> None:
+        msgs = [{"role": "user", "content": "Help me design the architecture for a microservices system."}]
+        assert _infer_task_type(msgs) == "planning"
+
+    def test_how_should_i_signals_planning(self) -> None:
+        msgs = [{"role": "user", "content": "How should I approach building this feature?"}]
+        assert _infer_task_type(msgs) == "planning"
+
+    def test_summarize_signals_summarization(self) -> None:
+        msgs = [{"role": "user", "content": "Please summarize this document for me."}]
+        assert _infer_task_type(msgs) == "summarization"
+
+    def test_tldr_signals_summarization(self) -> None:
+        msgs = [{"role": "user", "content": "tldr of this article please"}]
+        assert _infer_task_type(msgs) == "summarization"
+
+    def test_plain_question_is_chat(self) -> None:
+        msgs = [{"role": "user", "content": "What is the capital of France?"}]
+        assert _infer_task_type(msgs) == "chat"
+
+    def test_empty_messages_is_chat(self) -> None:
+        assert _infer_task_type([]) == "chat"
+
+    def test_code_detected_before_planning(self) -> None:
+        # A message asking to "implement a plan" should be "code" not "planning"
+        msgs = [{"role": "user", "content": "implement this step-by-step plan in code"}]
+        assert _infer_task_type(msgs) == "code"
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 — complexity inference
+# ---------------------------------------------------------------------------
+
+
+class TestComplexityInference:
+    def test_low_complexity_short_few_messages(self) -> None:
+        assert _infer_complexity(100, 1, False) == "low"
+
+    def test_medium_complexity_moderate_tokens(self) -> None:
+        assert _infer_complexity(600, 2, False) == "medium"
+
+    def test_medium_complexity_many_messages(self) -> None:
+        assert _infer_complexity(100, 5, False) == "medium"
+
+    def test_high_complexity_many_tokens(self) -> None:
+        assert _infer_complexity(4000, 2, False) == "high"
+
+    def test_high_complexity_many_messages(self) -> None:
+        assert _infer_complexity(100, 10, False) == "high"
+
+    def test_high_complexity_tools_present(self) -> None:
+        assert _infer_complexity(100, 1, True) == "high"
+
+    def test_boundary_500_tokens_is_medium(self) -> None:
+        assert _infer_complexity(501, 1, False) == "medium"
+
+    def test_boundary_3000_tokens_is_high(self) -> None:
+        assert _infer_complexity(3001, 1, False) == "high"
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 — requires_long_context and requires_tools
+# ---------------------------------------------------------------------------
+
+
+class TestRequiresFlags:
+    def test_requires_long_context_above_threshold(self) -> None:
+        body = {"messages": [{"role": "user", "content": "x" * (6000 * 4 + 4)}]}
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.requires_long_context is True
+
+    def test_requires_long_context_below_threshold(self) -> None:
+        body = {"messages": [{"role": "user", "content": "hello"}]}
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.requires_long_context is False
+
+    def test_requires_tools_when_tools_present(self) -> None:
+        body = {
+            "messages": [{"role": "user", "content": "hi"}],
+            "tools": [{"type": "function", "function": {"name": "foo"}}],
+        }
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.requires_tools is True
+
+    def test_requires_tools_false_when_no_tools(self) -> None:
+        body = {"messages": [{"role": "user", "content": "hi"}]}
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.requires_tools is False
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 — cost_sensitivity and latency_sensitivity headers
+# ---------------------------------------------------------------------------
+
+
+class TestSensitivityHeaders:
+    def test_cost_sensitivity_from_header(self) -> None:
+        body = {"messages": []}
+        ctx = RequestClassifier().classify(body, {"X-SwitchBoard-Cost-Sensitivity": "high"})
+        assert ctx.cost_sensitivity == "high"
+
+    def test_latency_sensitivity_from_header(self) -> None:
+        body = {"messages": []}
+        ctx = RequestClassifier().classify(body, {"X-SwitchBoard-Latency-Sensitivity": "low"})
+        assert ctx.latency_sensitivity == "low"
+
+    def test_streaming_implies_high_latency_sensitivity(self) -> None:
+        body = {"messages": [], "stream": True}
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.latency_sensitivity == "high"
+
+    def test_header_overrides_stream_derived_latency_sensitivity(self) -> None:
+        body = {"messages": [], "stream": True}
+        ctx = RequestClassifier().classify(body, {"X-SwitchBoard-Latency-Sensitivity": "low"})
+        assert ctx.latency_sensitivity == "low"
+
+    def test_no_sensitivity_headers_gives_none(self) -> None:
+        body = {"messages": []}
+        ctx = RequestClassifier().classify(body, {})
+        assert ctx.cost_sensitivity is None
+        # latency_sensitivity is None only if stream is also False
+        assert ctx.latency_sensitivity is None

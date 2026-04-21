@@ -127,3 +127,134 @@ class TestSelectorForceProfile:
         assert result.profile_name == "local"
         assert result.downstream_model == "llama3"
         assert result.rule_name == "force_profile"
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 — eligibility validation
+# ---------------------------------------------------------------------------
+
+
+def _make_profile_store(profiles: dict):
+    class _Store:
+        def get_profiles(self):
+            return profiles
+    return _Store()
+
+
+_PROFILES_WITH_CAPABILITIES = {
+    "fast": {
+        "downstream_model": "gpt-4o-mini",
+        "supports_tools": True,
+        "max_context_tokens": 128_000,
+    },
+    "capable": {
+        "downstream_model": "gpt-4o",
+        "supports_tools": True,
+        "max_context_tokens": 128_000,
+    },
+    "local": {
+        "downstream_model": "llama3",
+        "supports_tools": False,
+        "max_context_tokens": 8_192,
+    },
+    "default": {
+        "downstream_model": "gpt-4o-mini",
+        "supports_tools": True,
+        "max_context_tokens": 128_000,
+    },
+}
+
+
+def _make_selector_with_eligibility(
+    policy_profile: str,
+    policy_rule: str,
+    profiles: dict | None = None,
+) -> Selector:
+    policy_engine = MagicMock()
+    policy_engine.select_profile.return_value = (policy_profile, policy_rule)
+
+    capability_registry = MagicMock()
+    capability_registry.resolve_profile.side_effect = lambda name: {
+        "fast": "gpt-4o-mini",
+        "capable": "gpt-4o",
+        "local": "llama3",
+        "default": "gpt-4o-mini",
+    }.get(name, "gpt-4o-mini")
+
+    profile_store = _make_profile_store(profiles or _PROFILES_WITH_CAPABILITIES)
+    return Selector(policy_engine, capability_registry, profile_store)
+
+
+class TestEligibilityValidation:
+    def test_tools_required_rejects_local_profile(self) -> None:
+        selector = _make_selector_with_eligibility("local", "low_priority_local")
+        ctx = _make_context(requires_tools=True, tools_present=True)
+        result = selector.select(ctx)
+
+        assert result.profile_name != "local"
+        assert len(result.rejected_profiles) >= 1
+        assert result.rejected_profiles[0]["profile"] == "local"
+        assert "tool" in result.rejected_profiles[0]["reason"]
+
+    def test_tools_required_escalates_to_capable(self) -> None:
+        selector = _make_selector_with_eligibility("local", "low_priority_local")
+        ctx = _make_context(requires_tools=True, tools_present=True)
+        result = selector.select(ctx)
+
+        assert result.profile_name == "capable"
+        assert result.rule_name == "eligibility_fallback"
+
+    def test_long_context_rejects_local_small_window(self) -> None:
+        selector = _make_selector_with_eligibility("local", "some_rule")
+        ctx = _make_context(requires_long_context=True)
+        result = selector.select(ctx)
+
+        assert result.profile_name != "local"
+        assert any(r["profile"] == "local" for r in result.rejected_profiles)
+
+    def test_eligible_profile_has_no_rejections(self) -> None:
+        selector = _make_selector_with_eligibility("capable", "coding_task")
+        ctx = _make_context(requires_tools=True)
+        result = selector.select(ctx)
+
+        assert result.profile_name == "capable"
+        assert result.rejected_profiles == []
+
+    def test_force_profile_skips_eligibility(self) -> None:
+        selector = _make_selector_with_eligibility("local", "force_profile")
+        ctx = _make_context(requires_tools=True, force_profile="local")
+        result = selector.select(ctx)
+
+        # force_profile bypasses eligibility — no rejections recorded
+        assert result.profile_name == "local"
+        assert result.rejected_profiles == []
+
+    def test_reason_includes_rule_and_profile(self) -> None:
+        selector = _make_selector_with_eligibility("capable", "coding_task")
+        ctx = _make_context()
+        result = selector.select(ctx)
+
+        assert "capable" in result.reason
+        assert "coding_task" in result.reason
+
+    def test_reason_includes_rejection_when_rejected(self) -> None:
+        selector = _make_selector_with_eligibility("local", "low_priority_local")
+        ctx = _make_context(requires_tools=True, tools_present=True)
+        result = selector.select(ctx)
+
+        assert "rejected" in result.reason
+        assert "local" in result.reason
+
+    def test_no_profile_store_skips_eligibility(self) -> None:
+        policy_engine = MagicMock()
+        policy_engine.select_profile.return_value = ("local", "some_rule")
+        capability_registry = MagicMock()
+        capability_registry.resolve_profile.return_value = "llama3"
+
+        selector = Selector(policy_engine, capability_registry)  # no profile_store
+        ctx = _make_context(requires_tools=True)
+        result = selector.select(ctx)
+
+        # Without profile_store, no eligibility check, no rejections
+        assert result.profile_name == "local"
+        assert result.rejected_profiles == []
