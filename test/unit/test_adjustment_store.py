@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from unittest.mock import MagicMock
-
-import pytest
 
 from switchboard.domain.decision_record import DecisionRecord
 from switchboard.services.adjustment_engine import AdjustmentEngine, PolicyAdjustment

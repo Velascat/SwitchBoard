@@ -1,6 +1,5 @@
 """Unit tests for PolicyEngine."""
 
-import pytest
 
 from switchboard.domain.policy_rule import PolicyConfig, PolicyRule
 from switchboard.domain.selection_context import SelectionContext

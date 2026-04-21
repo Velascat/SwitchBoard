@@ -27,7 +27,6 @@ from typing import Any
 
 from switchboard.domain.selection_context import SelectionContext
 
-
 _TIER_TO_VALUE: dict[str, float] = {
     "low": 0.0,
     "medium": 0.5,

@@ -15,8 +15,9 @@ Usage::
 
 from __future__ import annotations
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Generator
+from typing import Any
 
 
 class _NoOpSpan:
@@ -31,7 +32,7 @@ class _NoOpSpan:
     def set_status(self, status: Any) -> None:  # noqa: ARG002
         pass
 
-    def __enter__(self) -> "_NoOpSpan":
+    def __enter__(self) -> _NoOpSpan:
         return self
 
     def __exit__(self, *args: Any) -> None:

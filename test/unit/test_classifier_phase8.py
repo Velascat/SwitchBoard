@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-import pytest
-
-from switchboard.services.classifier import RequestClassifier, _infer_structured_output, _infer_task_type
+from switchboard.services.classifier import (
+    RequestClassifier,
+    _infer_structured_output,
+    _infer_task_type,
+)
 
 
 def _msgs(text: str) -> list[dict]:

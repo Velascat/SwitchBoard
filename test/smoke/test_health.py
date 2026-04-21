@@ -6,7 +6,7 @@ It uses the FastAPI ASGI test transport so it can run without a real server.
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 
 import pytest
 from httpx import ASGITransport, AsyncClient

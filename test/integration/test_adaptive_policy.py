@@ -25,8 +25,6 @@ from switchboard.domain.selection_result import SelectionResult
 from switchboard.services.adjustment_engine import PolicyAdjustment
 from switchboard.services.adjustment_store import AdjustmentStore
 from switchboard.services.decision_logger import DecisionLogger
-from switchboard.services.signal_aggregator import ProfileSignals
-
 
 # ---------------------------------------------------------------------------
 # Fixtures

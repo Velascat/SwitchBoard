@@ -22,7 +22,6 @@ from switchboard.domain.selection_context import SelectionContext
 from switchboard.domain.selection_result import SelectionResult
 from switchboard.services.decision_logger import DecisionLogger
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

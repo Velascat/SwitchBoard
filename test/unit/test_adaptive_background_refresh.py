@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import asyncio
-from unittest.mock import MagicMock, call, patch
-
-import pytest
+import contextlib
+from unittest.mock import MagicMock, patch
 
 from switchboard.app import _adaptive_refresh_loop
 from switchboard.services.adjustment_store import AdjustmentStore
@@ -41,10 +40,8 @@ async def test_loop_calls_maybe_refresh_after_sleep():
         task = asyncio.create_task(_adaptive_refresh_loop(store, decision_log))
         await asyncio.sleep(0.05)
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     assert call_count >= 1
     decision_log.last_n.assert_called_with(50)
@@ -81,10 +78,8 @@ async def test_loop_continues_after_exception():
         task = asyncio.create_task(_adaptive_refresh_loop(store, decision_log))
         await asyncio.sleep(0.05)
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     assert call_count >= 2
 

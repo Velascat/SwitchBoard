@@ -8,7 +8,6 @@ criterion D.
 from __future__ import annotations
 
 import json
-import time
 from pathlib import Path
 
 import pytest
@@ -18,7 +17,6 @@ from switchboard.domain.decision_record import DecisionRecord
 from switchboard.domain.selection_context import SelectionContext
 from switchboard.domain.selection_result import SelectionResult
 from switchboard.services.decision_logger import DecisionLogger, make_decision_record
-
 
 # ---------------------------------------------------------------------------
 # Helpers

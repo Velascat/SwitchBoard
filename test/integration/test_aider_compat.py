@@ -21,7 +21,6 @@ from switchboard.app import create_app
 from switchboard.domain.selection_context import SelectionContext
 from switchboard.domain.selection_result import SelectionResult
 
-
 _OPENAI_RESPONSE: dict[str, Any] = {
     "id": "chatcmpl-aider-compat",
     "object": "chat.completion",

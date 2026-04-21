@@ -7,7 +7,6 @@ the routing decision is still logged.
 
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -16,7 +15,6 @@ from httpx import ASGITransport, AsyncClient
 from switchboard.app import create_app
 from switchboard.domain.selection_context import SelectionContext
 from switchboard.domain.selection_result import SelectionResult
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -242,9 +240,9 @@ class TestStreamingForwarder:
         assert b"[DONE]" in chunks_received[2]
 
     async def test_stream_logs_decision_after_complete(self) -> None:
-        from pathlib import Path
         import json
         import tempfile
+        from pathlib import Path
 
         from switchboard.domain.selection_context import SelectionContext
         from switchboard.domain.selection_result import SelectionResult

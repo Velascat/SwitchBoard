@@ -20,7 +20,6 @@ from switchboard.app import create_app
 from switchboard.domain.selection_context import SelectionContext
 from switchboard.domain.selection_result import SelectionResult
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -223,16 +222,18 @@ class TestErrorHelpers:
         assert body["error"]["code"] == "bad_code"
 
     def test_request_id_included_when_provided(self) -> None:
-        from switchboard.api.errors import error_response
         import json
+
+        from switchboard.api.errors import error_response
 
         resp = error_response(500, "internal_error", "oops", "err", request_id="req-123")
         body = json.loads(resp.body)
         assert body["error"]["request_id"] == "req-123"
 
     def test_request_id_omitted_when_none(self) -> None:
-        from switchboard.api.errors import error_response
         import json
+
+        from switchboard.api.errors import error_response
 
         resp = error_response(500, "internal_error", "oops", "err")
         body = json.loads(resp.body)

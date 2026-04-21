@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import asyncio
-import logging
+import contextlib
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 import httpx
 import uvicorn
@@ -141,10 +141,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # --- Shutdown ------------------------------------------------------------
     logger.info("SwitchBoard shutting down")
     refresh_task.cancel()
-    try:
+    with contextlib.suppress(asyncio.CancelledError):
         await refresh_task
-    except asyncio.CancelledError:
-        pass
     await inner_gateway.close()
     decision_logger.close()
 
@@ -156,10 +154,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
+    from switchboard.api.routes_admin import router as admin_router
+    from switchboard.api.routes_chat import router as chat_router
     from switchboard.api.routes_health import router as health_router
     from switchboard.api.routes_models import router as models_router
-    from switchboard.api.routes_chat import router as chat_router
-    from switchboard.api.routes_admin import router as admin_router
 
     app = FastAPI(
         title="SwitchBoard",

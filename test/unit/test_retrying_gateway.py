@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, call, patch
 import httpx
 import pytest
 
-from switchboard.adapters.retrying_gateway import RetryingGateway, _RETRYABLE_STATUS_CODES
+from switchboard.adapters.retrying_gateway import _RETRYABLE_STATUS_CODES, RetryingGateway
 
 
 def _make_status_error(status_code: int) -> httpx.HTTPStatusError:

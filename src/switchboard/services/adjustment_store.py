@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -92,14 +92,14 @@ class AdjustmentStore:
             if adj.action != "neutral":
                 new_adjustments[adj.profile] = adj
         self._adjustments = new_adjustments
-        self._last_refresh = datetime.now(timezone.utc)
+        self._last_refresh = datetime.now(UTC)
 
     def maybe_refresh(self, records: list[DecisionRecord]) -> None:
         """Refresh only if the cache is stale (TTL exceeded or never populated)."""
         if self._last_refresh is None:
             self.refresh(records)
             return
-        age = (datetime.now(timezone.utc) - self._last_refresh).total_seconds()
+        age = (datetime.now(UTC) - self._last_refresh).total_seconds()
         if age >= self._ttl_seconds:
             self.refresh(records)
 

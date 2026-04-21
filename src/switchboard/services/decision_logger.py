@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from statistics import mean, median
 from typing import Any
@@ -160,7 +160,7 @@ def make_decision_record(
         }
 
     return DecisionRecord(
-        timestamp=datetime.now(timezone.utc).isoformat(),
+        timestamp=datetime.now(UTC).isoformat(),
         client=tenant_id,
         task_type=context.task_type if context else None,
         selected_profile=profile_name,

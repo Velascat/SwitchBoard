@@ -27,7 +27,6 @@ from typing import Any
 
 from switchboard.domain.selection_context import SelectionContext
 
-
 # ---------------------------------------------------------------------------
 # Header names (lowercased for case-insensitive matching)
 # ---------------------------------------------------------------------------

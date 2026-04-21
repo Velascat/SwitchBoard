@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-import pytest
-
 from switchboard.services.adjustment_engine import (
-    AdjustmentEngine,
-    PolicyAdjustment,
     _DEMOTE_ERROR_RATE,
     _DEMOTE_LATENCY_MS,
     _DEMOTE_MIN_REQUESTS,
     _PROMOTE_MAX_ERROR_RATE,
     _PROMOTE_MIN_REQUESTS,
+    AdjustmentEngine,
 )
 from switchboard.services.signal_aggregator import ProfileSignals
 

@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-import pytest
-
 from switchboard.domain.policy_rule import ExperimentConfig
 from switchboard.services.experiment_router import ExperimentRouter, _assign_bucket
-
 
 # ---------------------------------------------------------------------------
 # Bucket assignment — determinism and distribution

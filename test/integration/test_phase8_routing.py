@@ -23,7 +23,6 @@ from switchboard.services.policy_engine import PolicyEngine
 from switchboard.services.profile_scorer import ProfileScorer
 from switchboard.services.selector import Selector
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

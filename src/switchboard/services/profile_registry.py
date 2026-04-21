@@ -59,10 +59,7 @@ class ProfileRegistry:
                 f"Available: {sorted(profiles.keys())}"
             )
         entry = profiles[profile_name]
-        if isinstance(entry, dict):
-            model = entry.get("downstream_model", "")
-        else:
-            model = str(entry)
+        model = entry.get("downstream_model", "") if isinstance(entry, dict) else str(entry)
 
         if not model:
             raise ValueError(

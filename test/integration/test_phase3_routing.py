@@ -17,12 +17,10 @@ import pytest
 
 from switchboard.adapters.file_policy_store import FilePolicyStore
 from switchboard.adapters.file_profile_store import FileProfileStore
-from switchboard.domain.selection_context import SelectionContext
 from switchboard.services.capability_registry import CapabilityRegistry
 from switchboard.services.classifier import RequestClassifier
 from switchboard.services.policy_engine import PolicyEngine
 from switchboard.services.selector import Selector
-
 
 # ---------------------------------------------------------------------------
 # Fixtures

@@ -17,7 +17,6 @@ import respx
 
 from switchboard.adapters.http_9router import HttpNineRouterGateway
 
-
 NINE_ROUTER_BASE = "http://fake-9router:20128"
 
 _SAMPLE_REQUEST: dict[str, Any] = {

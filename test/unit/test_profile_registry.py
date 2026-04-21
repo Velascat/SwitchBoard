@@ -1,13 +1,10 @@
 """Unit tests for ProfileRegistry."""
 
-from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-import yaml
 
 from switchboard.services.profile_registry import ProfileRegistry
-
 
 # ---------------------------------------------------------------------------
 # Helpers / fixtures

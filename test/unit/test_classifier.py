@@ -5,8 +5,8 @@ import pytest
 from switchboard.services.classifier import (
     RequestClassifier,
     _estimate_tokens,
-    _infer_task_type,
     _infer_complexity,
+    _infer_task_type,
 )
 
 
