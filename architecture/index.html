@@ -1312,7 +1312,7 @@
 </tr>
 <tr>
 <td><code>AdjustmentStore</code></td>
-<td>Per-profile adjustments (demoted/promoted); refreshed on operator request or via <code>maybe_refresh()</code> with 300 s TTL</td>
+<td>Per-profile adjustments (demoted/promoted); auto-refreshed every 300 s by background task; operator controls via admin API</td>
 </tr>
 <tr>
 <td><code>AdjustmentEngine</code></td>
