@@ -40,6 +40,16 @@ class DecisionRecord(BaseModel):
     status: str = "success"           # "success" | "error"
     error_category: str | None = None  # "upstream_error" | "upstream_timeout" | "selection_error" | "internal_error"
 
+    # Phase 7 — adaptive policy trace
+    adjustment_applied: bool = False
+    adjustment_reason: str | None = None
+
+    # Phase 8 — advanced routing trace
+    cost_estimate: float | None = None
+    ab_experiment: str | None = None
+    ab_bucket: str | None = None
+    scored_profiles: list[dict] | None = None
+
     # ---------------------------------------------------------------------------
     # Legacy fields — kept for backward-compat with existing decision_log +
     # admin route

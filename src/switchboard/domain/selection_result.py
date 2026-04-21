@@ -32,6 +32,16 @@ class SelectionResult(BaseModel):
     # Phase 3 — rejection trace: profiles considered but ruled ineligible
     rejected_profiles: list[dict[str, Any]] = Field(default_factory=list)
 
+    # Phase 7 — adaptive policy trace
+    adjustment_applied: bool = False
+    adjustment_reason: str | None = None
+
+    # Phase 8 — advanced routing trace
+    cost_estimate: float | None = None       # relative cost weight of selected profile
+    ab_experiment: str | None = None         # experiment name if A/B routing applied
+    ab_bucket: str | None = None             # "A" (control) or "B" (treatment)
+    scored_profiles: list[dict] | None = None  # multi-factor scoring details
+
     # ---------------------------------------------------------------------------
     # Legacy field — kept for backward-compat with existing selector + tests
     # ---------------------------------------------------------------------------
