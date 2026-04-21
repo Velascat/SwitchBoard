@@ -47,6 +47,12 @@ check_file "scripts/run_dev.sh"
 check_file "scripts/smoke_test.sh"
 check_file "scripts/inspect.py"
 
+# Site
+check_file "docs/index.md"
+check_file "mkdocs.yml"
+check_file ".github/workflows/docs.yml"
+check_file ".github/workflows/ci.yml"
+
 # License
 check_file "LICENSE"
 
