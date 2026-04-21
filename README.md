@@ -27,7 +27,7 @@ When you have multiple LLM providers and model tiers (fast/cheap, capable/expens
 
 - **Transparent proxy** — clients send standard OpenAI requests and receive standard responses
 - **Policy as code** — edit `config/policy.yaml` and routing changes immediately, no redeploy
-- **Adaptive routing** — monitors error rates and latency; automatically demotes unhealthy profiles
+- **Adaptive routing** — monitors error rates and latency; demotes unhealthy profiles on operator or scheduled refresh
 - **A/B experiments** — declarative traffic splitting between profiles with no code changes
 - **Full audit trail** — every routing decision is logged for debugging and analysis
 
