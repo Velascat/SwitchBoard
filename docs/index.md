@@ -1,23 +1,26 @@
 # SwitchBoard
 
-**Policy-driven model selection service.**
+**Execution-lane selector and policy-driven routing service.**
 
-SwitchBoard sits between API clients and [9router](https://github.com/Velascat/9router), inspecting every chat-completion request, evaluating a declarative policy, and routing the request to the most appropriate downstream model profile — transparently to the caller.
+SwitchBoard receives a task request, classifies it (complexity, cost sensitivity,
+capability requirements), evaluates a declarative policy, and selects the execution
+lane that should handle it — `claude_cli`, `codex_cli`, or `aider_local`.
 
 ```
-Client
-  │  POST /v1/chat/completions
+Task request
+  │
   ▼
 SwitchBoard  (port 20401)
-  │  classify → select → forward
+  │  classify → score → select lane
   ▼
-9router      (port 20128)
-  │  provider routing
-  ▼
-LLM Provider (OpenAI, Anthropic, local, …)
+Execution lane
+  ├── claude_cli   (Claude Code CLI, premium, OAuth)
+  ├── codex_cli    (Codex CLI, premium, subscription)
+  └── aider_local  (Aider + WorkStation tiny models, local, free)
 ```
 
-Any OpenAI-compatible client works without modification. The routing logic lives in a YAML file — no code changes needed to change routing behaviour.
+The routing logic lives in a YAML file. No code changes are needed to change which
+lane handles which kind of task.
 
 ---
 
@@ -37,9 +40,32 @@ When you have multiple LLM providers and model tiers (fast/cheap, capable/expens
 
 ---
 
+## What SwitchBoard Is Not
+
+- **Not a universal provider proxy.** SwitchBoard selects execution lanes. It does not
+  forward requests to external LLM provider APIs (OpenAI, Anthropic, etc.) on behalf of
+  clients. That pattern was removed when `9router` was retired. See
+  `WorkStation/docs/architecture/adr/0001-remove-9router.md`.
+
+- **Not a credential broker.** SwitchBoard does not hold API keys for LLM providers.
+  The CLI lanes (`claude_cli`, `codex_cli`) manage their own OAuth sessions. The local
+  lane (`aider_local`) uses WorkStation-deployed models with no external credentials.
+
+- **Not a recreation of 9router.** 9router was a provider-routing proxy. SwitchBoard
+  is a lane-selection policy engine. The distinction matters: SwitchBoard produces a
+  lane assignment; it does not proxy HTTP calls to provider APIs.
+
+- **Not the decision engine.** SwitchBoard does not decide *what* work to do. It
+  decides *how* to run a task that has already been selected by ControlPlane.
+
+- **Not the execution runner.** SwitchBoard selects the lane and hands off. kodo and
+  the lane runners do the actual coding.
+
+---
+
 ## Quick start
 
-**Prerequisites:** Python 3.11+ and a running [9router](https://github.com/Velascat/9router) instance.
+**Prerequisites:** Python 3.11+.
 
 ```bash
 git clone https://github.com/Velascat/SwitchBoard
