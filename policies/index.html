@@ -1489,7 +1489,7 @@
 <tr>
 <td><code>complexity</code></td>
 <td>string or list</td>
-<td><code>"low"</code>, <code>"medium"</code>, <code>"high"</code></td>
+<td><code>"low"</code> (≤500 tokens, ≤3 msgs), <code>"medium"</code> (≤3k tokens, ≤8 msgs), <code>"high"</code> (&gt;3k tokens, &gt;8 msgs, or tools present)</td>
 </tr>
 <tr>
 <td><code>stream</code></td>
@@ -1500,6 +1500,21 @@
 <td><code>tools_present</code></td>
 <td>boolean</td>
 <td>Whether the request includes a <code>tools</code> array</td>
+</tr>
+<tr>
+<td><code>requires_tools</code></td>
+<td>boolean</td>
+<td>Same as <code>tools_present</code> — alias used by the eligibility check</td>
+</tr>
+<tr>
+<td><code>requires_long_context</code></td>
+<td>boolean</td>
+<td><code>true</code> when estimated tokens &gt; 6,000</td>
+</tr>
+<tr>
+<td><code>requires_structured_output</code></td>
+<td>boolean</td>
+<td><code>true</code> when <code>response_format.type</code> is <code>json_object</code> or <code>json_schema</code></td>
 </tr>
 </tbody>
 </table>

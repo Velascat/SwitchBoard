@@ -1058,110 +1058,115 @@
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│    task_type: code | analysis | planning |      │
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│               summarization | chat              │
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│    complexity: low | medium | high              │
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│    requires_structured_output (from             │
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│      response_format.type)                      │
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│                                                 │
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│  Output: SelectionContext                       │
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>└────────────────────────┬────────────────────────┘
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>                         │
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>                         ▼
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>┌─────────────────────────────────────────────────┐
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│  3. SELECT  (Selector)                          │
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│                                                 │
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│  3a. PolicyEngine                               │
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│      If force_profile header → use it directly  │
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│      Else: evaluate rules in priority order;    │
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│      first match wins.                          │
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│      No match → fallback_profile                │
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│                                                 │
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│  3b. ExperimentRouter (A/B)                     │
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│      If an enabled experiment applies to this   │
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│      rule, and the request hashes into the      │
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│      treatment bucket → redirect to profile_b.  │
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│      force_profile rules skip this step.        │
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│                                                 │
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│  3c. AdjustmentStore (adaptive routing)         │
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│      If the selected profile is demoted (high   │
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│      error rate or latency), find the next      │
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│      eligible non-demoted profile.              │
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│      Fail-open: if all profiles are demoted,    │
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│      keep the original selection.               │
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│                                                 │
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│  3d. Eligibility check                          │
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│      For each candidate profile:                │
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│        requires_tools? → supports_tools must    │
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│          be true.                               │
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│        requires_structured_output? →            │
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│          supports_structured_output must be     │
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│          true.                                  │
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│      Ineligible profiles are skipped.           │
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│                                                 │
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│  3e. ProfileScorer                              │
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│      All eligible candidates are scored by a    │
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│      weighted combination of quality_tier,      │
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│      cost_tier/cost_weight, and latency_tier.   │
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│      Highest-scoring profile is selected.       │
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│                                                 │
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│  Output: SelectionResult                        │
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│    profile_name, downstream_model, rule_name,   │
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│    adjustment_applied, ab_experiment,           │
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│    cost_estimate, scored_profiles               │
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>└────────────────────────┬────────────────────────┘
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>                         │
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>                         ▼
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>┌─────────────────────────────────────────────────┐
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│  4. REWRITE  (routes_chat.py)                   │
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│                                                 │
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│  body[&quot;model&quot;] = result.downstream_model        │
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│                                                 │
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│  All other fields preserved verbatim:           │
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│  tools, stream, response_format, temperature,   │
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│  max_tokens, …                                  │
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>└────────────────────────┬────────────────────────┘
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>                         │
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>                         ▼
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>┌─────────────────────────────────────────────────┐
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│  5. FORWARD  (Forwarder + RetryingGateway)      │
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│                                                 │
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│  RetryingGateway wraps HttpNineRouterGateway:   │
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│    Attempt 1 → if 429/5xx/timeout/conn error:   │
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>│    sleep 0.5 s → Attempt 2                      │
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│    sleep 1.0 s → Attempt 3                      │
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│    4xx (except 429) raised immediately.         │
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│    After 3 failed attempts: raise exception.    │
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│                                                 │
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│  Streaming (stream: true):                      │
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│    No retry. SSE chunks forwarded directly.     │
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│                                                 │
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│  Timer wraps the full attempt sequence.         │
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>└────────────────────────┬────────────────────────┘
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>                         │
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>                         ▼
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>┌─────────────────────────────────────────────────┐
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│  6. LOG  (DecisionLogger)                       │
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│                                                 │
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│  DecisionRecord appended to:                    │
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│    - In-memory ring buffer (last 1 000)         │
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│    - decisions.jsonl (if path configured)       │
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│                                                 │
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│  Fields include: timestamp, request_id,         │
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│  profile_name, downstream_model, rule_name,     │
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│  task_type, complexity, estimated_tokens,       │
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│  adjustment_applied, ab_experiment, ab_bucket,  │
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>│  cost_estimate, scored_profiles, latency_ms,    │
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│  status, error                                  │
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>└────────────────────────┬────────────────────────┘
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>                         │
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                         ▼
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>┌─────────────────────────────────────────────────┐
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│  7. RESPOND  (routes_chat.py)                   │
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>│                                                 │
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>│  Success: return provider response verbatim,    │
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│  HTTP 200.                                      │
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│                                                 │
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>│  Failure: return structured error response      │
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│  (see error table below).                       │
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>└─────────────────────────────────────────────────┘
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│      high = &gt;3k tokens | &gt;8 msgs | tools        │
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│      medium = &gt;500 tokens | &gt;3 msgs             │
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│    requires_long_context: true if tokens &gt; 6k   │
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│    requires_structured_output (from             │
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│      response_format.type)                      │
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│    latency_sensitivity auto-set to &quot;high&quot;       │
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│      when stream=true (no header override)      │
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│                                                 │
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│  Output: SelectionContext                       │
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>└────────────────────────┬────────────────────────┘
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>                         │
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>                         ▼
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│  3. SELECT  (Selector)                          │
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│                                                 │
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│  3a. PolicyEngine                               │
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│      If force_profile header → use it directly  │
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│      Else: evaluate rules in priority order;    │
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│      first match wins.                          │
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│      No match → fallback_profile                │
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│                                                 │
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│  3b. ExperimentRouter (A/B)                     │
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│      If an enabled experiment applies to this   │
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│      rule, and the request hashes into the      │
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│      treatment bucket → redirect to profile_b.  │
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│      force_profile rules skip this step.        │
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│                                                 │
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│  3c. AdjustmentStore (adaptive routing)         │
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│      If the selected profile is demoted (high   │
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│      error rate or latency), find the next      │
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│      eligible non-demoted profile.              │
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│      Fail-open: if all profiles are demoted,    │
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│      keep the original selection.               │
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│                                                 │
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│  3d. Eligibility check                          │
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│      For each candidate profile:                │
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│        requires_tools? → supports_tools must    │
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│          be true.                               │
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│        requires_structured_output? →            │
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│          supports_structured_output must be     │
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│          true.                                  │
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│      Ineligible profiles are skipped.           │
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│                                                 │
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│  3e. ProfileScorer                              │
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│      All eligible candidates are scored by a    │
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│      weighted combination of quality_tier,      │
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│      cost_tier/cost_weight, and latency_tier.   │
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│      Highest-scoring profile is selected.       │
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│                                                 │
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│  Output: SelectionResult                        │
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│    profile_name, downstream_model, rule_name,   │
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│    adjustment_applied, ab_experiment,           │
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│    cost_estimate, scored_profiles               │
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>└────────────────────────┬────────────────────────┘
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>                         │
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>                         ▼
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│  4. REWRITE  (routes_chat.py)                   │
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│                                                 │
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│  body[&quot;model&quot;] = result.downstream_model        │
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│                                                 │
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│  All other fields preserved verbatim:           │
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│  tools, stream, response_format, temperature,   │
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│  max_tokens, …                                  │
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>└────────────────────────┬────────────────────────┘
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>                         │
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>                         ▼
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│  5. FORWARD  (Forwarder + RetryingGateway)      │
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│                                                 │
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│  RetryingGateway wraps HttpNineRouterGateway:   │
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│    Attempt 1 → if 429/5xx/timeout/conn error:   │
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│    sleep 0.5 s → Attempt 2                      │
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│    sleep 1.0 s → Attempt 3                      │
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│    4xx (except 429) raised immediately.         │
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│    After 3 failed attempts: raise exception.    │
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>│                                                 │
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>│  Streaming (stream: true):                      │
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>│    No retry. SSE chunks forwarded directly.     │
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>│                                                 │
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│  Timer wraps the full attempt sequence.         │
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>└────────────────────────┬────────────────────────┘
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>                         │
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>                         ▼
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│  6. LOG  (DecisionLogger)                       │
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│                                                 │
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│  DecisionRecord appended to:                    │
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│    - In-memory ring buffer (last 1 000)         │
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│    - decisions.jsonl (if path configured)       │
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>│                                                 │
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│  Fields include: timestamp, request_id,         │
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>│  profile_name, downstream_model, rule_name,     │
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>│  task_type, complexity, estimated_tokens,       │
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>│  adjustment_applied, ab_experiment, ab_bucket,  │
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>│  cost_estimate, scored_profiles, latency_ms,    │
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│  status, error                                  │
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>└────────────────────────┬────────────────────────┘
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                         │
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>                         ▼
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>┌─────────────────────────────────────────────────┐
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>│  7. RESPOND  (routes_chat.py)                   │
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│                                                 │
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>│  Success: return provider response verbatim,    │
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>│  HTTP 200.                                      │
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>│                                                 │
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>│  Failure: return structured error response      │
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>│  (see error table below).                       │
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>└─────────────────────────────────────────────────┘
 </code></pre></div>
 <hr />
 <h2 id="error-responses">Error responses<a class="headerlink" href="#error-responses" title="Permanent link">&para;</a></h2>

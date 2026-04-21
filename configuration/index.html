@@ -589,6 +589,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-requests-are-classified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How requests are classified
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How requests are classified">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boolean flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-latency-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic latency sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-estimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token estimation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1249,6 +1321,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-requests-are-classified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How requests are classified
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How requests are classified">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boolean flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-latency-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic latency sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-estimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token estimation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1531,6 +1675,92 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="how-requests-are-classified">How requests are classified<a class="headerlink" href="#how-requests-are-classified" title="Permanent link">&para;</a></h2>
+<p>The <code>RequestClassifier</code> runs on every request before policy evaluation and populates the <code>SelectionContext</code> fields that rule conditions match against. All logic is deterministic and keyword-based — no model calls.</p>
+<h3 id="task-type">Task type<a class="headerlink" href="#task-type" title="Permanent link">&para;</a></h3>
+<p>Detection order (first match wins):</p>
+<table>
+<thead>
+<tr>
+<th><code>task_type</code></th>
+<th>Triggered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>Code fence (<code>```</code>) in any message, or phrases like <code>"write a function"</code>, <code>"refactor"</code>, <code>"debug"</code></td>
+</tr>
+<tr>
+<td><code>analysis</code></td>
+<td>Phrases like <code>"analyze"</code>, <code>"compare and contrast"</code>, <code>"root cause"</code>, <code>"trade-offs"</code></td>
+</tr>
+<tr>
+<td><code>planning</code></td>
+<td>Phrases like <code>"design a"</code>, <code>"architecture"</code>, <code>"roadmap"</code>, <code>"step by step"</code></td>
+</tr>
+<tr>
+<td><code>summarization</code></td>
+<td>Phrases like <code>"summarize"</code>, <code>"tldr"</code>, <code>"key points"</code></td>
+</tr>
+<tr>
+<td><code>chat</code></td>
+<td>Default when nothing else matches</td>
+</tr>
+</tbody>
+</table>
+<h3 id="complexity">Complexity<a class="headerlink" href="#complexity" title="Permanent link">&para;</a></h3>
+<p>Computed from token count, message count, and tool use:</p>
+<table>
+<thead>
+<tr>
+<th><code>complexity</code></th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>high</code></td>
+<td>estimated tokens &gt; 3,000 <strong>or</strong> more than 8 messages <strong>or</strong> tools array present</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>estimated tokens &gt; 500 <strong>or</strong> more than 3 messages</td>
+</tr>
+<tr>
+<td><code>low</code></td>
+<td>everything else</td>
+</tr>
+</tbody>
+</table>
+<h3 id="boolean-flags">Boolean flags<a class="headerlink" href="#boolean-flags" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Set when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>requires_long_context</code></td>
+<td>estimated tokens &gt; 6,000</td>
+</tr>
+<tr>
+<td><code>requires_tools</code></td>
+<td><code>tools</code> array is non-empty</td>
+</tr>
+<tr>
+<td><code>requires_structured_output</code></td>
+<td><code>response_format.type</code> is <code>json_object</code> or <code>json_schema</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="automatic-latency-sensitivity">Automatic latency sensitivity<a class="headerlink" href="#automatic-latency-sensitivity" title="Permanent link">&para;</a></h3>
+<p>When <code>stream: true</code> and no <code>X-SwitchBoard-Latency-Sensitivity</code> header is present, <code>latency_sensitivity</code> is automatically set to <code>"high"</code>. This makes streaming requests match latency-sensitive rules without requiring callers to set the header explicitly.</p>
+<h3 id="token-estimation">Token estimation<a class="headerlink" href="#token-estimation" title="Permanent link">&para;</a></h3>
+<p>Estimated token count = total character length of all message content strings ÷ 4. This is a rough approximation — it does not account for tokenisation differences between models.</p>
 
 
 
