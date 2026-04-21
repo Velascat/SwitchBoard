@@ -1606,7 +1606,7 @@
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># View adaptive state</span>
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:20401/admin/adaptive<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>json.tool
 </code></pre></div>
-<p>The adaptive system demotes a profile when its error rate exceeds 40% or mean latency exceeds 8 000 ms over the last N requests. Adjustments expire after 300 seconds.</p>
+<p>The adaptive system demotes a profile when its error rate exceeds 40% or mean latency exceeds 8 000 ms over the last N requests (minimum 5 requests required before demotion triggers). Adjustments are not recomputed automatically — they persist until the next <code>POST /admin/adaptive/refresh</code> call or a reset.</p>
 <p>To reset:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:20401/admin/adaptive/reset
 </code></pre></div>

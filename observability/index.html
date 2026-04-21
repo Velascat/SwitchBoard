@@ -1460,7 +1460,7 @@ No JSONL parsing needed — it works against a running instance.</p>
 <p>Full request/response schemas: <a href="../api/">docs/api.md</a>.</p>
 <hr />
 <h2 id="adaptive-routing-observability">Adaptive routing observability<a class="headerlink" href="#adaptive-routing-observability" title="Permanent link">&para;</a></h2>
-<p>The adaptive system monitors per-profile error rates and latency and adjusts routing automatically.</p>
+<p>The adaptive system tracks per-profile error rates and latency. Adjustments are applied to routing decisions once computed, but are only recomputed when an operator calls <code>POST /admin/adaptive/refresh</code>.</p>
 <p>Check the current state:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:20401/admin/adaptive<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>json.tool
 </code></pre></div>
@@ -1481,7 +1481,7 @@ No JSONL parsing needed — it works against a running instance.</p>
 <a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">  </span><span class="nt">&quot;window_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
 <a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="p">}</span>
 </code></pre></div>
-<p>Adjustments are recomputed every 300 seconds from recent decision records. To reset all profiles to neutral immediately:</p>
+<p>Adjustments are only recomputed when an operator explicitly calls <code>POST /admin/adaptive/refresh</code> — there is no automatic background refresh. To reset all profiles to neutral immediately:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:20401/admin/adaptive/reset
 </code></pre></div>
 <p>Demotion thresholds (hardcoded, require at least 5 samples before triggering):
