@@ -603,12 +603,12 @@
   <a href="#profile-file-configprofilesyaml" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Profile File: config/profiles.yaml
+        Profile file: config/profiles.yaml
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Profile File: config/profiles.yaml">
+    <nav class="md-nav" aria-label="Profile file: config/profiles.yaml">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -628,15 +628,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#built-in-profiles" class="md-nav__link">
+  <a href="#multi-factor-scoring" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Built-in Profiles
+        Multi-factor scoring
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Built-in Profiles">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in profiles">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -689,21 +700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#relationship-to-capabilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Relationship to Capabilities
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#adding-a-new-profile" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Adding a New Profile
+        Adding a new profile
       
     </span>
   </a>
@@ -1014,12 +1014,12 @@
   <a href="#profile-file-configprofilesyaml" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Profile File: config/profiles.yaml
+        Profile file: config/profiles.yaml
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Profile File: config/profiles.yaml">
+    <nav class="md-nav" aria-label="Profile file: config/profiles.yaml">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1039,15 +1039,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#built-in-profiles" class="md-nav__link">
+  <a href="#multi-factor-scoring" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Built-in Profiles
+        Multi-factor scoring
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Built-in Profiles">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in profiles">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1100,21 +1111,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#relationship-to-capabilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Relationship to Capabilities
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#adding-a-new-profile" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Adding a New Profile
+        Adding a new profile
       
     </span>
   </a>
@@ -1142,24 +1142,25 @@
 
 
 <h1 id="model-profiles">Model Profiles<a class="headerlink" href="#model-profiles" title="Permanent link">&para;</a></h1>
-<p>Profiles are named abstractions that decouple policy rules from specific
-downstream model identifiers.  A rule selects a <strong>profile</strong>; the
-<strong>capability registry</strong> then resolves that profile to the actual model string
-sent to 9router.</p>
+<p>Profiles are named abstractions that decouple policy rules from specific downstream model identifiers. A rule selects a <strong>profile</strong>; the <strong>capability registry</strong> resolves that profile to the actual model string sent to 9router.</p>
 <hr />
-<h2 id="profile-file-configprofilesyaml">Profile File: <code>config/profiles.yaml</code><a class="headerlink" href="#profile-file-configprofilesyaml" title="Permanent link">&para;</a></h2>
+<h2 id="profile-file-configprofilesyaml">Profile file: <code>config/profiles.yaml</code><a class="headerlink" href="#profile-file-configprofilesyaml" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">profiles</span><span class="p">:</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&lt;profile_name&gt;</span><span class="p">:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Human-readable</span><span class="nv"> </span><span class="s">description.&quot;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">tag1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag2</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">preferred_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">max_context_tokens</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128000</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">supports_tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">supports_vision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">cost_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span><span class="w">        </span><span class="c1"># low | medium | high</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">latency_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span><span class="w">     </span><span class="c1"># low | medium | high</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">downstream_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4o-mini</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Human-readable</span><span class="nv"> </span><span class="s">description.&quot;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">tag1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tag2</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">preferred_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">max_context_tokens</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128000</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">supports_tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">supports_vision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">supports_structured_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="nt">cost_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">cost_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nt">latency_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">quality_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
 </code></pre></div>
 <h3 id="schema">Schema<a class="headerlink" href="#schema" title="Permanent link">&para;</a></h3>
 <table>
@@ -1173,6 +1174,12 @@ sent to 9router.</p>
 </thead>
 <tbody>
 <tr>
+<td><code>downstream_model</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Concrete model identifier forwarded to 9router.</td>
+</tr>
+<tr>
 <td><code>description</code></td>
 <td>string</td>
 <td>no</td>
@@ -1182,108 +1189,136 @@ sent to 9router.</p>
 <td><code>tags</code></td>
 <td>list[string]</td>
 <td>no</td>
-<td>Free-form capability tags for documentation purposes.</td>
+<td>Free-form capability tags.</td>
 </tr>
 <tr>
 <td><code>preferred_provider</code></td>
 <td>string</td>
 <td>no</td>
-<td>Hint to 9router for provider selection (e.g. <code>openai</code>, <code>ollama</code>).</td>
+<td>Hint to 9router for provider selection (<code>openai</code>, <code>anthropic</code>, <code>ollama</code>, …).</td>
 </tr>
 <tr>
 <td><code>max_context_tokens</code></td>
 <td>integer</td>
 <td>no</td>
-<td>Maximum context window size supported by this profile.</td>
+<td>Maximum context window supported by this profile.</td>
 </tr>
 <tr>
 <td><code>supports_tools</code></td>
 <td>boolean</td>
 <td>no</td>
-<td>Whether the underlying model reliably handles function calling.</td>
+<td>Whether the model reliably handles function calling. Default: <code>true</code>.</td>
 </tr>
 <tr>
 <td><code>supports_vision</code></td>
 <td>boolean</td>
 <td>no</td>
-<td>Whether the underlying model accepts image inputs.</td>
+<td>Whether the model accepts image inputs. Default: <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>supports_structured_output</code></td>
+<td>boolean</td>
+<td>no</td>
+<td>Whether the model reliably produces JSON output when <code>response_format</code> is set. Profiles where this is <code>false</code> are excluded when the request requires structured output. Default: <code>true</code>.</td>
 </tr>
 <tr>
 <td><code>cost_tier</code></td>
 <td>string</td>
 <td>no</td>
-<td>Relative cost indicator: <code>low</code>, <code>medium</code>, or <code>high</code>.</td>
+<td>Relative cost: <code>low</code>, <code>medium</code>, or <code>high</code>. Used by the profile scorer when <code>cost_weight</code> is absent.</td>
+</tr>
+<tr>
+<td><code>cost_weight</code></td>
+<td>float</td>
+<td>no</td>
+<td>Precise relative cost for multi-factor scoring. Overrides <code>cost_tier</code>. Higher = more expensive.</td>
 </tr>
 <tr>
 <td><code>latency_tier</code></td>
 <td>string</td>
 <td>no</td>
-<td>Relative latency indicator: <code>low</code> (fast), <code>medium</code>, or <code>high</code>.</td>
+<td>Relative latency: <code>low</code> (fast response), <code>medium</code>, or <code>high</code> (slow).</td>
+</tr>
+<tr>
+<td><code>quality_tier</code></td>
+<td>string</td>
+<td>no</td>
+<td>Relative output quality: <code>low</code>, <code>medium</code>, or <code>high</code>. Used by the profile scorer.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="built-in-profiles">Built-in Profiles<a class="headerlink" href="#built-in-profiles" title="Permanent link">&para;</a></h2>
+<h2 id="multi-factor-scoring">Multi-factor scoring<a class="headerlink" href="#multi-factor-scoring" title="Permanent link">&para;</a></h2>
+<p>When multiple profiles are eligible for a request, <code>ProfileScorer</code> ranks them using a weighted combination of quality, cost, and latency tiers.</p>
+<p>Default weights: <code>quality=4.0, cost=1.0, latency=1.0</code> — quality dominates by default.</p>
+<p>Weights shift automatically based on caller signals:
+- <code>X-SwitchBoard-Cost-Sensitivity: high</code> → cost weight increases to match quality weight
+- <code>X-SwitchBoard-Latency-Sensitivity: high</code> → latency weight raised to exceed quality weight</p>
+<hr />
+<h2 id="built-in-profiles">Built-in profiles<a class="headerlink" href="#built-in-profiles" title="Permanent link">&para;</a></h2>
 <h3 id="fast"><code>fast</code><a class="headerlink" href="#fast" title="Permanent link">&para;</a></h3>
-<p>Intended for short, routine requests where latency matters more than capability.</p>
+<p>Low-latency, cost-efficient model for short conversational turns and routine requests.</p>
 <ul>
-<li>Low cost, low latency.</li>
-<li>Resolves to <code>gpt-4o-mini</code> by default.</li>
-<li>Supports tool use.</li>
+<li><code>downstream_model: gpt-4o-mini</code></li>
+<li><code>cost_tier: low</code>, <code>cost_weight: 1.0</code>, <code>latency_tier: low</code>, <code>quality_tier: medium</code></li>
+<li><code>supports_tools: true</code>, <code>supports_structured_output: true</code></li>
 </ul>
 <h3 id="capable"><code>capable</code><a class="headerlink" href="#capable" title="Permanent link">&para;</a></h3>
-<p>Intended for complex tasks: long context, multi-step reasoning, reliable tool use.</p>
+<p>High-capability model for complex reasoning, long-context tasks, code generation, and tool use.</p>
 <ul>
-<li>High capability, medium latency, higher cost.</li>
-<li>Resolves to <code>gpt-4o</code> by default.</li>
-<li>Supports tool use and vision.</li>
+<li><code>downstream_model: gpt-4o</code></li>
+<li><code>cost_tier: high</code>, <code>cost_weight: 10.0</code>, <code>latency_tier: medium</code>, <code>quality_tier: high</code></li>
+<li><code>supports_tools: true</code>, <code>supports_vision: true</code>, <code>supports_structured_output: true</code></li>
 </ul>
 <h3 id="local"><code>local</code><a class="headerlink" href="#local" title="Permanent link">&para;</a></h3>
-<p>Intended for sensitive data (no cloud egress), batch jobs, or cost reduction.</p>
+<p>Locally hosted open-weight model. No data leaves the network. Suitable for sensitive workloads, batch jobs, and cost reduction.</p>
 <ul>
-<li>Runs via Ollama on the local network.</li>
-<li>Resolves to <code>llama3</code> by default.</li>
-<li>Limited context window (8k tokens).</li>
+<li><code>downstream_model: llama3</code></li>
+<li><code>cost_tier: low</code>, <code>cost_weight: 0.1</code>, <code>latency_tier: medium</code>, <code>quality_tier: medium</code></li>
+<li><code>supports_tools: false</code>, <code>supports_structured_output: false</code></li>
 </ul>
 <h3 id="default"><code>default</code><a class="headerlink" href="#default" title="Permanent link">&para;</a></h3>
-<p>Used when no policy rule matches.  Identical to <code>fast</code> in practice.</p>
+<p>Generic fallback used when no rule matches. Identical to <code>fast</code> in practice.</p>
+<ul>
+<li><code>downstream_model: gpt-4o-mini</code></li>
+<li><code>cost_tier: low</code>, <code>cost_weight: 1.0</code>, <code>quality_tier: medium</code></li>
+</ul>
 <hr />
-<h2 id="relationship-to-capabilities">Relationship to Capabilities<a class="headerlink" href="#relationship-to-capabilities" title="Permanent link">&para;</a></h2>
-<p>Profiles themselves do not contain the downstream model string.  That binding
-lives in <code>config/capabilities.yaml</code> so it can be changed without editing policy
-rules or profile definitions.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Policy rule → profile_name ──► capabilities.yaml → downstream_model → 9router
-</code></pre></div>
-<hr />
-<h2 id="adding-a-new-profile">Adding a New Profile<a class="headerlink" href="#adding-a-new-profile" title="Permanent link">&para;</a></h2>
+<h2 id="adding-a-new-profile">Adding a new profile<a class="headerlink" href="#adding-a-new-profile" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Add an entry to <code>config/profiles.yaml</code>:</li>
+<li>Add the entry to <code>config/profiles.yaml</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">profiles</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">ultra</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">downstream_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">o3</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Highest</span><span class="nv"> </span><span class="s">quality</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">critical</span><span class="nv"> </span><span class="s">tasks.&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">preferred_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">cost_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">cost_weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50.0</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">latency_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">quality_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">supports_tools</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">supports_structured_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<ol>
+<li>Add the downstream model binding to <code>config/capabilities.yaml</code> under <code>profiles:</code>:</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">profiles</span><span class="p">:</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">ultra</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Ultra</span><span class="nv"> </span><span class="s">high</span><span class="nv"> </span><span class="s">quality</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">critical</span><span class="nv"> </span><span class="s">tasks.&quot;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">cost_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">latency_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">downstream_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">o3</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">provider_hint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 </code></pre></div>
 <ol>
-<li>Add the downstream model binding to <code>config/capabilities.yaml</code>:</li>
+<li>Reference the profile in a policy rule:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">profiles</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">ultra</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">downstream_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">o3</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">provider_hint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical_task</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">select_profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ultra</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">when</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;critical&quot;</span>
 </code></pre></div>
 <ol>
-<li>Reference the profile name in a policy rule in <code>config/policy.yaml</code>:</li>
-</ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical_task</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ultra</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">conditions</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;critical&quot;</span>
-</code></pre></div>
-<ol>
-<li>Restart SwitchBoard (or trigger a reload) to pick up the changes.</li>
+<li>Restart SwitchBoard to pick up the changes.</li>
 </ol>
 
 
