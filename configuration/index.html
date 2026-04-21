@@ -1475,7 +1475,7 @@
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a># 9router connection
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>ROUTER9_BASE_URL=http://localhost:20128
 <a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>ROUTER9_CHAT_COMPLETIONS_PATH=/v1/chat/completions
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>ROUTER9_TIMEOUT_S=120              # per-attempt timeout in seconds (retries excluded)
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>ROUTER9_TIMEOUT_S=120              # read timeout per attempt in seconds; connect=5s, write=10s are hardcoded
 </code></pre></div>
 <hr />
 <h2 id="routing-policy-configpolicyyaml">Routing policy (<code>config/policy.yaml</code>)<a class="headerlink" href="#routing-policy-configpolicyyaml" title="Permanent link">&para;</a></h2>
@@ -1660,13 +1660,13 @@
 </tr>
 <tr>
 <td><code>X-SwitchBoard-Cost-Sensitivity</code></td>
-<td><code>high</code></td>
-<td>Matches <code>cost_sensitivity</code> condition</td>
+<td><code>high</code>, <code>low</code></td>
+<td><code>high</code>: favour cheap profiles; <code>low</code>: favour quality over cost</td>
 </tr>
 <tr>
 <td><code>X-SwitchBoard-Latency-Sensitivity</code></td>
-<td><code>high</code></td>
-<td>Matches <code>latency_sensitivity</code> condition</td>
+<td><code>high</code>, <code>low</code></td>
+<td><code>high</code>: favour fast profiles; <code>low</code>: de-prioritise latency</td>
 </tr>
 <tr>
 <td><code>X-SwitchBoard-Tenant-ID</code></td>
