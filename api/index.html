@@ -672,6 +672,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#get-admindecisionsrequest_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /admin/decisions/{request_id}
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GET /admin/decisions/{request_id}">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#path-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#get-adminsummary" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -695,7 +734,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#response_3" class="md-nav__link">
+  <a href="#response_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Response
@@ -723,7 +762,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#response_4" class="md-nav__link">
+  <a href="#response_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Response
@@ -1368,6 +1407,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#get-admindecisionsrequest_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /admin/decisions/{request_id}
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GET /admin/decisions/{request_id}">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#path-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#get-adminsummary" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1391,7 +1469,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#response_3" class="md-nav__link">
+  <a href="#response_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Response
@@ -1419,7 +1497,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#response_4" class="md-nav__link">
+  <a href="#response_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Response
@@ -1872,9 +1950,40 @@
 <td>string|null</td>
 <td>Error category for aggregation</td>
 </tr>
+<tr>
+<td><code>context_summary</code></td>
+<td>object|null</td>
+<td>Key classifier fields: <code>task_type</code>, <code>complexity</code>, <code>estimated_tokens</code>, <code>requires_tools</code>, <code>requires_long_context</code>, <code>stream</code>, <code>cost_sensitivity</code>, <code>latency_sensitivity</code></td>
+</tr>
+<tr>
+<td><code>rejected_profiles</code></td>
+<td>array</td>
+<td>Profiles considered and rejected, each with <code>profile</code> and <code>reason</code> fields</td>
+</tr>
 </tbody>
 </table>
 <p><strong>Status codes:</strong> <code>200</code>, <code>422</code> (invalid <code>n</code> value).</p>
+<hr />
+<h2 id="get-admindecisionsrequest_id">GET /admin/decisions/{request_id}<a class="headerlink" href="#get-admindecisionsrequest_id" title="Permanent link">&para;</a></h2>
+<p>Returns a single decision record by correlation ID.</p>
+<h3 id="path-parameters">Path parameters<a class="headerlink" href="#path-parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request_id</code></td>
+<td>The <code>X-Request-ID</code> value sent with the original request.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">&para;</a></h3>
+<p>Same schema as a single element in <code>GET /admin/decisions/recent</code>.</p>
+<p><strong>Status codes:</strong> <code>200</code>, <code>404</code> (no decision found with that <code>request_id</code>).</p>
 <hr />
 <h2 id="get-adminsummary">GET /admin/summary<a class="headerlink" href="#get-adminsummary" title="Permanent link">&para;</a></h2>
 <p>Returns aggregated routing statistics over the last N decisions.</p>
@@ -1897,7 +2006,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">&para;</a></h3>
+<h3 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">87</span><span class="p">,</span>
@@ -1915,18 +2024,22 @@
 <hr />
 <h2 id="get-adminadaptive">GET /admin/adaptive<a class="headerlink" href="#get-adminadaptive" title="Permanent link">&para;</a></h2>
 <p>Returns the current state of the adaptive routing system.</p>
-<h3 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">&para;</a></h3>
+<h3 id="response_5">Response<a class="headerlink" href="#response_5" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;adjustments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;capable&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demote&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error_rate=0.52 exceeds threshold 0.40&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">      </span><span class="nt">&quot;expires_in_s&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">142.3</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="nt">&quot;last_refresh&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-20T12:30:00.000000+00:00&quot;</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;adjustment_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;demoted_profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;capable&quot;</span><span class="p">],</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;promoted_profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">&quot;adjustments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">&quot;profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;capable&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demote&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">      </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error rate 52% over 10 requests exceeds threshold (40%)&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nt">&quot;last_refresh&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-20T12:30:00.000000+00:00&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span><span class="nt">&quot;window_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1943,29 +2056,49 @@
 <td>Whether adaptive routing is active</td>
 </tr>
 <tr>
-<td><code>adjustments</code></td>
-<td>object</td>
-<td>Per-profile adjustments (only non-neutral entries)</td>
+<td><code>adjustment_count</code></td>
+<td>integer</td>
+<td>Total number of non-neutral adjustments currently cached</td>
 </tr>
 <tr>
-<td><code>adjustments[profile].action</code></td>
+<td><code>demoted_profiles</code></td>
+<td>array</td>
+<td>Profile names currently demoted</td>
+</tr>
+<tr>
+<td><code>promoted_profiles</code></td>
+<td>array</td>
+<td>Profile names currently marked for promotion</td>
+</tr>
+<tr>
+<td><code>adjustments</code></td>
+<td>array</td>
+<td>Full adjustment objects (only non-neutral entries)</td>
+</tr>
+<tr>
+<td><code>adjustments[].profile</code></td>
+<td>string</td>
+<td>Profile name this adjustment applies to</td>
+</tr>
+<tr>
+<td><code>adjustments[].action</code></td>
 <td>string</td>
 <td><code>"demote"</code> or <code>"promote"</code></td>
 </tr>
 <tr>
-<td><code>adjustments[profile].reason</code></td>
+<td><code>adjustments[].reason</code></td>
 <td>string</td>
-<td>Human-readable explanation</td>
-</tr>
-<tr>
-<td><code>adjustments[profile].expires_in_s</code></td>
-<td>float</td>
-<td>Seconds until this adjustment expires</td>
+<td>Human-readable explanation with threshold values</td>
 </tr>
 <tr>
 <td><code>last_refresh</code></td>
 <td>string|null</td>
-<td>When adjustments were last computed</td>
+<td>ISO-8601 UTC timestamp of the last refresh, or null</td>
+</tr>
+<tr>
+<td><code>window_size</code></td>
+<td>integer</td>
+<td>Number of recent decisions used for signal aggregation</td>
 </tr>
 </tbody>
 </table>
