@@ -1499,7 +1499,8 @@ Nothing imports the API layer except <code>app.py</code>.</p>
 <li>Instantiate adapters: <code>FilePolicyStore</code>, <code>FileProfileStore</code>, <code>CapabilityRegistry</code>, <code>HttpNineRouterGateway</code>, <code>RetryingGateway</code>, <code>DecisionLogger</code></li>
 <li>Instantiate services: <code>PolicyEngine</code>, <code>RequestClassifier</code>, <code>SignalAggregator</code>, <code>AdjustmentEngine</code>, <code>AdjustmentStore</code>, <code>ExperimentRouter</code>, <code>ProfileScorer</code>, <code>Selector</code>, <code>Forwarder</code></li>
 <li>Attach everything to <code>app.state</code> for route handler access</li>
-<li>On shutdown: close the HTTP gateway, flush the decision log</li>
+<li>Start <code>_adaptive_refresh_loop</code> background asyncio task</li>
+<li>On shutdown: cancel the background task, close the HTTP gateway, flush the decision log</li>
 </ol>
 
 

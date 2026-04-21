@@ -1212,7 +1212,7 @@
 <ul>
 <li>Signal aggregation from decision ring buffer into per-profile <code>ProfileSignals</code></li>
 <li><code>AdjustmentEngine</code> derives demotion/promotion decisions from error rate and latency</li>
-<li><code>AdjustmentStore</code> caches adjustments with 300 s TTL; lazy refresh</li>
+<li><code>AdjustmentStore</code> caches adjustments with 300 s TTL; background task refreshes automatically every 5 minutes</li>
 <li>Selector bypasses demoted profiles and finds the next eligible alternative</li>
 <li>Admin API: <code>/admin/adaptive</code>, <code>/admin/adaptive/enable|disable|reset|refresh</code></li>
 </ul>

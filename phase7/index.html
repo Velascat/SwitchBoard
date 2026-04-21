@@ -1261,10 +1261,9 @@ into both <code>Selector</code> and <code>app.state</code>:</p>
 <hr />
 <h2 id="current-limitations">Current Limitations<a class="headerlink" href="#current-limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>No auto-refresh.</strong> Adjustments are recomputed only when an operator calls
-  <code>POST /admin/adaptive/refresh</code> or when <code>maybe_refresh()</code> TTL elapses.
-  The selector does not call <code>maybe_refresh()</code> on every request; operators
-  must trigger refreshes explicitly or integrate a background task.</li>
+<li><strong>Background auto-refresh.</strong> A background asyncio task wakes up every 30 s and calls
+  <code>maybe_refresh()</code>, which recomputes adjustments once the 300 s TTL has elapsed. Operators
+  can also force an immediate refresh via <code>POST /admin/adaptive/refresh</code>.</li>
 <li><strong><code>promote</code> action is recorded but has no routing effect.</strong> Phase 7 only acts
   on <code>demote</code>. Promote is tracked for future use (e.g. raising a profile's
   weight in multi-candidate selection).</li>
