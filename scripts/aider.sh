@@ -11,7 +11,7 @@
 #
 # Prerequisites:
 #   - SwitchBoard running on http://localhost:20401
-#   - aider-chat installed: pip install aider-chat
+#   - .venv-aider bootstrapped: bash scripts/bootstrap_aider.sh
 #   - OPENAI_API_KEY set (any non-empty value works; SwitchBoard ignores it)
 # =============================================================================
 set -euo pipefail
@@ -32,6 +32,8 @@ PROFILE="${PROFILE:-fast}"
 SWITCHBOARD_HOST="${SWITCHBOARD_HOST:-0.0.0.0}"
 SWITCHBOARD_PORT="${SWITCHBOARD_PORT:-20401}"
 SWITCHBOARD_URL="http://localhost:${SWITCHBOARD_PORT}"
+
+AIDER_BIN="${REPO_ROOT}/.venv-aider/bin/aider"
 MODEL_SETTINGS_FILE="${REPO_ROOT}/config/aider/model-settings.yml"
 
 EXTRA_ARGS=()
@@ -60,6 +62,13 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# ── Guard: aider venv must be bootstrapped ────────────────────────────────────
+if [[ ! -x "${AIDER_BIN}" ]]; then
+  echo "[aider.sh] ERROR: .venv-aider not found or aider binary missing."
+  echo "           Bootstrap it first:  bash scripts/bootstrap_aider.sh"
+  exit 1
+fi
+
 # ── Verify SwitchBoard is reachable ───────────────────────────────────────────
 echo "[aider.sh] Checking SwitchBoard health at ${SWITCHBOARD_URL}/health ..."
 if ! curl --silent --fail --max-time 3 "${SWITCHBOARD_URL}/health" > /dev/null 2>&1; then
@@ -86,7 +95,7 @@ echo "  Endpoint: ${OPENAI_API_BASE}"
 echo "  Settings: ${MODEL_SETTINGS_FILE}"
 echo ""
 
-exec aider \
+exec "${AIDER_BIN}" \
   --model "openai/${PROFILE}" \
   --openai-api-base "${OPENAI_API_BASE}" \
   --openai-api-key "${OPENAI_API_KEY}" \
