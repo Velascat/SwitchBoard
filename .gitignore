@@ -99,3 +99,4 @@ config/*.yaml
 # FOB operator state
 .fob/
 !.fob/*.example*
+.aider*
