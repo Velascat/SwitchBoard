@@ -2,7 +2,7 @@
 
 **Policy-driven model selection service.**
 
-SwitchBoard sits between API clients and [9router](https://github.com/Velascat/9router), inspecting every chat-completion request, evaluating a declarative policy, and routing the request to the most appropriate downstream model profile — all transparently to the caller.
+SwitchBoard sits between API clients and [9router](https://github.com/Velascat/9router), inspecting every chat-completion request, evaluating a declarative policy, and routing the request to the most appropriate downstream model profile — transparently to the caller.
 
 ```
 Client
@@ -17,150 +17,131 @@ SwitchBoard  (port 20401)
 LLM Provider (OpenAI, Anthropic, local, …)
 ```
 
+Any OpenAI-compatible client works without modification. The model selection logic lives in a YAML policy file — no code changes needed to change routing behaviour.
+
 ---
 
-## 5.3 Design Overview
+## Why SwitchBoard
 
-### Problem
+When you have multiple LLM providers and model tiers (fast/cheap, capable/expensive, local/private), embedding the routing logic in every client is fragile and hard to maintain. SwitchBoard externalises that decision into a single, testable, hot-reloadable policy.
 
-When multiple LLM providers and model tiers are available (e.g., a cheap fast model, a capable expensive model, a local private model), deciding which model to use for each request is a cross-cutting concern. Embedding that logic in every client is fragile, duplicated, and hard to change.
-
-### Solution
-
-SwitchBoard externalises model selection into a **policy engine** backed by a **declarative YAML policy file**. Clients send standard OpenAI-compatible requests and receive standard OpenAI-compatible responses. SwitchBoard intercepts each request, classifies it into a `SelectionContext`, evaluates the policy rules in priority order, picks a **profile**, resolves the profile to a concrete downstream model name via the **capability registry**, then forwards the (potentially rewritten) request to 9router.
-
-Every routing decision is recorded to a **decision log** (JSONL) for audit, debugging, and offline analysis.
-
-### Key Design Principles
-
-| Principle | Implementation |
-|-----------|---------------|
-| OpenAI-compatible surface | `/v1/chat/completions`, `/v1/models` |
-| Policy as code | `config/policy.yaml` — no redeploy required |
-| Hexagonal architecture | Ports & adapters; core domain never touches HTTP or files directly |
-| Transparent proxy | Upstream receives the full provider response unmodified |
-| Zero-trust headers | `X-SwitchBoard-*` headers accepted but validated |
-
-### Component Map
-
-```
-┌─────────────────────────────────────────────────────┐
-│                    SwitchBoard                       │
-│                                                     │
-│  API Layer          Domain / Services               │
-│  ──────────         ─────────────────               │
-│  routes_chat   ───► RequestClassifier               │
-│  routes_models │    Selector                        │
-│  routes_health │      PolicyEngine                  │
-│  routes_admin  │      CapabilityRegistry             │
-│                └──► Forwarder ──────────────────────┼──► 9router
-│                     DecisionLog                     │
-│                                                     │
-│  Adapters                   Ports (Protocols)       │
-│  ────────                   ──────────────────      │
-│  HttpNineRouterGateway       ModelGateway            │
-│  FilePolicyStore             PolicyStore             │
-│  FileProfileStore            ProfileStore            │
-│                              DecisionSink            │
-└─────────────────────────────────────────────────────┘
-```
+- **Transparent proxy** — clients send standard OpenAI requests and receive standard responses
+- **Policy as code** — edit `config/policy.yaml` and routing changes immediately, no redeploy
+- **Adaptive routing** — monitors error rates and latency; automatically demotes unhealthy profiles
+- **A/B experiments** — declarative traffic splitting between profiles with no code changes
+- **Full audit trail** — every routing decision is logged for debugging and analysis
 
 ---
 
 ## Quick Start
 
-### Prerequisites
-
-- Python 3.11+
-- A running [9router](https://github.com/Velascat/9router) instance (default: `http://localhost:20128`)
-
-### Install
+**Prerequisites:** Python 3.11+ and a running [9router](https://github.com/Velascat/9router) instance.
 
 ```bash
+# 1. Clone and install
 git clone https://github.com/Velascat/SwitchBoard
 cd SwitchBoard
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-```
 
-### Configure
-
-```bash
+# 2. Configure
 cp .env.example .env
-# Edit .env as needed
-```
+# Edit .env to set ROUTER9_BASE_URL if 9router is not on localhost:20128
 
-Review and customise:
-- `config/policy.yaml` — routing rules
-- `config/profiles.yaml` — model profiles
-- `config/capabilities.yaml` — capability registry
-
-### Run
-
-```bash
-# Unix
+# 3. Start
 bash scripts/run_dev.sh
 
-# Windows PowerShell
-pwsh scripts/run_dev.ps1
-
-# Or directly:
-switchboard
-```
-
-### Smoke test
-
-```bash
+# 4. Verify
 bash scripts/smoke_test.sh
 ```
 
+For a detailed walkthrough including verification steps and the first real request, see **[docs/quickstart.md](docs/quickstart.md)**.
+
 ---
 
-## Configuration Files
+## Configuration
 
 | File | Purpose |
 |------|---------|
-| `config/policy.yaml` | Ordered list of policy rules; first match wins |
-| `config/profiles.yaml` | Named model profiles (capability requirements, preferred model) |
-| `config/capabilities.yaml` | Maps profile names to concrete downstream model identifiers |
+| `config/policy.yaml` | Ordered routing rules — first match wins |
+| `config/profiles.yaml` | Named model profiles with capability metadata |
+| `config/capabilities.yaml` | Downstream model capability descriptions |
+| `.env` | Service binding, log level, file paths, 9router URL |
 
-See `docs/policies.md`, `docs/profiles.md`, and `docs/capabilities.md` for full schema documentation.
+Each config file is heavily commented. For a first-time walkthrough see **[docs/configuration.md](docs/configuration.md)**. For full schema reference see [docs/policies.md](docs/policies.md), [docs/profiles.md](docs/profiles.md), and [docs/capabilities.md](docs/capabilities.md).
 
 ---
 
-## API Reference
-
-See `docs/api.md` for the full endpoint reference.
+## API
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `GET` | `/health` | Service + 9router reachability |
-| `GET` | `/v1/models` | OpenAI-style model list from profiles |
+| `GET` | `/health` | Service health + 9router reachability |
+| `GET` | `/v1/models` | OpenAI-style model list derived from profiles |
 | `POST` | `/v1/chat/completions` | Chat completion proxy with policy routing |
-| `GET` | `/admin/decisions/recent` | Last N decision log records |
+| `GET` | `/admin/decisions/recent` | Last N routing decisions |
+| `GET` | `/admin/summary` | Aggregated stats over last N decisions |
+| `GET` | `/admin/adaptive` | Adaptive routing adjustment state |
+
+Full endpoint reference: **[docs/api.md](docs/api.md)**
+
+---
+
+## Inspect routing decisions
+
+```bash
+# Last 20 decisions
+python scripts/inspect.py recent
+
+# Aggregated stats over last 100 decisions
+python scripts/inspect.py summary
+
+# Single decision by request ID
+python scripts/inspect.py show <request_id>
+```
 
 ---
 
 ## Development
 
 ```bash
-# Run tests
-pytest
-
-# Lint / format
-ruff check src test
-ruff format src test
+make install     # create .venv and install with dev dependencies
+make test        # run full test suite
+make smoke       # smoke-test a running instance
+make lint        # ruff check + format check
 ```
+
+Or directly:
+
+```bash
+.venv/bin/pytest -q                   # run tests
+.venv/bin/ruff check src test         # lint
+.venv/bin/ruff format src test        # format
+```
+
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for repo layout, architecture boundaries, and contribution workflow.
 
 ---
 
-## Architecture
+## Documentation
 
-See `docs/architecture.md` for the full hexagonal architecture diagram and layer responsibilities.
+| Document | Audience |
+|----------|----------|
+| [docs/quickstart.md](docs/quickstart.md) | First-time user |
+| [docs/configuration.md](docs/configuration.md) | First-time operator |
+| [docs/architecture.md](docs/architecture.md) | Contributor / deep dive |
+| [docs/api.md](docs/api.md) | Integrator |
+| [docs/observability.md](docs/observability.md) | Operator |
+| [docs/troubleshooting.md](docs/troubleshooting.md) | Operator |
+| [docs/policies.md](docs/policies.md) | Policy author |
+| [docs/profiles.md](docs/profiles.md) | Policy author |
+| [docs/capabilities.md](docs/capabilities.md) | Policy author |
+| [docs/stability.md](docs/stability.md) | Evaluator |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor |
 
 ---
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+GNU Affero General Public License v3.0 — see [LICENSE](LICENSE).

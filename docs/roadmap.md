@@ -1,72 +1,88 @@
 # Roadmap
 
-## Phase 1 — v0 (Current)
+---
 
-The current release establishes the core routing pipeline and makes it
-production-usable for teams that already run 9router.
+## Current: v0.1.0
 
-**Delivered:**
+The following phases have been delivered and are available in the current release.
 
-- Policy-driven model selection via YAML rules (`when` / `select_profile`).
-- Profile registry decoupling profile names from concrete model identifiers.
-- Capability registry describing downstream model features.
-- Full classify → select → forward → log pipeline on `POST /v1/chat/completions`.
-- OpenAI-compatible model listing at `GET /v1/models`.
-- Decision logging to JSONL with in-memory ring buffer + admin API.
-- `X-SwitchBoard-Profile` header for caller-side profile override.
-- `X-SwitchBoard-Priority` and `X-SwitchBoard-Tenant-ID` header support.
-- Health check endpoint (`GET /health`) with 9router probe.
-- Hot-reloadable policy config via admin endpoint (planned, scaffolded).
-- Hexagonal architecture: domain / ports / adapters / services clearly separated.
+### Core pipeline (Phases 1–3)
 
-**Intentionally out of scope for v0:**
+- Policy-driven model selection via YAML rules (`when` / `select_profile`)
+- Profile registry decoupling profile names from concrete model identifiers
+- Capability registry describing downstream model features
+- Full classify → select → forward → log pipeline on `POST /v1/chat/completions`
+- OpenAI-compatible model listing at `GET /v1/models`
+- Decision logging to JSONL with in-memory ring buffer + admin API
+- `X-SwitchBoard-*` header support (priority, tenant, cost/latency sensitivity)
+- Health check endpoint (`GET /health`) with 9router probe
+- SSE streaming pass-through (`stream: true`)
+- Dynamic policy reload via admin endpoint (`POST /admin/reload`)
+- Hexagonal architecture: domain / ports / adapters / services clearly separated
 
-- Authentication or API-key management (handled upstream or by 9router).
-- Per-tenant billing or quota enforcement.
-- Streaming response proxying (SSE pass-through) — non-streaming only.
-- Multi-region or multi-9router failover.
-- Prometheus metrics or OpenTelemetry tracing.
-- Persistent decision log beyond the local JSONL file.
-- Web UI or dashboard.
-- Dynamic policy reload without process restart (groundwork laid, not wired).
+### Observability (Phase 4)
+
+- Prometheus-style summary endpoint (`GET /admin/summary`)
+- Per-profile routing distribution, error rates, latency percentiles
+- Decision log enriched with context summary and rejected profiles
+
+### Advanced routing (Phases 5–6)
+
+- Task classification: detects code, analysis, planning, summarization, chat
+- Long-context detection and routing
+- Complexity estimation
+- Streaming-aware routing rules
+
+### Adaptive policy (Phase 7)
+
+- Signal aggregation from decision ring buffer into per-profile `ProfileSignals`
+- `AdjustmentEngine` derives demotion/promotion decisions from error rate and latency
+- `AdjustmentStore` caches adjustments with 300 s TTL; lazy refresh
+- Selector bypasses demoted profiles and finds the next eligible alternative
+- Admin API: `/admin/adaptive`, `/admin/adaptive/enable|disable|reset|refresh`
+
+### Advanced routing II (Phase 8)
+
+- A/B experiment routing: deterministic percentage split, recorded in decision log
+- Structured output capability routing: requests requiring JSON directed to capable profiles
+- Multi-factor profile scoring: weighted quality/cost/latency tiers
+- Cost estimate in decision trace
+- `analysis` task type added to classifier
+
+### Platform hardening (Phase 9)
+
+- Standardised OpenAI-compatible error responses for all failure cases
+- Retry with exponential backoff on transient upstream errors (max 2 retries)
+- Startup config validation: refuses to start on bad config with detailed errors
+- Global exception handler: unhandled exceptions return structured 500 responses
+
+### Externalization (Phase 10)
+
+- Complete public-facing documentation: quickstart, configuration guide, troubleshooting, stability statement
+- Contributor guide with architecture boundaries and development workflow
+- Accurate README with correct license, working commands, and docs index
 
 ---
 
-## Phase 2 — Streaming & Observability
+## Known gaps (not yet planned)
 
-- **SSE streaming pass-through** — proxy `stream: true` requests as a chunked
-  SSE response rather than buffering the full response.
-- **Prometheus metrics endpoint** (`GET /metrics`) — request counts, latency
-  histograms, error rates, and per-profile routing distribution.
-- **OpenTelemetry tracing** — emit spans for classify, select, and forward
-  stages; propagate trace context to 9router.
-- **Dynamic policy reload** — `POST /admin/reload` picks up edited `policy.yaml`
-  without a process restart.
+These are intentionally out of scope for v0. They may be addressed in future releases.
 
----
-
-## Phase 3 — Multi-Tenancy & Access Control
-
-- **API-key middleware** — validate caller API keys and attach tenant identity
-  automatically (removes the need for callers to send `X-SwitchBoard-Tenant-ID`).
-- **Per-tenant policy overrides** — allow different fallback profiles or rule
-  sets for different tenants without maintaining multiple SwitchBoard instances.
-- **Rate limiting** — per-tenant or per-profile request quotas enforced at the
-  SwitchBoard layer before hitting 9router.
-- **Audit log retention** — ship decision records to a structured store
-  (PostgreSQL, Loki, S3) instead of a local JSONL file.
+| Gap | Notes |
+|-----|-------|
+| Authentication / API key validation | Recommended: handle at reverse proxy layer |
+| Per-tenant policy overrides | All requests share one policy today |
+| Rate limiting | Not implemented |
+| Prometheus metrics endpoint | No `/metrics` today |
+| OpenTelemetry tracing | No span emission |
+| Dynamic config reload | Restart required to pick up config changes |
+| Persistent decision log sink | Local JSONL only; no database or remote sink |
+| Multi-9router failover | Single upstream only |
+| Configurable adaptive thresholds | Currently hardcoded in `adjustment_engine.py` |
+| Windows native support | Bash scripts work; PowerShell variants exist but less tested |
 
 ---
 
-## Phase 4 — Intelligent Routing
+## Contributing
 
-- **Classifier improvements** — detect task type (code, summarisation, Q&A,
-  etc.) from message content and use it as a routing signal.
-- **Cost-aware routing** — estimate request cost before forwarding and apply
-  budget guardrails.
-- **Latency-aware routing** — probe downstream model latency and adjust profile
-  selection dynamically when 9router reports high tail latency.
-- **A/B routing** — split traffic between two profiles to compare quality or
-  cost without a full migration.
-- **Feedback loop** — feed structured response quality signals back into policy
-  weight adjustments.
+If you want to work on one of the known gaps or a new capability, see [CONTRIBUTING.md](../CONTRIBUTING.md) for architecture boundaries and development workflow.
