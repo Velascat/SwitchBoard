@@ -167,7 +167,7 @@ python scripts/inspect.py summary 100
 curl -s http://localhost:20401/admin/adaptive | python3 -m json.tool
 ```
 
-The adaptive system demotes a profile when its error rate exceeds 40% or mean latency exceeds 8 000 ms over the last N requests (minimum 5 requests required before demotion triggers). Adjustments are not recomputed automatically — they persist until the next `POST /admin/adaptive/refresh` call or a reset.
+The adaptive system demotes a profile when its error rate exceeds 40% or mean latency exceeds 8 000 ms over the last N requests (minimum 5 requests required before demotion triggers). Adjustments are recomputed automatically every 5 minutes by a background task; you can also force an immediate refresh with `POST /admin/adaptive/refresh`.
 
 To reset:
 

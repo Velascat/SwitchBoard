@@ -63,6 +63,10 @@ class AdjustmentStore:
     def enabled(self) -> bool:
         return self._enabled
 
+    @property
+    def window_size(self) -> int:
+        return self._window_size
+
     def enable(self) -> None:
         """Re-enable adaptive adjustment (no-op if already enabled)."""
         self._enabled = True

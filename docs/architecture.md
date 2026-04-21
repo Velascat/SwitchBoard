@@ -79,7 +79,7 @@ All business logic. Services depend on **port interfaces**, not concrete adapter
 | `PolicyEngine` | evaluates ordered rules against a `SelectionContext`; returns matching rule |
 | `CapabilityRegistry` | resolves profile name → downstream model string; checks capability requirements |
 | `ExperimentRouter` | intercepts selections for A/B experiments; deterministic bucket assignment |
-| `AdjustmentStore` | Per-profile adjustments (demoted/promoted); refreshed on operator request or via `maybe_refresh()` with 300 s TTL |
+| `AdjustmentStore` | Per-profile adjustments (demoted/promoted); auto-refreshed every 300 s by background task; operator controls via admin API |
 | `AdjustmentEngine` | derives adjustments from `ProfileSignals` (error rate, latency thresholds) |
 | `SignalAggregator` | aggregates `DecisionRecord` ring buffer → `ProfileSignals` per profile |
 | `ProfileScorer` | ranks eligible profiles by weighted quality/cost/latency tiers |

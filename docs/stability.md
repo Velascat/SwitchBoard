@@ -90,7 +90,7 @@ The following workflows are verified to work with the current release:
 2. **Streaming** — request with `stream: true` passes through as SSE
 3. **Structured output routing** — requests requiring JSON output are directed to capable profiles
 4. **A/B experiments** — declarative traffic splitting by percent with deterministic assignment
-5. **Adaptive routing** — operator-triggered demotion of profiles with high error rate or latency
+5. **Adaptive routing** — automatic demotion of profiles with high error rate or latency (background refresh every 5 minutes)
 6. **Decision inspection** — view recent decisions via admin API or `inspect.py`
 7. **Operator control** — enable/disable/reset adaptive routing via admin API
 

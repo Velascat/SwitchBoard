@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -30,6 +31,33 @@ from switchboard.services.profile_scorer import ProfileScorer
 from switchboard.services.selector import Selector
 
 logger = get_logger(__name__)
+
+# How often the background loop wakes up to call maybe_refresh.
+# Actual recomputation only happens when the AdjustmentStore TTL has elapsed
+# (default 300 s), so this just controls the maximum lag before a refresh fires.
+_ADAPTIVE_POLL_INTERVAL_S = 30.0
+
+
+async def _adaptive_refresh_loop(
+    adjustment_store,
+    decision_logger: DecisionLogger,
+) -> None:
+    """Background task: periodically refresh adaptive routing adjustments.
+
+    Calls ``maybe_refresh`` on a fixed interval. The store's internal TTL
+    (default 300 s) gates actual recomputation, so this loop wakes up every
+    30 s but real work only happens once per TTL window.
+    """
+    while True:
+        try:
+            await asyncio.sleep(_ADAPTIVE_POLL_INTERVAL_S)
+            records = decision_logger.last_n(adjustment_store.window_size)
+            adjustment_store.maybe_refresh(records)
+        except asyncio.CancelledError:
+            break
+        except Exception as exc:
+            logger.warning("Adaptive refresh background task error: %s", exc, exc_info=True)
+
 
 # ---------------------------------------------------------------------------
 # Application state — populated in lifespan, injected via request.app.state
@@ -101,11 +129,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.decision_logger = decision_logger
     app.state.gateway = gateway
 
+    # --- Background tasks ----------------------------------------------------
+    refresh_task = asyncio.create_task(
+        _adaptive_refresh_loop(adjustment_store, decision_logger),
+        name="adaptive-refresh",
+    )
+
     logger.info("SwitchBoard ready")
     yield
 
     # --- Shutdown ------------------------------------------------------------
     logger.info("SwitchBoard shutting down")
+    refresh_task.cancel()
+    try:
+        await refresh_task
+    except asyncio.CancelledError:
+        pass
     await inner_gateway.close()
     decision_logger.close()
 
