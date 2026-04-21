@@ -93,6 +93,7 @@ rules:
 | `min_estimated_tokens` | integer | Context tokens ≥ value |
 | `max_estimated_tokens` | integer | Context tokens ≤ value |
 | `min_max_tokens` | integer | Requested output tokens ≥ value |
+| `max_max_tokens` | integer | Requested output tokens ≤ value |
 
 List values use "any of" semantics: `task_type: ["code", "planning"]` matches either.
 

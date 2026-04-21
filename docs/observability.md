@@ -69,7 +69,8 @@ Set to an empty string to disable disk logging — records are still kept in the
 | `scored_profiles` | Multi-factor scoring breakdown for all candidates, if scored |
 | `error` | Error message if forwarding failed |
 | `error_category` | Error category string for aggregation |
-| `rejected_profiles` | Profiles considered but filtered out, with reasons |
+| `rejected_profiles` | Profiles considered but filtered out, each with `profile` and `reason` keys |
+| `context_summary` | Nested object with key classifier fields: `task_type`, `complexity`, `estimated_tokens`, `requires_tools`, `requires_long_context`, `stream`, `cost_sensitivity`, `latency_sensitivity` |
 
 ### In-memory ring buffer
 
@@ -149,21 +150,29 @@ A demoted profile looks like:
 
 ```json
 {
-  "capable": {
-    "action": "demote",
-    "reason": "error_rate=0.52 exceeds threshold 0.40",
-    "expires_in_s": 142.3
-  }
+  "enabled": true,
+  "adjustment_count": 1,
+  "demoted_profiles": ["capable"],
+  "promoted_profiles": [],
+  "adjustments": [
+    {
+      "profile": "capable",
+      "action": "demote",
+      "reason": "error rate 52% over 10 requests exceeds threshold (40%)"
+    }
+  ],
+  "last_refresh": "2026-04-20T12:30:00.000000+00:00",
+  "window_size": 200
 }
 ```
 
-Adjustments expire after 300 seconds. To reset immediately:
+Adjustments are recomputed every 300 seconds from recent decision records. To reset all profiles to neutral immediately:
 
 ```bash
 curl -s -X POST http://localhost:20401/admin/adaptive/reset
 ```
 
-Demotion thresholds (hardcoded):
+Demotion thresholds (hardcoded, require at least 5 samples before triggering):
 - Error rate ≥ 40% over the measurement window → demote
 - Mean latency ≥ 8 000 ms → demote
 - Error rate ≤ 2% over 20+ requests → promote

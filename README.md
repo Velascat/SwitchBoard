@@ -81,6 +81,7 @@ Each config file is heavily commented. For a first-time walkthrough see **[docs/
 | `GET` | `/v1/models` | OpenAI-style model list derived from profiles |
 | `POST` | `/v1/chat/completions` | Chat completion proxy with policy routing |
 | `GET` | `/admin/decisions/recent` | Last N routing decisions |
+| `GET` | `/admin/decisions/{request_id}` | Single decision lookup by correlation ID |
 | `GET` | `/admin/summary` | Aggregated stats over last N decisions |
 | `GET` | `/admin/adaptive` | Adaptive routing adjustment state |
 

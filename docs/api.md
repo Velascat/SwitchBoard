@@ -183,8 +183,28 @@ Returns the most recent routing decisions from the in-memory ring buffer (last 1
 | `scored_profiles` | array\|null | Multi-factor scoring results for all eligible profiles |
 | `error` | string\|null | Error message if forwarding failed |
 | `error_category` | string\|null | Error category for aggregation |
+| `context_summary` | object\|null | Key classifier fields: `task_type`, `complexity`, `estimated_tokens`, `requires_tools`, `requires_long_context`, `stream`, `cost_sensitivity`, `latency_sensitivity` |
+| `rejected_profiles` | array | Profiles considered and rejected, each with `profile` and `reason` fields |
 
 **Status codes:** `200`, `422` (invalid `n` value).
+
+---
+
+## GET /admin/decisions/{request_id}
+
+Returns a single decision record by correlation ID.
+
+### Path parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `request_id` | The `X-Request-ID` value sent with the original request. |
+
+### Response
+
+Same schema as a single element in `GET /admin/decisions/recent`.
+
+**Status codes:** `200`, `404` (no decision found with that `request_id`).
 
 ---
 
@@ -228,25 +248,33 @@ Returns the current state of the adaptive routing system.
 ```json
 {
   "enabled": true,
-  "adjustments": {
-    "capable": {
+  "adjustment_count": 1,
+  "demoted_profiles": ["capable"],
+  "promoted_profiles": [],
+  "adjustments": [
+    {
+      "profile": "capable",
       "action": "demote",
-      "reason": "error_rate=0.52 exceeds threshold 0.40",
-      "expires_in_s": 142.3
+      "reason": "error rate 52% over 10 requests exceeds threshold (40%)"
     }
-  },
-  "last_refresh": "2026-04-20T12:30:00.000000+00:00"
+  ],
+  "last_refresh": "2026-04-20T12:30:00.000000+00:00",
+  "window_size": 200
 }
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `enabled` | boolean | Whether adaptive routing is active |
-| `adjustments` | object | Per-profile adjustments (only non-neutral entries) |
-| `adjustments[profile].action` | string | `"demote"` or `"promote"` |
-| `adjustments[profile].reason` | string | Human-readable explanation |
-| `adjustments[profile].expires_in_s` | float | Seconds until this adjustment expires |
-| `last_refresh` | string\|null | When adjustments were last computed |
+| `adjustment_count` | integer | Total number of non-neutral adjustments currently cached |
+| `demoted_profiles` | array | Profile names currently demoted |
+| `promoted_profiles` | array | Profile names currently marked for promotion |
+| `adjustments` | array | Full adjustment objects (only non-neutral entries) |
+| `adjustments[].profile` | string | Profile name this adjustment applies to |
+| `adjustments[].action` | string | `"demote"` or `"promote"` |
+| `adjustments[].reason` | string | Human-readable explanation with threshold values |
+| `last_refresh` | string\|null | ISO-8601 UTC timestamp of the last refresh, or null |
+| `window_size` | integer | Number of recent decisions used for signal aggregation |
 
 **Status codes:** `200`.
 
