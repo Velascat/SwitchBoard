@@ -14,6 +14,7 @@ Flow (section 9.5):
 
 from __future__ import annotations
 
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
@@ -52,11 +53,15 @@ async def chat_completions(request: Request) -> JSONResponse:
 
     headers = dict(request.headers)
 
+    # Establish correlation ID for this request — use caller-supplied value if present.
+    request_id = headers.get("x-request-id") or uuid.uuid4().hex
+
     # ------------------------------------------------------------------
     # 2. Classify
     # ------------------------------------------------------------------
     classifier = request.app.state.classifier
     context = classifier.classify(body, headers)
+    context.extra["request_id"] = request_id
 
     # ------------------------------------------------------------------
     # 3. Select

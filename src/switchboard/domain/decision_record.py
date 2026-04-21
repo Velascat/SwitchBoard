@@ -36,6 +36,10 @@ class DecisionRecord(BaseModel):
     # Phase 3 — profiles considered but rejected before final selection
     rejected_profiles: list[dict[str, Any]] = Field(default_factory=list)
 
+    # Phase 4 — lifecycle / failure visibility
+    status: str = "success"           # "success" | "error"
+    error_category: str | None = None  # "upstream_error" | "upstream_timeout" | "selection_error" | "internal_error"
+
     # ---------------------------------------------------------------------------
     # Legacy fields — kept for backward-compat with existing decision_log +
     # admin route
