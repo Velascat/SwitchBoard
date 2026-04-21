@@ -664,6 +664,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Multi-factor scoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tie-breaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tie-breaking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1075,6 +1092,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Multi-factor scoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tie-breaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tie-breaking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1279,9 +1313,42 @@
 <h2 id="multi-factor-scoring">Multi-factor scoring<a class="headerlink" href="#multi-factor-scoring" title="Permanent link">&para;</a></h2>
 <p>When multiple profiles are eligible for a request, <code>ProfileScorer</code> ranks them using a weighted combination of quality, cost, and latency tiers.</p>
 <p>Default weights: <code>quality=4.0, cost=1.0, latency=1.0</code> — quality dominates by default.</p>
-<p>Weights shift automatically based on caller signals:
-- <code>X-SwitchBoard-Cost-Sensitivity: high</code> → cost weight increases to match quality weight
-- <code>X-SwitchBoard-Latency-Sensitivity: high</code> → latency weight raised to exceed quality weight</p>
+<p>Weights shift automatically based on caller signals:</p>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-SwitchBoard-Cost-Sensitivity</code></td>
+<td><code>high</code></td>
+<td><code>cost=4.0, quality=1.0</code> — cost-optimal profile wins</td>
+</tr>
+<tr>
+<td><code>X-SwitchBoard-Cost-Sensitivity</code></td>
+<td><code>low</code></td>
+<td><code>cost=0.5, quality=3.0</code> — quality preference restored, cost nearly ignored</td>
+</tr>
+<tr>
+<td><code>X-SwitchBoard-Latency-Sensitivity</code></td>
+<td><code>high</code></td>
+<td><code>latency=6.0</code> — latency dominates over quality and cost</td>
+</tr>
+<tr>
+<td><code>X-SwitchBoard-Latency-Sensitivity</code></td>
+<td><code>low</code></td>
+<td><code>latency=0.5</code> — latency de-prioritised, quality leads</td>
+</tr>
+</tbody>
+</table>
+<p>When no sensitivity header is set the defaults apply (<code>quality=4.0, cost=1.0, latency=1.0</code>).</p>
+<h3 id="tie-breaking">Tie-breaking<a class="headerlink" href="#tie-breaking" title="Permanent link">&para;</a></h3>
+<p>When multiple profiles score identically, the scorer uses a preference order as a tiebreaker:
+<code>capable</code> → <code>fast</code> → <code>default</code> → <code>local</code>. Profiles not in this list are ranked after those that are.</p>
 <hr />
 <h2 id="built-in-profiles">Built-in profiles<a class="headerlink" href="#built-in-profiles" title="Permanent link">&para;</a></h2>
 <h3 id="fast"><code>fast</code><a class="headerlink" href="#fast" title="Permanent link">&para;</a></h3>

@@ -747,6 +747,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Error behaviour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passthrough-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passthrough fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1113,6 +1130,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Error behaviour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passthrough-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passthrough fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1315,6 +1349,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;routing_error&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no_eligible_profile&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">...</span><span class="p">}}</span>
 </code></pre></div>
 <p>To prevent this, ensure every profile referenced in <code>policy.yaml</code> (including <code>fallback_profile</code> and experiment profiles) has an entry in <code>capabilities.yaml</code>. The config validator at startup logs a warning for any unknown profile references.</p>
+<h3 id="passthrough-fallback">Passthrough fallback<a class="headerlink" href="#passthrough-fallback" title="Permanent link">&para;</a></h3>
+<p>There is one exception to the above: if the selected profile is missing from the registry <strong>and</strong> the request included a <code>model</code> field, the Selector passes the <code>model</code> value through as the <code>downstream_model</code> unchanged (with <code>rule_name = "passthrough_fallback"</code> and <code>profile_name = "passthrough"</code> recorded in the decision log). This lets a caller address a model directly by name without configuring a profile for it, at the cost of bypassing all capability checks and scoring. This behaviour is a last-resort escape hatch; normal deployments should always have a registry entry for every profile.</p>
 
 
 
