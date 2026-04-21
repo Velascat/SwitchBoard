@@ -51,8 +51,20 @@ When multiple profiles are eligible for a request, `ProfileScorer` ranks them us
 Default weights: `quality=4.0, cost=1.0, latency=1.0` — quality dominates by default.
 
 Weights shift automatically based on caller signals:
-- `X-SwitchBoard-Cost-Sensitivity: high` → cost weight increases to match quality weight
-- `X-SwitchBoard-Latency-Sensitivity: high` → latency weight raised to exceed quality weight
+
+| Header | Value | Effect |
+|--------|-------|--------|
+| `X-SwitchBoard-Cost-Sensitivity` | `high` | `cost=4.0, quality=1.0` — cost-optimal profile wins |
+| `X-SwitchBoard-Cost-Sensitivity` | `low` | `cost=0.5, quality=3.0` — quality preference restored, cost nearly ignored |
+| `X-SwitchBoard-Latency-Sensitivity` | `high` | `latency=6.0` — latency dominates over quality and cost |
+| `X-SwitchBoard-Latency-Sensitivity` | `low` | `latency=0.5` — latency de-prioritised, quality leads |
+
+When no sensitivity header is set the defaults apply (`quality=4.0, cost=1.0, latency=1.0`).
+
+### Tie-breaking
+
+When multiple profiles score identically, the scorer uses a preference order as a tiebreaker:
+`capable` → `fast` → `default` → `local`. Profiles not in this list are ranked after those that are.
 
 ---
 

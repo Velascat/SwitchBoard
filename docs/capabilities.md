@@ -159,3 +159,7 @@ If the policy engine selects a profile that is not present in the `profiles:` se
 ```
 
 To prevent this, ensure every profile referenced in `policy.yaml` (including `fallback_profile` and experiment profiles) has an entry in `capabilities.yaml`. The config validator at startup logs a warning for any unknown profile references.
+
+### Passthrough fallback
+
+There is one exception to the above: if the selected profile is missing from the registry **and** the request included a `model` field, the Selector passes the `model` value through as the `downstream_model` unchanged (with `rule_name = "passthrough_fallback"` and `profile_name = "passthrough"` recorded in the decision log). This lets a caller address a model directly by name without configuring a profile for it, at the cost of bypassing all capability checks and scoring. This behaviour is a last-resort escape hatch; normal deployments should always have a registry entry for every profile.
