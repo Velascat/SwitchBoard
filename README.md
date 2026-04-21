@@ -106,10 +106,12 @@ python scripts/inspect.py show <request_id>
 ## Development
 
 ```bash
-make install     # create .venv and install with dev dependencies
-make test        # run full test suite
-make smoke       # smoke-test a running instance
-make lint        # ruff check + format check
+make install      # create .venv and install with dev dependencies
+make test         # run full test suite
+make smoke        # smoke-test a running instance
+make lint         # ruff check
+make fmt          # ruff format
+make docs-check   # verify all doc-referenced files exist
 ```
 
 Or directly:
@@ -131,6 +133,7 @@ See **[CONTRIBUTING.md](CONTRIBUTING.md)** for repo layout, architecture boundar
 | [docs/quickstart.md](docs/quickstart.md) | First-time user |
 | [docs/configuration.md](docs/configuration.md) | First-time operator |
 | [docs/architecture.md](docs/architecture.md) | Contributor / deep dive |
+| [docs/request-flow.md](docs/request-flow.md) | Contributor / integrator |
 | [docs/api.md](docs/api.md) | Integrator |
 | [docs/observability.md](docs/observability.md) | Operator |
 | [docs/troubleshooting.md](docs/troubleshooting.md) | Operator |

@@ -130,7 +130,7 @@ Before submitting a change, run both commands and fix any issues.
 
 1. Add the field to `SelectionContext` in `domain/selection_context.py`
 2. Populate it in `RequestClassifier.classify()` in `services/classifier.py`
-3. Add a `when` condition handler in `PolicyEngine._evaluate_condition()` in `services/policy_engine.py`
+3. Add a `when` condition handler in `_condition_matches()` in `services/policy_engine.py`
 4. Add tests in `test/unit/test_classifier.py` and `test/unit/test_policy_engine.py`
 
 ### Adding a new profile field
