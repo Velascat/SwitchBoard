@@ -67,9 +67,12 @@ After a rule matches, these checks still apply in order:
 | Key | Type | Description |
 |-----|------|-------------|
 | `task_type` | string or list | Inferred task: `"code"`, `"analysis"`, `"planning"`, `"summarization"`, `"chat"` |
-| `complexity` | string or list | `"low"`, `"medium"`, `"high"` |
+| `complexity` | string or list | `"low"` (≤500 tokens, ≤3 msgs), `"medium"` (≤3k tokens, ≤8 msgs), `"high"` (>3k tokens, >8 msgs, or tools present) |
 | `stream` | boolean | Whether the caller requested SSE streaming |
 | `tools_present` | boolean | Whether the request includes a `tools` array |
+| `requires_tools` | boolean | Same as `tools_present` — alias used by the eligibility check |
+| `requires_long_context` | boolean | `true` when estimated tokens > 6,000 |
+| `requires_structured_output` | boolean | `true` when `response_format.type` is `json_object` or `json_schema` |
 
 ### Token counts
 

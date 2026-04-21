@@ -208,3 +208,47 @@ Callers can influence routing without changing the policy by sending these heade
 | `X-SwitchBoard-Latency-Sensitivity` | `high` | Matches `latency_sensitivity` condition |
 | `X-SwitchBoard-Tenant-ID` | any string | Matches `tenant_id` condition |
 | `X-Request-ID` | any string | Preserved in decision log and error responses |
+
+---
+
+## How requests are classified
+
+The `RequestClassifier` runs on every request before policy evaluation and populates the `SelectionContext` fields that rule conditions match against. All logic is deterministic and keyword-based — no model calls.
+
+### Task type
+
+Detection order (first match wins):
+
+| `task_type` | Triggered by |
+|-------------|-------------|
+| `code` | Code fence (` ``` `) in any message, or phrases like `"write a function"`, `"refactor"`, `"debug"` |
+| `analysis` | Phrases like `"analyze"`, `"compare and contrast"`, `"root cause"`, `"trade-offs"` |
+| `planning` | Phrases like `"design a"`, `"architecture"`, `"roadmap"`, `"step by step"` |
+| `summarization` | Phrases like `"summarize"`, `"tldr"`, `"key points"` |
+| `chat` | Default when nothing else matches |
+
+### Complexity
+
+Computed from token count, message count, and tool use:
+
+| `complexity` | Condition |
+|--------------|-----------|
+| `high` | estimated tokens > 3,000 **or** more than 8 messages **or** tools array present |
+| `medium` | estimated tokens > 500 **or** more than 3 messages |
+| `low` | everything else |
+
+### Boolean flags
+
+| Flag | Set when |
+|------|----------|
+| `requires_long_context` | estimated tokens > 6,000 |
+| `requires_tools` | `tools` array is non-empty |
+| `requires_structured_output` | `response_format.type` is `json_object` or `json_schema` |
+
+### Automatic latency sensitivity
+
+When `stream: true` and no `X-SwitchBoard-Latency-Sensitivity` header is present, `latency_sensitivity` is automatically set to `"high"`. This makes streaming requests match latency-sensitive rules without requiring callers to set the header explicitly.
+
+### Token estimation
+
+Estimated token count = total character length of all message content strings ÷ 4. This is a rough approximation — it does not account for tokenisation differences between models.

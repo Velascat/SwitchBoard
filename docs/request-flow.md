@@ -48,8 +48,13 @@ Client
 │    task_type: code | analysis | planning |      │
 │               summarization | chat              │
 │    complexity: low | medium | high              │
+│      high = >3k tokens | >8 msgs | tools        │
+│      medium = >500 tokens | >3 msgs             │
+│    requires_long_context: true if tokens > 6k   │
 │    requires_structured_output (from             │
 │      response_format.type)                      │
+│    latency_sensitivity auto-set to "high"       │
+│      when stream=true (no header override)      │
 │                                                 │
 │  Output: SelectionContext                       │
 └────────────────────────┬────────────────────────┘
