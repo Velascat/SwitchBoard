@@ -203,3 +203,33 @@ rules:
       go to the fast model.
     when:
       max_estimated_tokens: 4096
+
+# ---------------------------------------------------------------------------
+# Phase 8 — A/B Experiments
+#
+# Each experiment intercepts requests where the policy selects profile_a
+# and routes a split_percent percentage to profile_b instead.
+#
+# Fields:
+#   name               Unique identifier recorded in decision logs.
+#   profile_a          Control profile (majority of traffic).
+#   profile_b          Treatment profile (split_percent % of traffic).
+#   split_percent      Percentage sent to profile_b (0-100).
+#   enabled            Set to false to pause without removing the config.
+#   applies_to_rules   Restrict to specific rule names (empty = all rules).
+#
+# Example (disabled by default — enable to activate):
+# ---------------------------------------------------------------------------
+
+experiments: []
+
+# To activate an experiment, replace the empty list above with entries like:
+#
+# experiments:
+#   - name: capable_vs_fast_chat
+#     profile_a: capable
+#     profile_b: fast
+#     split_percent: 10
+#     enabled: true
+#     applies_to_rules:
+#       - default_short_request

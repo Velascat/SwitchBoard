@@ -17,7 +17,7 @@ from typing import Any
 
 import yaml
 
-from switchboard.domain.policy_rule import PolicyConfig, PolicyRule
+from switchboard.domain.policy_rule import ExperimentConfig, PolicyConfig, PolicyRule
 from switchboard.observability.logging import get_logger
 
 logger = get_logger(__name__)
@@ -96,7 +96,25 @@ class FilePolicyStore:
                 )
             )
 
-        config = PolicyConfig(version=version, fallback_profile=fallback, rules=rules)
+        # Load experiments (Phase 8)
+        raw_experiments: list[dict[str, Any]] = raw.get("experiments", [])
+        experiments: list[ExperimentConfig] = []
+        for exp in raw_experiments:
+            if not exp.get("name") or not exp.get("profile_a") or not exp.get("profile_b"):
+                logger.warning("Experiment missing required fields (name/profile_a/profile_b); skipping.")
+                continue
+            experiments.append(
+                ExperimentConfig(
+                    name=exp["name"],
+                    profile_a=exp["profile_a"],
+                    profile_b=exp["profile_b"],
+                    split_percent=int(exp.get("split_percent", 10)),
+                    enabled=bool(exp.get("enabled", True)),
+                    applies_to_rules=list(exp.get("applies_to_rules", [])),
+                )
+            )
+
+        config = PolicyConfig(version=version, fallback_profile=fallback, rules=rules, experiments=experiments)
         logger.info(
             "Policy loaded from %s: %d rules, fallback=%s",
             self._path,

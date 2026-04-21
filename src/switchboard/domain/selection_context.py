@@ -34,6 +34,8 @@ class SelectionContext(BaseModel):
     latency_sensitivity: str | None = None
     requires_tools: bool = False
     requires_long_context: bool = False
+    # Phase 8 — structured output capability requirement
+    requires_structured_output: bool = False
 
     # ---------------------------------------------------------------------------
     # Extended fields kept for backward-compat with classifier and policy engine

@@ -16,8 +16,11 @@
 #   max_context_tokens  Maximum supported context window (informational).
 #   supports_tools      Whether this profile's model reliably supports tool use.
 #   supports_vision     Whether this profile's model supports image inputs.
+#   supports_structured_output  Whether this profile reliably produces JSON output. (Phase 8)
 #   cost_tier           Relative cost tier: low | medium | high
+#   cost_weight         Precise relative cost (Phase 8); overrides cost_tier in scorer.
 #   latency_tier        Relative latency tier: low | medium | high
+#   quality_tier        Relative quality tier: low | medium | high  (Phase 8)
 
 version: "1"
 
@@ -40,8 +43,11 @@ profiles:
     max_context_tokens: 128000
     supports_tools: true
     supports_vision: false
+    supports_structured_output: true
     cost_tier: low
+    cost_weight: 1.0
     latency_tier: low
+    quality_tier: medium
 
   # ------------------------------------------------------------------
   # capable — high-quality model for complex or long-context tasks
@@ -61,8 +67,11 @@ profiles:
     max_context_tokens: 128000
     supports_tools: true
     supports_vision: true
+    supports_structured_output: true
     cost_tier: high
+    cost_weight: 10.0
     latency_tier: medium
+    quality_tier: high
 
   # ------------------------------------------------------------------
   # local — on-premise model for private or low-priority workloads
@@ -82,8 +91,11 @@ profiles:
     max_context_tokens: 8192
     supports_tools: false
     supports_vision: false
+    supports_structured_output: false
     cost_tier: low
+    cost_weight: 0.1
     latency_tier: medium
+    quality_tier: medium
 
   # ------------------------------------------------------------------
   # default — generic fallback used when no rule matches
@@ -99,5 +111,8 @@ profiles:
     max_context_tokens: 128000
     supports_tools: true
     supports_vision: false
+    supports_structured_output: true
     cost_tier: low
+    cost_weight: 1.0
     latency_tier: low
+    quality_tier: medium

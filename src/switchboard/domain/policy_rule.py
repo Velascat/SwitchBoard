@@ -1,4 +1,4 @@
-"""PolicyRule and PolicyConfig — policy domain types.
+"""PolicyRule, ExperimentConfig, and PolicyConfig — policy domain types.
 
 These types describe the shape of a loaded policy configuration.  They are
 populated by :class:`switchboard.adapters.file_policy_store.FilePolicyStore`
@@ -50,6 +50,27 @@ class PolicyRule(BaseModel):
         return self.when or self.conditions
 
 
+class ExperimentConfig(BaseModel):
+    """A controlled A/B routing experiment.
+
+    Attributes:
+        name:              Unique experiment identifier recorded in decision logs.
+        profile_a:         Control profile (receives 100 - split_percent % of traffic).
+        profile_b:         Treatment profile (receives split_percent % of traffic).
+        split_percent:     Percentage of matching requests routed to ``profile_b`` (0–100).
+        enabled:           Whether this experiment is active.
+        applies_to_rules:  Rule names this experiment intercepts.
+                           Empty list means "all rules except force_profile".
+    """
+
+    name: str
+    profile_a: str
+    profile_b: str
+    split_percent: int = 10
+    enabled: bool = True
+    applies_to_rules: list[str] = Field(default_factory=list)
+
+
 class PolicyConfig(BaseModel):
     """Top-level policy configuration loaded from ``policy.yaml``.
 
@@ -62,6 +83,7 @@ class PolicyConfig(BaseModel):
     version: str = "1"
     fallback_profile: str = "default"
     rules: list[PolicyRule] = Field(default_factory=list)
+    experiments: list[ExperimentConfig] = Field(default_factory=list)
 
     def sorted_rules(self) -> list[PolicyRule]:
         """Return rules sorted by ascending priority."""

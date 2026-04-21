@@ -10,11 +10,12 @@ Classification happens in three passes:
 
 3. **Heuristic pass** — derives higher-level context dimensions from message
    content and token estimates using deterministic keyword rules:
-   - ``task_type``        — "code" | "planning" | "summarization" | "chat"
-   - ``complexity``       — "low" | "medium" | "high"
-   - ``requires_long_context`` — True if estimated_tokens > 6 000
-   - ``requires_tools``   — True if a non-empty tools array is present
-   - ``latency_sensitivity`` — "high" when stream=True (unless overridden by header)
+   - ``task_type``              — "code" | "analysis" | "planning" | "summarization" | "chat"
+   - ``complexity``             — "low" | "medium" | "high"
+   - ``requires_long_context``  — True if estimated_tokens > 6 000
+   - ``requires_tools``         — True if a non-empty tools array is present
+   - ``requires_structured_output`` — True if response_format is json_object or json_schema
+   - ``latency_sensitivity``    — "high" when stream=True (unless overridden by header)
 
 All heuristics are deterministic and fully inspectable here.
 """
@@ -98,6 +99,28 @@ _SUMMARY_PHRASES: tuple[str, ...] = (
     "in short,",
 )
 
+_ANALYSIS_PHRASES: tuple[str, ...] = (
+    "analyze",
+    "analyse",
+    "analysis of",
+    "evaluate ",
+    "compare and contrast",
+    "pros and cons",
+    "trade-offs",
+    "tradeoffs",
+    "investigate ",
+    "what are the implications",
+    "root cause",
+    "diagnose ",
+    "assess ",
+    "assess the",
+    "break down ",
+    "examine ",
+)
+
+# response_format type values that indicate structured JSON output is required
+_STRUCTURED_OUTPUT_TYPES: frozenset[str] = frozenset({"json_object", "json_schema"})
+
 
 class RequestClassifier:
     """Converts a raw chat-completion request body + headers into a :class:`SelectionContext`."""
@@ -131,6 +154,10 @@ class RequestClassifier:
         requires_long_context = estimated_tokens > _LONG_CONTEXT_THRESHOLD
         requires_tools = tools_present
 
+        # Phase 8: detect structured output requirement
+        response_format = request_body.get("response_format")
+        requires_structured_output = _infer_structured_output(response_format)
+
         # Streaming requests are inherently latency-sensitive unless the
         # caller already specified a preference via header.
         if latency_sensitivity is None and stream:
@@ -138,8 +165,8 @@ class RequestClassifier:
 
         # Collect anything not captured by explicit fields
         extra: dict[str, Any] = {}
-        if "response_format" in request_body:
-            extra["response_format"] = request_body["response_format"]
+        if response_format is not None:
+            extra["response_format"] = response_format
         if "user" in request_body:
             extra["user"] = request_body["user"]
 
@@ -161,6 +188,8 @@ class RequestClassifier:
             requires_tools=requires_tools,
             cost_sensitivity=cost_sensitivity,
             latency_sensitivity=latency_sensitivity,
+            # Phase 8
+            requires_structured_output=requires_structured_output,
             extra=extra,
         )
 
@@ -186,18 +215,29 @@ def _extract_text(messages: list[dict[str, Any]]) -> str:
 def _infer_task_type(messages: list[dict[str, Any]]) -> str:
     """Return the most likely task type from message content.
 
-    Detection order: code → planning → summarization → chat (default).
-    Code is checked first because planning/summary can also contain code.
+    Detection order: code → analysis → planning → summarization → chat (default).
+    Code is checked first because other types can also reference code snippets.
+    Analysis is checked before planning because many analysis phrases overlap
+    with planning language.
     """
     text = _extract_text(messages)
 
     if _CODE_FENCE_RE.search(text) or any(p in text for p in _CODE_PHRASES):
         return "code"
+    if any(p in text for p in _ANALYSIS_PHRASES):
+        return "analysis"
     if any(p in text for p in _PLANNING_PHRASES):
         return "planning"
     if any(p in text for p in _SUMMARY_PHRASES):
         return "summarization"
     return "chat"
+
+
+def _infer_structured_output(response_format: Any) -> bool:
+    """Return True if the response_format field requires structured JSON output."""
+    if not isinstance(response_format, dict):
+        return False
+    return response_format.get("type") in _STRUCTURED_OUTPUT_TYPES
 
 
 def _infer_complexity(
