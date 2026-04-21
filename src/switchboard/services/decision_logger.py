@@ -79,8 +79,20 @@ def make_decision_record(
     context = result.context
     request_id = context.extra.get("request_id") if context and context.extra else None
     tenant_id = context.tenant_id if context else None
-
     profile_name = result.profile_name or result.profile
+
+    context_summary = None
+    if context is not None:
+        context_summary = {
+            "task_type": context.task_type,
+            "complexity": context.complexity,
+            "estimated_tokens": context.estimated_tokens,
+            "requires_tools": context.requires_tools,
+            "requires_long_context": context.requires_long_context,
+            "stream": context.stream,
+            "cost_sensitivity": context.cost_sensitivity,
+            "latency_sensitivity": context.latency_sensitivity,
+        }
 
     return DecisionRecord(
         timestamp=datetime.now(timezone.utc).isoformat(),
@@ -90,6 +102,8 @@ def make_decision_record(
         downstream_model=result.downstream_model,
         rule_name=result.rule_name,
         reason=result.reason,
+        context_summary=context_summary,
+        rejected_profiles=result.rejected_profiles,
         request_id=request_id,
         original_model_hint=original_model_hint,
         profile_name=profile_name,

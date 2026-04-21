@@ -5,7 +5,9 @@ Section 8.3
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class DecisionRecord(BaseModel):
@@ -28,6 +30,11 @@ class DecisionRecord(BaseModel):
     downstream_model: str = ""
     rule_name: str = ""
     reason: str = ""
+
+    # Phase 3 — context summary: key derived fields captured at decision time
+    context_summary: dict[str, Any] | None = None
+    # Phase 3 — profiles considered but rejected before final selection
+    rejected_profiles: list[dict[str, Any]] = Field(default_factory=list)
 
     # ---------------------------------------------------------------------------
     # Legacy fields — kept for backward-compat with existing decision_log +
