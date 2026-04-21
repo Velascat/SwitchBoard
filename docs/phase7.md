@@ -224,10 +224,9 @@ curl http://localhost:20401/admin/adaptive
 
 ## Current Limitations
 
-- **No auto-refresh.** Adjustments are recomputed only when an operator calls
-  `POST /admin/adaptive/refresh` or when `maybe_refresh()` TTL elapses.
-  The selector does not call `maybe_refresh()` on every request; operators
-  must trigger refreshes explicitly or integrate a background task.
+- **Background auto-refresh.** A background asyncio task wakes up every 30 s and calls
+  `maybe_refresh()`, which recomputes adjustments once the 300 s TTL has elapsed. Operators
+  can also force an immediate refresh via `POST /admin/adaptive/refresh`.
 - **`promote` action is recorded but has no routing effect.** Phase 7 only acts
   on `demote`. Promote is tracked for future use (e.g. raising a profile's
   weight in multi-candidate selection).

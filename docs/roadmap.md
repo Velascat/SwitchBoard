@@ -37,7 +37,7 @@ The following phases have been delivered and are available in the current releas
 
 - Signal aggregation from decision ring buffer into per-profile `ProfileSignals`
 - `AdjustmentEngine` derives demotion/promotion decisions from error rate and latency
-- `AdjustmentStore` caches adjustments with 300 s TTL; lazy refresh
+- `AdjustmentStore` caches adjustments with 300 s TTL; background task refreshes automatically every 5 minutes
 - Selector bypasses demoted profiles and finds the next eligible alternative
 - Admin API: `/admin/adaptive`, `/admin/adaptive/enable|disable|reset|refresh`
 

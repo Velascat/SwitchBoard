@@ -189,4 +189,5 @@ Nothing imports the API layer except `app.py`.
 3. Instantiate adapters: `FilePolicyStore`, `FileProfileStore`, `CapabilityRegistry`, `HttpNineRouterGateway`, `RetryingGateway`, `DecisionLogger`
 4. Instantiate services: `PolicyEngine`, `RequestClassifier`, `SignalAggregator`, `AdjustmentEngine`, `AdjustmentStore`, `ExperimentRouter`, `ProfileScorer`, `Selector`, `Forwarder`
 5. Attach everything to `app.state` for route handler access
-6. On shutdown: close the HTTP gateway, flush the decision log
+6. Start `_adaptive_refresh_loop` background asyncio task
+7. On shutdown: cancel the background task, close the HTTP gateway, flush the decision log
