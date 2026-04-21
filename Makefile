@@ -12,23 +12,22 @@ help:
 	@echo "  docs-check  verify all doc-referenced files exist"
 
 install:
-	python -m venv .venv
-	.venv/bin/pip install -e ".[dev]" -q
+	uv sync
 
 run:
 	bash scripts/run_dev.sh
 
 test:
-	.venv/bin/pytest -q
+	uv run pytest -q
 
 smoke:
 	bash scripts/smoke_test.sh
 
 lint:
-	.venv/bin/ruff check src test
+	uv run ruff check src test
 
 fmt:
-	.venv/bin/ruff format src test
+	uv run ruff format src test
 
 docs-check:
 	bash scripts/check_docs.sh

@@ -94,7 +94,9 @@ Integration tests use `httpx.AsyncClient` with `ASGITransport` — no real HTTP 
 ## Running locally
 
 ```bash
-# Install
+# Install (uv preferred — respects uv.lock for reproducible installs)
+uv sync
+# or with pip:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"

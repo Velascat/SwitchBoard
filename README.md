@@ -115,12 +115,12 @@ make fmt          # ruff format
 make docs-check   # verify all doc-referenced files exist
 ```
 
-Or directly:
+Or directly with `uv`:
 
 ```bash
-.venv/bin/pytest -q                   # run tests
-.venv/bin/ruff check src test         # lint
-.venv/bin/ruff format src test        # format
+uv run pytest -q                   # run tests
+uv run ruff check src test         # lint
+uv run ruff format src test        # format
 ```
 
 See **[CONTRIBUTING.md](CONTRIBUTING.md)** for repo layout, architecture boundaries, and contribution workflow.
