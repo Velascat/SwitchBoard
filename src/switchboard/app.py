@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # --- Domain services -----------------------------------------------------
     policy_engine = PolicyEngine(policy_store)
     classifier = RequestClassifier()
-    selector = Selector(policy_engine, capability_registry)
+    selector = Selector(policy_engine, capability_registry, profile_store)
     forwarder = Forwarder(gateway, decision_logger)
 
     # --- Attach to app state so routers can access them ----------------------

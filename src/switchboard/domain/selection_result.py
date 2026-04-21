@@ -5,7 +5,9 @@ Section 8.2
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 from switchboard.domain.selection_context import SelectionContext
 
@@ -26,6 +28,9 @@ class SelectionResult(BaseModel):
     downstream_model: str = ""
     rule_name: str = ""
     reason: str = ""
+
+    # Phase 3 — rejection trace: profiles considered but ruled ineligible
+    rejected_profiles: list[dict[str, Any]] = Field(default_factory=list)
 
     # ---------------------------------------------------------------------------
     # Legacy field — kept for backward-compat with existing selector + tests
