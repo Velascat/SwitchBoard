@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Policy-driven model selection service — clients → SwitchBoard → 9router → providers">
+        <meta name="description" content="Policy-driven execution-lane selector for canonical task proposals">
       
       
       
@@ -792,34 +792,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../stability/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stability
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         
   
@@ -1041,8 +1013,8 @@ participate in the runtime request path.</p>
 <ul>
 <li>
 <p><strong>Not a provider proxy.</strong> SwitchBoard does not forward arbitrary LLM API traffic
-  to external providers. It does not aggregate remote API access. It is not a
-  drop-in replacement for 9router in the gateway sense. See ADR-0001.</p>
+  to external providers. It does not aggregate remote API access. It stops at
+  route selection and handoff.</p>
 </li>
 <li>
 <p><strong>Not a model host.</strong> If <code>aider_local</code> is selected, SwitchBoard is choosing a

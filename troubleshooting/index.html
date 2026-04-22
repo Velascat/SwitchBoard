@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Policy-driven model selection service — clients → SwitchBoard → 9router → providers">
+        <meta name="description" content="Policy-driven execution-lane selector for canonical task proposals">
       
       
       
@@ -16,7 +16,7 @@
         <link rel="prev" href="../observability/">
       
       
-        <link rel="next" href="../stability/">
+        <link rel="next" href="../roadmap/">
       
       
         
@@ -771,277 +771,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#startup-failures" class="md-nav__link">
+  <a href="#get-health-returns-degraded" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Startup failures
+        GET /health returns degraded
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Startup failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#startup-aborted-due-to-configuration-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Startup aborted due to configuration errors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#modulenotfounderror-no-module-named-switchboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ModuleNotFoundError: No module named 'switchboard'
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#port-already-in-use" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Port already in use
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#health-check-failures" class="md-nav__link">
+  <a href="#post-route-returns-400-or-422" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Health check failures
+        POST /route returns 400 or 422
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Health check failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nine_routerreachable-false" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        nine_router.reachable: false
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-failures" class="md-nav__link">
+  <a href="#post-route-returns-503" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request failures
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Request failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#http-400-invalid_json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 400 — invalid_json
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-422-missing_required_field" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 422 — missing_required_field
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-503-no_eligible_profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 503 — no_eligible_profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-502-upstream_connection_error" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 502 — upstream_connection_error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-502-upstream_http_error" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 502 — upstream_http_error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-504-upstream_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 504 — upstream_timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#routing-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Routing decisions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Routing decisions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#request-went-to-the-wrong-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request went to the wrong profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#adaptive-routing-is-demoting-a-profile-unexpectedly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adaptive routing is demoting a profile unexpectedly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#decision-log" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decision log
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Decision log">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#decision-log-file-not-being-written" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decision log file not being written
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-admindecisionsrecent-returns-an-empty-list" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GET /admin/decisions/recent returns an empty list
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Performance
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#high-latency-on-first-request-after-startup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        High latency on first request after startup
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-more-information" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting more information
+        POST /route returns 503
       
     </span>
   </a>
@@ -1123,34 +878,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../stability/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stability
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         
   
@@ -1206,277 +933,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#startup-failures" class="md-nav__link">
+  <a href="#get-health-returns-degraded" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Startup failures
+        GET /health returns degraded
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Startup failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#startup-aborted-due-to-configuration-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Startup aborted due to configuration errors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#modulenotfounderror-no-module-named-switchboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ModuleNotFoundError: No module named 'switchboard'
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#port-already-in-use" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Port already in use
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#health-check-failures" class="md-nav__link">
+  <a href="#post-route-returns-400-or-422" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Health check failures
+        POST /route returns 400 or 422
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Health check failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nine_routerreachable-false" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        nine_router.reachable: false
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-failures" class="md-nav__link">
+  <a href="#post-route-returns-503" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request failures
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Request failures">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#http-400-invalid_json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 400 — invalid_json
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-422-missing_required_field" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 422 — missing_required_field
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-503-no_eligible_profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 503 — no_eligible_profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-502-upstream_connection_error" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 502 — upstream_connection_error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-502-upstream_http_error" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 502 — upstream_http_error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#http-504-upstream_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        HTTP 504 — upstream_timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#routing-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Routing decisions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Routing decisions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#request-went-to-the-wrong-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request went to the wrong profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#adaptive-routing-is-demoting-a-profile-unexpectedly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adaptive routing is demoting a profile unexpectedly
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#decision-log" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decision log
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Decision log">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#decision-log-file-not-being-written" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decision log file not being written
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-admindecisionsrecent-returns-an-empty-list" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GET /admin/decisions/recent returns an empty list
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Performance
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Performance">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#high-latency-on-first-request-after-startup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        High latency on first request after startup
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-more-information" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting more information
+        POST /route returns 503
       
     </span>
   </a>
@@ -1504,138 +986,12 @@
 
 
 <h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
-<hr />
-<h2 id="startup-failures">Startup failures<a class="headerlink" href="#startup-failures" title="Permanent link">&para;</a></h2>
-<h3 id="startup-aborted-due-to-configuration-errors"><code>Startup aborted due to configuration errors</code><a class="headerlink" href="#startup-aborted-due-to-configuration-errors" title="Permanent link">&para;</a></h3>
-<p>SwitchBoard validates all config files before accepting any requests. The log output lists every problem found:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CRITICAL switchboard.app - Startup aborted due to configuration errors:
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  2 configuration error(s):
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  - Policy file not found: /path/to/policy.yaml
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  - Experiment &#39;my_exp&#39;: split_percent must be between 0 and 100, got 150
-</code></pre></div>
-<p><strong>Fix:</strong> Address each listed error then restart.</p>
-<p>Common causes:
-- Config file path in <code>.env</code> points to a file that does not exist
-- <code>SWITCHBOARD_POLICY_PATH</code> relative path is resolved from the working directory, not the script location — run from the repo root
-- Experiment <code>split_percent</code> outside 0–100
-- Two rules in <code>policy.yaml</code> have the same <code>name</code> field
-- Experiment <code>profile_a</code> and <code>profile_b</code> are the same profile name</p>
-<hr />
-<h3 id="modulenotfounderror-no-module-named-switchboard"><code>ModuleNotFoundError: No module named 'switchboard'</code><a class="headerlink" href="#modulenotfounderror-no-module-named-switchboard" title="Permanent link">&para;</a></h3>
-<p>The package is not installed in the current Python environment.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
-</code></pre></div>
-<hr />
-<h3 id="port-already-in-use">Port already in use<a class="headerlink" href="#port-already-in-use" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ERROR:    [Errno 98] Address already in use
-</code></pre></div>
-<p>Another process is already listening on port 20401. Either stop that process or change <code>SWITCHBOARD_PORT</code> in <code>.env</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Find the process</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>lsof<span class="w"> </span>-i<span class="w"> </span>:20401
-</code></pre></div>
-<hr />
-<h2 id="health-check-failures">Health check failures<a class="headerlink" href="#health-check-failures" title="Permanent link">&para;</a></h2>
-<h3 id="nine_routerreachable-false"><code>nine_router.reachable: false</code><a class="headerlink" href="#nine_routerreachable-false" title="Permanent link">&para;</a></h3>
-<p>SwitchBoard is running but cannot reach 9router.</p>
-<ol>
-<li>Confirm 9router is running: <code>curl http://localhost:20128/health</code></li>
-<li>Check <code>ROUTER9_BASE_URL</code> in <code>.env</code> matches where 9router is actually running</li>
-<li>Check firewall rules if running on different machines</li>
-</ol>
-<p>SwitchBoard remains fully functional for classification and selection; only the forward step will fail until 9router is reachable.</p>
-<hr />
-<h2 id="request-failures">Request failures<a class="headerlink" href="#request-failures" title="Permanent link">&para;</a></h2>
-<h3 id="http-400-invalid_json">HTTP 400 — <code>invalid_json</code><a class="headerlink" href="#http-400-invalid_json" title="Permanent link">&para;</a></h3>
-<p>The request body is not valid JSON.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;invalid_request_error&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;invalid_json&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">...</span><span class="p">}}</span>
-</code></pre></div>
-<p>Ensure the request includes <code>Content-Type: application/json</code> and a valid JSON body.</p>
-<hr />
-<h3 id="http-422-missing_required_field">HTTP 422 — <code>missing_required_field</code><a class="headerlink" href="#http-422-missing_required_field" title="Permanent link">&para;</a></h3>
-<p>The request body does not include a <code>messages</code> array.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;invalid_request_error&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;missing_required_field&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">...</span><span class="p">}}</span>
-</code></pre></div>
-<p>The <code>messages</code> field is required. Example of a valid body:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello&quot;</span><span class="p">}]}</span>
-</code></pre></div>
-<hr />
-<h3 id="http-503-no_eligible_profile">HTTP 503 — <code>no_eligible_profile</code><a class="headerlink" href="#http-503-no_eligible_profile" title="Permanent link">&para;</a></h3>
-<p>No profile could be found to serve the request. This usually means:</p>
-<ul>
-<li>The selected profile is demoted by the adaptive routing system (high error rate or high latency)</li>
-<li>All eligible profiles have been filtered out by capability requirements (e.g., request requires structured output but no profile supports it)</li>
-</ul>
-<p><strong>Check adaptive state:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:20401/admin/adaptive<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>json.tool
-</code></pre></div>
-<p>If profiles are demoted, wait for them to recover or reset manually:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:20401/admin/adaptive/reset
-</code></pre></div>
-<hr />
-<h3 id="http-502-upstream_connection_error">HTTP 502 — <code>upstream_connection_error</code><a class="headerlink" href="#http-502-upstream_connection_error" title="Permanent link">&para;</a></h3>
-<p>SwitchBoard could not connect to 9router. See <a href="#nine_routerreachable-false">nine_router.reachable: false</a> above.</p>
-<hr />
-<h3 id="http-502-upstream_http_error">HTTP 502 — <code>upstream_http_error</code><a class="headerlink" href="#http-502-upstream_http_error" title="Permanent link">&para;</a></h3>
-<p>9router returned an HTTP error (e.g., 503, 500). The routing itself worked correctly. Check 9router's logs for the root cause.</p>
-<hr />
-<h3 id="http-504-upstream_timeout">HTTP 504 — <code>upstream_timeout</code><a class="headerlink" href="#http-504-upstream_timeout" title="Permanent link">&para;</a></h3>
-<p>9router did not respond within <code>ROUTER9_TIMEOUT_S</code> seconds (default 120). SwitchBoard retries up to 2 times before returning this error. If you see this consistently, check 9router latency and consider increasing the timeout or investigating the provider.</p>
-<hr />
-<h2 id="routing-decisions">Routing decisions<a class="headerlink" href="#routing-decisions" title="Permanent link">&para;</a></h2>
-<h3 id="request-went-to-the-wrong-profile">Request went to the wrong profile<a class="headerlink" href="#request-went-to-the-wrong-profile" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Check what rule fired:</li>
-</ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>python<span class="w"> </span>scripts/inspect.py<span class="w"> </span>recent<span class="w"> </span><span class="m">1</span>
-</code></pre></div>
-<p>Look at the <code>rule</code> and <code>reason</code> fields.</p>
-<ol>
-<li>Check what context SwitchBoard inferred:</li>
-</ol>
-<p>The <code>context_summary</code> in the decision record shows <code>task_type</code>, <code>complexity</code>, <code>estimated_tokens</code>, <code>requires_tools</code>, and other signals. If the inferred context differs from what you expected, the wrong rule may have matched.</p>
-<ol>
-<li>Trace through the policy manually:</li>
-</ol>
-<p>Rules are evaluated in ascending <code>priority</code> order. The first matching rule wins. Check <code>config/policy.yaml</code> for rules with lower priority numbers that might be matching before your intended rule.</p>
-<hr />
-<h3 id="adaptive-routing-is-demoting-a-profile-unexpectedly">Adaptive routing is demoting a profile unexpectedly<a class="headerlink" href="#adaptive-routing-is-demoting-a-profile-unexpectedly" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Check current adjustments</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>python<span class="w"> </span>scripts/inspect.py<span class="w"> </span>summary<span class="w"> </span><span class="m">100</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># View adaptive state</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:20401/admin/adaptive<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>json.tool
-</code></pre></div>
-<p>The adaptive system demotes a profile when its error rate exceeds 40% or mean latency exceeds 8 000 ms over the last N requests (minimum 5 requests required before demotion triggers). Adjustments are recomputed automatically every 5 minutes by a background task; you can also force an immediate refresh with <code>POST /admin/adaptive/refresh</code>.</p>
-<p>To reset:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:20401/admin/adaptive/reset
-</code></pre></div>
-<p>To disable adaptive routing entirely:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:20401/admin/adaptive/disable
-</code></pre></div>
-<hr />
-<h2 id="decision-log">Decision log<a class="headerlink" href="#decision-log" title="Permanent link">&para;</a></h2>
-<h3 id="decision-log-file-not-being-written">Decision log file not being written<a class="headerlink" href="#decision-log-file-not-being-written" title="Permanent link">&para;</a></h3>
-<p>Check <code>SWITCHBOARD_DECISION_LOG_PATH</code> in <code>.env</code>. If it is blank, logging is disabled by design.</p>
-<p>The <code>runtime/</code> directory is created automatically if it does not exist. If the process does not have write permission to the target directory, decision logging silently fails but requests are still routed correctly.</p>
-<hr />
-<h3 id="get-admindecisionsrecent-returns-an-empty-list"><code>GET /admin/decisions/recent</code> returns an empty list<a class="headerlink" href="#get-admindecisionsrecent-returns-an-empty-list" title="Permanent link">&para;</a></h3>
-<p>The in-memory ring buffer holds the last 1 000 decisions and is reset when SwitchBoard restarts. If you just restarted and have not sent any requests yet, the list will be empty.</p>
-<hr />
-<h2 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h2>
-<h3 id="high-latency-on-first-request-after-startup">High latency on first request after startup<a class="headerlink" href="#high-latency-on-first-request-after-startup" title="Permanent link">&para;</a></h3>
-<p>SwitchBoard makes no upstream connections until the first request arrives. The initial TCP handshake and TLS setup to 9router adds latency to the first request only.</p>
-<hr />
-<h2 id="getting-more-information">Getting more information<a class="headerlink" href="#getting-more-information" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Increase log verbosity</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nv">SWITCHBOARD_LOG_LEVEL</span><span class="o">=</span>debug<span class="w"> </span>bash<span class="w"> </span>scripts/run_dev.sh
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Recent decisions with full context</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>python<span class="w"> </span>scripts/inspect.py<span class="w"> </span>recent<span class="w"> </span><span class="m">20</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Aggregated stats</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>python<span class="w"> </span>scripts/inspect.py<span class="w"> </span>summary<span class="w"> </span><span class="m">200</span>
-</code></pre></div>
+<h2 id="get-health-returns-degraded"><code>GET /health</code> returns <code>degraded</code><a class="headerlink" href="#get-health-returns-degraded" title="Permanent link">&para;</a></h2>
+<p>The policy loaded, but validation found routing issues. Inspect <code>policy_issues</code> in the response.</p>
+<h2 id="post-route-returns-400-or-422"><code>POST /route</code> returns <code>400</code> or <code>422</code><a class="headerlink" href="#post-route-returns-400-or-422" title="Permanent link">&para;</a></h2>
+<p>The submitted payload is not a valid canonical <code>TaskProposal</code>.</p>
+<h2 id="post-route-returns-503"><code>POST /route</code> returns <code>503</code><a class="headerlink" href="#post-route-returns-503" title="Permanent link">&para;</a></h2>
+<p>Routing policy evaluation failed. Check the configured policy, profiles, and capabilities.</p>
 
 
 

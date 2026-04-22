@@ -25,34 +25,6 @@
          <lastmod>2026-04-22</lastmod>
     </url>
     <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase1/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase2/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase3/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase4/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase7/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase8/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
-         <loc>https://velascat.github.io/SwitchBoard/phase9/</loc>
-         <lastmod>2026-04-22</lastmod>
-    </url>
-    <url>
          <loc>https://velascat.github.io/SwitchBoard/policies/</loc>
          <lastmod>2026-04-22</lastmod>
     </url>
@@ -86,6 +58,10 @@
     </url>
     <url>
          <loc>https://velascat.github.io/SwitchBoard/troubleshooting/</loc>
+         <lastmod>2026-04-22</lastmod>
+    </url>
+    <url>
+         <loc>https://velascat.github.io/SwitchBoard/migration/switchboard-selector-cutover/</loc>
          <lastmod>2026-04-22</lastmod>
     </url>
 </urlset>

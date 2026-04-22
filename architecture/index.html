@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Policy-driven model selection service — clients → SwitchBoard → 9router → providers">
+        <meta name="description" content="Policy-driven execution-lane selector for canonical task proposals">
       
       
       
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#architecture" class="md-skip">
+        <a href="#switchboard-architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -544,10 +544,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#layer-diagram" class="md-nav__link">
+  <a href="#runtime-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Layer diagram
+        Runtime boundary
       
     </span>
   </a>
@@ -555,93 +555,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#layers-and-responsibilities" class="md-nav__link">
+  <a href="#what-was-removed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Layers and responsibilities
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Layers and responsibilities">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#api-layer-srcswitchboardapi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API layer (src/switchboard/api/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#service-layer-srcswitchboardservices" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Service layer (src/switchboard/services/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#domain-layer-srcswitchboarddomain" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Domain layer (src/switchboard/domain/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#port-layer-srcswitchboardports" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Port layer (src/switchboard/ports/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#adapter-layer-srcswitchboardadapters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adapter layer (src/switchboard/adapters/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#config-layer-srcswitchboardconfig" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Config layer (src/switchboard/config/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#request-flow-non-streaming" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request flow (non-streaming)
+        What was removed
       
     </span>
   </a>
@@ -649,21 +566,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dependency-rule" class="md-nav__link">
+  <a href="#live-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependency rule
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#application-wiring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Application wiring
+        Live API
       
     </span>
   </a>
@@ -972,34 +878,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../stability/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stability
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         
   
@@ -1055,10 +933,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#layer-diagram" class="md-nav__link">
+  <a href="#runtime-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Layer diagram
+        Runtime boundary
       
     </span>
   </a>
@@ -1066,93 +944,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#layers-and-responsibilities" class="md-nav__link">
+  <a href="#what-was-removed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Layers and responsibilities
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Layers and responsibilities">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#api-layer-srcswitchboardapi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API layer (src/switchboard/api/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#service-layer-srcswitchboardservices" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Service layer (src/switchboard/services/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#domain-layer-srcswitchboarddomain" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Domain layer (src/switchboard/domain/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#port-layer-srcswitchboardports" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Port layer (src/switchboard/ports/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#adapter-layer-srcswitchboardadapters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adapter layer (src/switchboard/adapters/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#config-layer-srcswitchboardconfig" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Config layer (src/switchboard/config/)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#request-flow-non-streaming" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request flow (non-streaming)
+        What was removed
       
     </span>
   </a>
@@ -1160,21 +955,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dependency-rule" class="md-nav__link">
+  <a href="#live-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dependency rule
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#application-wiring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Application wiring
+        Live API
       
     </span>
   </a>
@@ -1201,318 +985,31 @@
   
 
 
-<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<p>SwitchBoard follows a <strong>hexagonal architecture</strong> (ports and adapters). The core domain
-has no dependencies on HTTP, filesystems, or any external library. All I/O is handled
-by adapters that implement well-defined port interfaces.</p>
-<p><strong>Architectural position:</strong> SwitchBoard is an execution-lane selector. It classifies
-tasks, evaluates policy, and returns a lane assignment (<code>claude_cli</code>, <code>codex_cli</code>, or
-<code>aider_local</code>). It does not proxy API calls to external LLM providers.</p>
-<p><strong>9router:</strong> The <code>HttpNineRouterGateway</code> adapter and the <code>Forwarder</code> service that
-forwarded requests to 9router are in the process of being replaced with a
-lane-dispatch adapter. 9router has been removed from the architecture. See
-<a href="https://github.com/Velascat/WorkStation/tree/main/docs/architecture/adr/0001-remove-9router.md"><code>WorkStation/docs/architecture/adr/0001-remove-9router.md</code></a>
-for the full rationale. Until the adapter replacement lands in Phase 3, the
-<code>HttpNineRouterGateway</code> code remains present but is not the target architecture.</p>
-<hr />
-<h2 id="layer-diagram">Layer diagram<a class="headerlink" href="#layer-diagram" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>╔══════════════════════════════════════════════════════════════════════╗
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>║                         HTTP Clients                                 ║
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>║          (curl, SDKs, any OpenAI-compatible client)                 ║
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>╚═════════════════════════════╦════════════════════════════════════════╝
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                              │ POST /v1/chat/completions
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                              │ GET  /v1/models  GET /health
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                              │ GET  /admin/decisions/recent
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                              │ GET  /admin/decisions/{request_id}
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                              │ GET  /admin/summary
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                              │ GET/POST /admin/adaptive[/*]
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>╔═════════════════════════════▼════════════════════════════════════════╗
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>║                       API Layer (FastAPI)                            ║
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>║                                                                      ║
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>║  routes_chat.py   routes_models.py   routes_health.py               ║
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>║  routes_admin.py  errors.py                                          ║
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>╚═════════════════════════════╦════════════════════════════════════════╝
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                              │ calls
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>╔═════════════════════════════▼════════════════════════════════════════╗
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>║                      Service Layer                                   ║
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>║                                                                      ║
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>║  RequestClassifier                                                   ║
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>║       │                                                              ║
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>║       ▼                                                              ║
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>║  Selector ─────────────────────────────────────────────► Forwarder  ║
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>║    │  │  │  │                                               │        ║
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>║    │  │  │  └─ ProfileScorer (multi-factor ranking)         │        ║
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>║    │  │  └──── ExperimentRouter (A/B splits)                │        ║
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>║    │  └─────── AdjustmentStore ◄── AdjustmentEngine         │        ║
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>║    │                               ◄── SignalAggregator      │        ║
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>║    └─────────── PolicyEngine                                 │        ║
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>║                 CapabilityRegistry                           │        ║
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>║                                                              ▼        ║
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>║                                                         DecisionLogger║
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>╚══════════════╦═══════════════════════════════╦══════════════════════╝
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>               │ Port interfaces               │
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>╔══════════════▼══════════════╗  ╔════════════▼══════════════════════╗
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>║      Domain Layer           ║  ║       Adapter Layer               ║
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>║                             ║  ║                                   ║
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>║  SelectionContext           ║  ║  FilePolicyStore                  ║
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>║  SelectionResult            ║  ║  FileProfileStore                 ║
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>║  DecisionRecord             ║  ║  HttpNineRouterGateway            ║
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>║  PolicyRule / PolicyConfig  ║  ║  RetryingGateway (wraps above)   ║
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>║  ExperimentConfig           ║  ║  JsonlDecisionSink                ║
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>╚═════════════════════════════╝  ╚═══════════════════════════════════╝
+<h1 id="switchboard-architecture">SwitchBoard Architecture<a class="headerlink" href="#switchboard-architecture" title="Permanent link">&para;</a></h1>
+<p>SwitchBoard is now a selector-only service.</p>
+<h2 id="runtime-boundary">Runtime boundary<a class="headerlink" href="#runtime-boundary" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>TaskProposal -&gt; SwitchBoard -&gt; LaneDecision
 </code></pre></div>
-<hr />
-<h2 id="layers-and-responsibilities">Layers and responsibilities<a class="headerlink" href="#layers-and-responsibilities" title="Permanent link">&para;</a></h2>
-<h3 id="api-layer-srcswitchboardapi">API layer (<code>src/switchboard/api/</code>)<a class="headerlink" href="#api-layer-srcswitchboardapi" title="Permanent link">&para;</a></h3>
-<p>Owns all HTTP concerns: parsing request bodies, setting response codes, CORS, structured error responses. Contains no business logic — delegates immediately to the service layer. Reads services from <code>request.app.state</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Module</th>
-<th>Responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>routes_chat.py</code></td>
-<td>Orchestrates classify → select → forward pipeline</td>
-</tr>
-<tr>
-<td><code>routes_models.py</code></td>
-<td>Lists available profiles as OpenAI model objects</td>
-</tr>
-<tr>
-<td><code>routes_health.py</code></td>
-<td>Checks local and downstream (9router) health</td>
-</tr>
-<tr>
-<td><code>routes_admin.py</code></td>
-<td>Decision log, summary stats, adaptive routing control</td>
-</tr>
-<tr>
-<td><code>errors.py</code></td>
-<td>OpenAI-compatible error response builders</td>
-</tr>
-</tbody>
-</table>
-<h3 id="service-layer-srcswitchboardservices">Service layer (<code>src/switchboard/services/</code>)<a class="headerlink" href="#service-layer-srcswitchboardservices" title="Permanent link">&para;</a></h3>
-<p>All business logic. Services depend on <strong>port interfaces</strong>, not concrete adapters. No HTTP, no file I/O.</p>
-<table>
-<thead>
-<tr>
-<th>Service</th>
-<th>Responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>RequestClassifier</code></td>
-<td>raw request + headers → <code>SelectionContext</code> (task type, complexity, token estimate, structured output requirement)</td>
-</tr>
-<tr>
-<td><code>PolicyEngine</code></td>
-<td>evaluates ordered rules against a <code>SelectionContext</code>; returns matching rule</td>
-</tr>
-<tr>
-<td><code>CapabilityRegistry</code></td>
-<td>resolves profile name → downstream model string; checks capability requirements</td>
-</tr>
-<tr>
-<td><code>ExperimentRouter</code></td>
-<td>intercepts selections for A/B experiments; deterministic bucket assignment</td>
-</tr>
-<tr>
-<td><code>AdjustmentStore</code></td>
-<td>Per-profile adjustments (demoted/promoted); auto-refreshed every 300 s by background task; operator controls via admin API</td>
-</tr>
-<tr>
-<td><code>AdjustmentEngine</code></td>
-<td>derives adjustments from <code>ProfileSignals</code> (error rate, latency thresholds)</td>
-</tr>
-<tr>
-<td><code>SignalAggregator</code></td>
-<td>aggregates <code>DecisionRecord</code> ring buffer → <code>ProfileSignals</code> per profile</td>
-</tr>
-<tr>
-<td><code>ProfileScorer</code></td>
-<td>ranks eligible profiles by weighted quality/cost/latency tiers</td>
-</tr>
-<tr>
-<td><code>Selector</code></td>
-<td>orchestrates policy → A/B → adaptive → eligibility → scoring → result</td>
-</tr>
-<tr>
-<td><code>Forwarder</code></td>
-<td>sends the rewritten request to 9router, measures latency, records decision</td>
-</tr>
-<tr>
-<td><code>DecisionLogger</code></td>
-<td>appends <code>DecisionRecord</code> to JSONL and in-memory ring buffer</td>
-</tr>
-</tbody>
-</table>
-<h3 id="domain-layer-srcswitchboarddomain">Domain layer (<code>src/switchboard/domain/</code>)<a class="headerlink" href="#domain-layer-srcswitchboarddomain" title="Permanent link">&para;</a></h3>
-<p>Pure data types with no behaviour beyond validation. No external dependencies.</p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>SelectionContext</code></td>
-<td>Inferred properties of an incoming request</td>
-</tr>
-<tr>
-<td><code>SelectionResult</code></td>
-<td>Chosen profile, downstream model, rule, adaptive/A/B trace</td>
-</tr>
-<tr>
-<td><code>DecisionRecord</code></td>
-<td>Full audit record written to the decision log</td>
-</tr>
-<tr>
-<td><code>PolicyRule</code></td>
-<td>Typed representation of one policy rule</td>
-</tr>
-<tr>
-<td><code>PolicyConfig</code></td>
-<td>Full policy: rules, fallback profile, experiments</td>
-</tr>
-<tr>
-<td><code>ExperimentConfig</code></td>
-<td>A/B experiment definition</td>
-</tr>
-</tbody>
-</table>
-<h3 id="port-layer-srcswitchboardports">Port layer (<code>src/switchboard/ports/</code>)<a class="headerlink" href="#port-layer-srcswitchboardports" title="Permanent link">&para;</a></h3>
-<p>Python <code>Protocol</code> classes that define contracts for adapters. Services import ports, never adapters directly — enabling lightweight test doubles.</p>
-<table>
-<thead>
-<tr>
-<th>Port</th>
-<th>Implemented by</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>PolicyStore</code></td>
-<td><code>FilePolicyStore</code></td>
-</tr>
-<tr>
-<td><code>ProfileStore</code></td>
-<td><code>FileProfileStore</code></td>
-</tr>
-<tr>
-<td><code>ModelGateway</code></td>
-<td><code>HttpNineRouterGateway</code> (wrapped by <code>RetryingGateway</code>)</td>
-</tr>
-<tr>
-<td><code>DecisionSink</code></td>
-<td><code>JsonlDecisionSink</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="adapter-layer-srcswitchboardadapters">Adapter layer (<code>src/switchboard/adapters/</code>)<a class="headerlink" href="#adapter-layer-srcswitchboardadapters" title="Permanent link">&para;</a></h3>
-<p>Concrete implementations of ports. Allowed to import <code>httpx</code>, <code>yaml</code>, <code>pathlib</code>, etc.</p>
-<table>
-<thead>
-<tr>
-<th>Adapter</th>
-<th>Responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>FilePolicyStore</code></td>
-<td>Reads and parses <code>policy.yaml</code></td>
-</tr>
-<tr>
-<td><code>FileProfileStore</code></td>
-<td>Reads and parses <code>profiles.yaml</code></td>
-</tr>
-<tr>
-<td><code>HttpNineRouterGateway</code></td>
-<td>HTTP client for 9router (<code>/v1/chat/completions</code>, SSE streaming)</td>
-</tr>
-<tr>
-<td><code>RetryingGateway</code></td>
-<td>Wraps any <code>ModelGateway</code>; retries 429/5xx/timeout with backoff</td>
-</tr>
-</tbody>
-</table>
-<h3 id="config-layer-srcswitchboardconfig">Config layer (<code>src/switchboard/config/</code>)<a class="headerlink" href="#config-layer-srcswitchboardconfig" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Module</th>
-<th>Responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>__init__.py</code></td>
-<td><code>Settings</code> (pydantic-settings); all env vars with defaults</td>
-</tr>
-<tr>
-<td><code>validator.py</code></td>
-<td><code>ConfigValidator</code> — validates all three YAML files at startup; aborts on errors</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="request-flow-non-streaming">Request flow (non-streaming)<a class="headerlink" href="#request-flow-non-streaming" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>1. routes_chat.py
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>   ├── Parse JSON body
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>   ├── Assign / extract request_id
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>   │
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>2. RequestClassifier.classify()
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>   ├── Infer task_type, complexity, estimated_tokens
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>   ├── Read X-SwitchBoard-* headers
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>   └── Returns SelectionContext
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>   │
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>3. Selector.select()
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>   ├── 3a. PolicyEngine — find first matching rule → profile_name
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>   ├── 3b. ExperimentRouter — maybe redirect to treatment profile (A/B)
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>   ├── 3c. AdjustmentStore — skip demoted profiles
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>   ├── 3d. Eligibility check — capability requirements (tools, structured output)
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>   ├── 3e. ProfileScorer — rank all eligible candidates
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>   └── Returns SelectionResult
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>   │
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>4. Rewrite request body: body[&quot;model&quot;] = result.downstream_model
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>   │
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>5. Forwarder.forward()
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>   ├── RetryingGateway.create_chat_completion() (up to 3 attempts)
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>   ├── Measure latency
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>   ├── DecisionLogger.log()
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>   └── Returns response data
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>   │
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>6. Return JSONResponse(response_data)
-</code></pre></div>
-<hr />
-<h2 id="dependency-rule">Dependency rule<a class="headerlink" href="#dependency-rule" title="Permanent link">&para;</a></h2>
-<p>Dependencies flow <strong>inward only</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>API → Services → Domain
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Adapters → Ports ← Services
-</code></pre></div>
-<p>The domain layer imports nothing from outside itself.
-The service layer imports domain + ports, never adapters.
-The API and adapter layers import services and domain.
-Nothing imports the API layer except <code>app.py</code>.</p>
-<hr />
-<h2 id="application-wiring">Application wiring<a class="headerlink" href="#application-wiring" title="Permanent link">&para;</a></h2>
-<p><code>app.py::lifespan()</code> is the composition root:</p>
-<ol>
-<li>Load <code>Settings</code> from environment / <code>.env</code></li>
-<li>Run <code>ConfigValidator.validate_all()</code> — abort on errors</li>
-<li>Instantiate adapters: <code>FilePolicyStore</code>, <code>FileProfileStore</code>, <code>CapabilityRegistry</code>, <code>HttpNineRouterGateway</code>, <code>RetryingGateway</code>, <code>DecisionLogger</code></li>
-<li>Instantiate services: <code>PolicyEngine</code>, <code>RequestClassifier</code>, <code>SignalAggregator</code>, <code>AdjustmentEngine</code>, <code>AdjustmentStore</code>, <code>ExperimentRouter</code>, <code>ProfileScorer</code>, <code>Selector</code>, <code>Forwarder</code></li>
-<li>Attach everything to <code>app.state</code> for route handler access</li>
-<li>Start <code>_adaptive_refresh_loop</code> background asyncio task</li>
-<li>On shutdown: cancel the background task, close the HTTP gateway, flush the decision log</li>
-</ol>
+<ul>
+<li>SwitchBoard accepts canonical <code>TaskProposal</code> input.</li>
+<li>It evaluates lane-routing policy.</li>
+<li>It returns a canonical <code>LaneDecision</code>.</li>
+<li>It can also return a full routing plan with fallback and escalation candidates.</li>
+</ul>
+<h2 id="what-was-removed">What was removed<a class="headerlink" href="#what-was-removed" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Active provider proxy behavior</li>
+<li><code>/v1/chat/completions</code> forwarding</li>
+<li>9router health dependency</li>
+<li>Default runtime wiring for upstream forwarding adapters</li>
+</ul>
+<h2 id="live-api">Live API<a class="headerlink" href="#live-api" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>GET /health</code></li>
+<li><code>POST /route</code></li>
+<li><code>POST /route-plan</code></li>
+</ul>
+<p>See <a href="../README.md">README.md</a> and <a href="../routing/">docs/routing.md</a> for the current routing model.</p>
 
 
 

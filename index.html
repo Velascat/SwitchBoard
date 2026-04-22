@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Policy-driven model selection service — clients → SwitchBoard → 9router → providers">
+        <meta name="description" content="Policy-driven execution-lane selector for canonical task proposals">
       
       
       
@@ -318,43 +318,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-switchboard" class="md-nav__link">
+  <a href="#core-docs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why SwitchBoard
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-switchboard-is-not" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What SwitchBoard Is Not
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick start
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation-map" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation map
+        Core docs
       
     </span>
   </a>
@@ -885,34 +852,6 @@
   
   
     <li class="md-nav__item">
-      <a href="stability/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stability
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="roadmap/" class="md-nav__link">
         
   
@@ -968,43 +907,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-switchboard" class="md-nav__link">
+  <a href="#core-docs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why SwitchBoard
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-switchboard-is-not" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What SwitchBoard Is Not
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick start
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation-map" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation map
+        Core docs
       
     </span>
   </a>
@@ -1032,164 +938,24 @@
 
 
 <h1 id="switchboard">SwitchBoard<a class="headerlink" href="#switchboard" title="Permanent link">&para;</a></h1>
-<p><strong>Execution-lane selector and policy-driven routing service.</strong></p>
-<p>SwitchBoard receives a task request, classifies it (complexity, cost sensitivity,
-capability requirements), evaluates a declarative policy, and selects the execution
-lane that should handle it — <code>claude_cli</code>, <code>codex_cli</code>, or <code>aider_local</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Task request
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  ▼
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>SwitchBoard  (port 20401)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │  classify → score → select lane
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  ▼
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Execution lane
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  ├── claude_cli   (Claude Code CLI, premium, OAuth)
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  ├── codex_cli    (Codex CLI, premium, subscription)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  └── aider_local  (Aider + WorkStation tiny models, local, free)
+<p>SwitchBoard is the selector layer in the platform:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ControlPlane -&gt; TaskProposal -&gt; SwitchBoard -&gt; LaneDecision
 </code></pre></div>
-<p>The routing logic lives in a YAML file. No code changes are needed to change which
-lane handles which kind of task.</p>
-<hr />
-<h2 id="why-switchboard">Why SwitchBoard<a class="headerlink" href="#why-switchboard" title="Permanent link">&para;</a></h2>
-<p>When you have multiple LLM providers and model tiers (fast/cheap, capable/expensive, local/private), embedding the routing logic in every client is fragile and hard to maintain. SwitchBoard externalises that decision into a single, testable, hot-reloadable policy.</p>
-<table>
-<thead>
-<tr>
-<th>Capability</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Transparent proxy</strong></td>
-<td>Clients send standard OpenAI requests and receive standard responses</td>
-</tr>
-<tr>
-<td><strong>Policy as code</strong></td>
-<td>Edit <code>config/policy.yaml</code>; routing changes immediately without redeploy</td>
-</tr>
-<tr>
-<td><strong>Adaptive routing</strong></td>
-<td>Monitors error rates and latency; automatically demotes unhealthy profiles every 5 minutes</td>
-</tr>
-<tr>
-<td><strong>A/B experiments</strong></td>
-<td>Declarative traffic splitting between profiles with no code changes</td>
-</tr>
-<tr>
-<td><strong>Full audit trail</strong></td>
-<td>Every routing decision is logged for debugging and analysis</td>
-</tr>
-<tr>
-<td><strong>Structured output routing</strong></td>
-<td>Requests requiring JSON output are directed to capable profiles</td>
-</tr>
-<tr>
-<td><strong>Multi-factor scoring</strong></td>
-<td>Ranks eligible profiles by weighted quality, cost, and latency tiers</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="what-switchboard-is-not">What SwitchBoard Is Not<a class="headerlink" href="#what-switchboard-is-not" title="Permanent link">&para;</a></h2>
+<p>It evaluates routing policy and returns a canonical lane decision. It does not proxy provider traffic, execute backends, or depend on 9router.</p>
+<h2 id="core-docs">Core docs<a class="headerlink" href="#core-docs" title="Permanent link">&para;</a></h2>
 <ul>
-<li>
-<p><strong>Not a universal provider proxy.</strong> SwitchBoard selects execution lanes. It does not
-  forward requests to external LLM provider APIs (OpenAI, Anthropic, etc.) on behalf of
-  clients. That pattern was removed when <code>9router</code> was retired. See
-  <code>WorkStation/docs/architecture/adr/0001-remove-9router.md</code>.</p>
-</li>
-<li>
-<p><strong>Not a credential broker.</strong> SwitchBoard does not hold API keys for LLM providers.
-  The CLI lanes (<code>claude_cli</code>, <code>codex_cli</code>) manage their own OAuth sessions. The local
-  lane (<code>aider_local</code>) uses WorkStation-deployed models with no external credentials.</p>
-</li>
-<li>
-<p><strong>Not a recreation of 9router.</strong> 9router was a provider-routing proxy. SwitchBoard
-  is a lane-selection policy engine. The distinction matters: SwitchBoard produces a
-  lane assignment; it does not proxy HTTP calls to provider APIs.</p>
-</li>
-<li>
-<p><strong>Not the decision engine.</strong> SwitchBoard does not decide <em>what</em> work to do. It
-  decides <em>how</em> to run a task that has already been selected by ControlPlane.</p>
-</li>
-<li>
-<p><strong>Not the execution runner.</strong> SwitchBoard selects the lane and hands off. kodo and
-  the lane runners do the actual coding.</p>
-</li>
+<li><a href="quickstart/">Quickstart</a></li>
+<li><a href="configuration/">Configuration</a></li>
+<li><a href="api/">API</a></li>
+<li><a href="architecture/">Architecture</a></li>
+<li><a href="routing/">Routing</a></li>
+<li><a href="policies/">Policies</a></li>
+<li><a href="profiles/">Profiles</a></li>
+<li><a href="capabilities/">Capabilities</a></li>
+<li><a href="observability/">Observability</a></li>
+<li><a href="troubleshooting/">Troubleshooting</a></li>
+<li><a href="roadmap/">Roadmap</a></li>
 </ul>
-<hr />
-<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<p><strong>Prerequisites:</strong> Python 3.11+.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Velascat/SwitchBoard
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>SwitchBoard
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">           </span><span class="c1"># set ROUTER9_BASE_URL if needed</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>bash<span class="w"> </span>scripts/run_dev.sh
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>bash<span class="w"> </span>scripts/smoke_test.sh<span class="w">     </span><span class="c1"># verify it works</span>
-</code></pre></div>
-<p>For the complete step-by-step guide with expected output at each step, see the <a href="quickstart/">Quickstart</a>.</p>
-<hr />
-<h2 id="documentation-map">Documentation map<a class="headerlink" href="#documentation-map" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Document</th>
-<th>Audience</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="quickstart/">Quickstart</a></td>
-<td>New user — first-time setup and verification</td>
-</tr>
-<tr>
-<td><a href="configuration/">Configuration</a></td>
-<td>Operator — env vars, policy rules, profiles</td>
-</tr>
-<tr>
-<td><a href="api/">API Reference</a></td>
-<td>Integrator — all endpoints with request/response schemas</td>
-</tr>
-<tr>
-<td><a href="architecture/">Architecture</a></td>
-<td>Contributor — layer diagram, service responsibilities</td>
-</tr>
-<tr>
-<td><a href="request-flow/">Request Flow</a></td>
-<td>Contributor — step-by-step request lifecycle with error handling</td>
-</tr>
-<tr>
-<td><a href="observability/">Observability</a></td>
-<td>Operator — decision log format, admin API, adaptive monitoring</td>
-</tr>
-<tr>
-<td><a href="troubleshooting/">Troubleshooting</a></td>
-<td>Operator — common failure cases with fixes</td>
-</tr>
-<tr>
-<td><a href="policies/">Policies</a></td>
-<td>Policy author — rule conditions reference</td>
-</tr>
-<tr>
-<td><a href="profiles/">Profiles</a></td>
-<td>Policy author — profile fields reference</td>
-</tr>
-<tr>
-<td><a href="capabilities/">Capabilities</a></td>
-<td>Policy author — capability registry schema</td>
-</tr>
-<tr>
-<td><a href="stability/">Stability</a></td>
-<td>Evaluator — what is stable, what is experimental, known gaps</td>
-</tr>
-<tr>
-<td><a href="roadmap/">Roadmap</a></td>
-<td>Everyone — what is delivered, what is planned</td>
-</tr>
-</tbody>
-</table>
 
 
 
