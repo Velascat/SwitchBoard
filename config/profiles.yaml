@@ -7,12 +7,12 @@
 # policy rules.
 #
 # Required fields per profile:
-#   downstream_model    The model identifier sent to 9router.
+#   downstream_model    The backend/model identifier associated with the profile.
 #   tags                Free-form list of capability tags.
 #
 # Optional metadata fields:
 #   description         Human-readable explanation.
-#   preferred_provider  Hint to 9router about which provider to prefer.
+#   preferred_provider  Optional provider preference metadata.
 #   max_context_tokens  Maximum supported context window (informational).
 #   supports_tools      Whether this profile's model reliably supports tool use.
 #   supports_vision     Whether this profile's model supports image inputs.

@@ -6,7 +6,7 @@ SwitchBoard is the selector layer in the platform:
 ControlPlane -> TaskProposal -> SwitchBoard -> LaneDecision
 ```
 
-It evaluates routing policy and returns a canonical lane decision. It does not proxy provider traffic, execute backends, or depend on 9router.
+It evaluates routing policy and returns a canonical lane decision. It does not proxy provider traffic or execute backends.
 
 ## Core docs
 

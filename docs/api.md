@@ -4,7 +4,7 @@ SwitchBoard is selector-only.
 
 ## `GET /health`
 
-Returns local selector readiness and policy validity. It does not probe 9router or any provider proxy.
+Returns local selector readiness and policy validity.
 
 ## `POST /route`
 

@@ -14,7 +14,7 @@ Selection flow:
     6. Fall back to FallbackPolicy if no rule matched or all are excluded
 
 SwitchBoard does not execute backends. It does not host models. It does not
-proxy providers. It selects a lane and a backend and returns the decision.
+external providers. It selects a lane and a backend and returns the decision.
 """
 
 from __future__ import annotations

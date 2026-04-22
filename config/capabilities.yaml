@@ -1,7 +1,7 @@
 # SwitchBoard Capability Registry
 # Section 6.5
 #
-# Describes the capabilities of each downstream model that 9router can route to.
+# Describes the capabilities of each downstream model available to the execution stack.
 # This is separate from profiles.yaml: profiles map names → models, while
 # capabilities.yaml describes what each model can do.
 #

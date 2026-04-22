@@ -13,13 +13,6 @@ TaskProposal -> SwitchBoard -> LaneDecision
 - It returns a canonical `LaneDecision`.
 - It can also return a full routing plan with fallback and escalation candidates.
 
-## What was removed
-
-- Active provider proxy behavior
-- `/v1/chat/completions` forwarding
-- 9router health dependency
-- Default runtime wiring for upstream forwarding adapters
-
 ## Live API
 
 - `GET /health`

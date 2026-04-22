@@ -27,9 +27,7 @@ SwitchBoard decides **how** a task runs. It does not decide **what** to work on
 ## What SwitchBoard Is Not
 
 - **Not a provider proxy.** SwitchBoard does not forward HTTP requests to external
-  LLM providers. It selects an execution lane and stops at `LaneDecision`. 9router,
-  which served a forwarding role, has been removed from the architecture. See
-  `WorkStation/docs/architecture/adr/0001-remove-9router.md`.
+  LLM providers. It selects an execution lane and stops at `LaneDecision`.
 
 - **Not a universal auth broker.** SwitchBoard does not hold or manage provider
   credentials. The `claude_cli` and `codex_cli` lanes handle their own OAuth sessions

@@ -7,4 +7,4 @@ SwitchBoard's main configuration is selector-oriented:
 - `config/capabilities.yaml`: capability metadata
 - `.env`: host/port, log level, file paths
 
-There is no upstream provider or 9router configuration in the default runtime.
+There is no upstream provider configuration in the default runtime.

@@ -10,5 +10,4 @@ Stable:
 Not part of the product surface:
 
 - Provider proxy endpoints
-- 9router health semantics
 - OpenAI-compatible `/v1/chat/completions` forwarding

@@ -1,6 +1,6 @@
 # Profiles
 
-Profiles are named routing abstractions used by policy. They do not imply a provider proxy hop.
+Profiles are named routing abstractions used by policy.
 
 Typical fields:
 
