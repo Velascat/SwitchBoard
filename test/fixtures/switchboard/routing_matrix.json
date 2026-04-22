@@ -1,0 +1,94 @@
+[
+  {
+    "_description": "Safe local task: low-risk lint fix, no constraints → local primary, remote fallback available",
+    "proposal": {
+      "task_type": "lint_fix",
+      "risk_level": "low",
+      "labels": []
+    },
+    "expected": {
+      "primary_lane": "aider_local",
+      "primary_backend": "direct_local",
+      "has_fallbacks": true,
+      "has_escalations": false,
+      "has_blocked": false
+    }
+  },
+  {
+    "_description": "Local-only constraint: any task with local_only label → local only, all remote blocked",
+    "proposal": {
+      "task_type": "lint_fix",
+      "risk_level": "low",
+      "labels": ["local_only"]
+    },
+    "expected": {
+      "primary_lane": "aider_local",
+      "primary_backend": "direct_local",
+      "has_fallbacks": false,
+      "has_blocked": true,
+      "all_blocked_by_constraint": true
+    }
+  },
+  {
+    "_description": "Medium implementation task: bug fix, low-medium risk → premium lane primary",
+    "proposal": {
+      "task_type": "bug_fix",
+      "risk_level": "medium",
+      "labels": []
+    },
+    "expected": {
+      "primary_lane": "claude_cli",
+      "primary_backend": "kodo"
+    }
+  },
+  {
+    "_description": "Complex refactor, medium risk → routes directly to workflow primary (no escalation needed)",
+    "proposal": {
+      "task_type": "refactor",
+      "risk_level": "medium",
+      "labels": []
+    },
+    "expected": {
+      "primary_lane": "claude_cli",
+      "primary_backend": "archon_then_kodo",
+      "has_escalations": false
+    }
+  },
+  {
+    "_description": "High-risk bug fix → kodo primary with workflow escalation available",
+    "proposal": {
+      "task_type": "bug_fix",
+      "risk_level": "high",
+      "labels": []
+    },
+    "expected": {
+      "primary_lane": "claude_cli",
+      "primary_backend": "kodo",
+      "has_escalations": true,
+      "escalation_backend_available": "archon_then_kodo"
+    }
+  },
+  {
+    "_description": "High risk escalation: any high-risk task → premium lane",
+    "proposal": {
+      "task_type": "bug_fix",
+      "risk_level": "high",
+      "labels": []
+    },
+    "expected": {
+      "primary_lane": "claude_cli",
+      "has_escalations": true
+    }
+  },
+  {
+    "_description": "Local task, medium risk: local primary with escalation available (not local_only)",
+    "proposal": {
+      "task_type": "documentation",
+      "risk_level": "medium",
+      "labels": []
+    },
+    "expected": {
+      "has_escalations": true
+    }
+  }
+]
