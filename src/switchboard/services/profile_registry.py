@@ -6,7 +6,7 @@ Together these two sources provide a complete picture: what profiles exist and
 which downstream model each profile maps to.
 
 The ProfileRegistry is the authoritative answer to "given profile name X, what
-concrete model string should go in the 9router request?"
+concrete backend/model identifier should the selected execution lane use?"
 """
 
 from __future__ import annotations

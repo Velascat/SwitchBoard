@@ -1,8 +1,8 @@
 """CapabilityRegistry — maps profile names to concrete downstream model identifiers.
 
-Loads ``capabilities.yaml`` on first access and caches it.  A profile entry
-in the registry specifies which downstream model identifier (the value passed
-to 9router in the ``model`` field) should be used for that profile.
+Loads ``capabilities.yaml`` on first access and caches it. A profile entry
+in the registry specifies which downstream model identifier should be used for
+that profile.
 
 YAML schema (see ``config/capabilities.yaml`` for a full example):
 
@@ -32,7 +32,7 @@ logger = get_logger(__name__)
 
 
 class CapabilityRegistry:
-    """Resolves a profile name to the downstream model identifier used in 9router requests."""
+    """Resolves a profile name to the downstream model identifier for a selected lane."""
 
     def __init__(self, capabilities_path: Path) -> None:
         self._path = capabilities_path

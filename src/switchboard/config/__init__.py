@@ -70,23 +70,6 @@ class Settings(BaseSettings):
         description="Path to write decision log JSONL. Empty string disables logging.",
     )
 
-    # Downstream 9router
-    nine_router_url: str = Field(
-        default="http://localhost:20128",
-        alias="ROUTER9_BASE_URL",
-        description="Base URL of the 9router instance.",
-    )
-    nine_router_chat_completions_path: str = Field(
-        default="/v1/chat/completions",
-        alias="ROUTER9_CHAT_COMPLETIONS_PATH",
-        description="Path for chat completions on the 9router instance.",
-    )
-    nine_router_timeout_s: int = Field(
-        default=120,
-        alias="ROUTER9_TIMEOUT_S",
-        description="Timeout in seconds for requests to 9router.",
-    )
-
     @field_validator("log_level")
     @classmethod
     def _validate_log_level(cls, v: str) -> str:

@@ -1,17 +1,13 @@
 """Structured error response helpers for the SwitchBoard API.
 
-All errors returned by the chat completions endpoint follow the OpenAI error
-format so that clients using SwitchBoard as an OpenAI-compatible endpoint get
-standard error parsing behaviour:
+Routing endpoints return a small structured error body:
 
     {"error": {"type": "...", "message": "...", "code": "...", "request_id": "..."}}
 
 Error types
 -----------
 ``invalid_request_error``   — 400/422: malformed or missing request fields
-``routing_error``           — 503: policy evaluation or profile selection failed
-``upstream_error``          — 502: 9router returned a non-2xx response
-``upstream_timeout_error``  — 504: 9router did not respond within the timeout
+``routing_error``           — 503: policy evaluation or lane selection failed
 ``internal_error``          — 500: unexpected exception inside SwitchBoard
 """
 
@@ -76,7 +72,7 @@ def upstream_error(
 
 
 def upstream_timeout(
-    message: str = "The upstream model provider did not respond in time.",
+    message: str = "The downstream execution boundary did not respond in time.",
     request_id: str | None = None,
 ) -> JSONResponse:
     return error_response(504, "upstream_timeout_error", message, "upstream_timeout", request_id)

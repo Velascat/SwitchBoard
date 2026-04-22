@@ -12,8 +12,7 @@ class DecisionSink(Protocol):
     """Contract for recording routing decisions.
 
     Any implementation (in-memory ring buffer, database, message queue, …)
-    must satisfy this protocol.  The :class:`~switchboard.services.forwarder.Forwarder`
-    depends only on this interface.
+    must satisfy this protocol.
     """
 
     def record(self, decision: DecisionRecord) -> None:

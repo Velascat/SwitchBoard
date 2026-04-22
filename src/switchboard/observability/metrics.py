@@ -61,7 +61,7 @@ class Counter:
 
 requests_total = Counter(
     name="switchboard_requests_total",
-    description="Total number of chat completion requests received by SwitchBoard.",
+    description="Total number of canonical routing requests received by SwitchBoard.",
 )
 
 decisions_total = Counter(
@@ -70,6 +70,6 @@ decisions_total = Counter(
 )
 
 forwarding_errors_total = Counter(
-    name="switchboard_forwarding_errors_total",
-    description="Total number of errors encountered when forwarding to 9router.",
+    name="switchboard_runtime_errors_total",
+    description="Total number of runtime errors encountered while selecting routes.",
 )

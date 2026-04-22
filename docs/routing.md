@@ -20,8 +20,8 @@ participate in the runtime request path.
 ## What SwitchBoard does not do
 
 - **Not a provider proxy.** SwitchBoard does not forward arbitrary LLM API traffic
-  to external providers. It does not aggregate remote API access. It is not a
-  drop-in replacement for 9router in the gateway sense. See ADR-0001.
+  to external providers. It does not aggregate remote API access. It stops at
+  route selection and handoff.
 
 - **Not a model host.** If `aider_local` is selected, SwitchBoard is choosing a
   WorkStation-hosted capability. WorkStation deploys the local model services;

@@ -59,18 +59,12 @@ try {
     $body | ConvertTo-Json -Depth 5 | Write-Host
 } catch { Write-Host '   (could not pretty-print response)' }
 
-# 3. Chat completion
+# 3. Route selection
 Write-Host ''
-Write-Host '3. POST /v1/chat/completions'
-$payload = '{"model":"fast","messages":[{"role":"user","content":"Say hello."}]}'
-$status  = Get-StatusCode -Uri "$BaseUrl/v1/chat/completions" -Method 'POST' -Body $payload
-if ($status -eq 200 -or $status -eq 502) {
-    Write-Pass "POST /v1/chat/completions routing reached 9router [HTTP $status]"
-    $Pass++
-} else {
-    Write-Fail "POST /v1/chat/completions [expected 200 or 502, got $status]"
-    $Fail++
-}
+Write-Host '3. POST /route'
+$payload = '{"task_id":"smoke-1","project_id":"switchboard-smoke","task_type":"documentation","execution_mode":"goal","goal_text":"Say hello.","target":{"repo_key":"docs","clone_url":"https://example.invalid/docs.git","base_branch":"main","allowed_paths":[]},"priority":"normal","risk_level":"low","constraints":{"allowed_paths":[],"require_clean_validation":true},"validation_profile":{"profile_name":"default","commands":[]},"branch_policy":{"push_on_success":true,"open_pr":false},"labels":[]}'
+$status  = Get-StatusCode -Uri "$BaseUrl/route" -Method 'POST' -Body $payload
+Invoke-Check 'POST /route returns 200' $status 200
 
 # 4. Admin decisions
 Write-Host ''

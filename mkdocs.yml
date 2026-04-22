@@ -1,5 +1,5 @@
 site_name: SwitchBoard
-site_description: Policy-driven model selection service — clients → SwitchBoard → 9router → providers
+site_description: Policy-driven execution-lane selector for canonical task proposals
 site_url: https://velascat.github.io/SwitchBoard/
 repo_url: https://github.com/Velascat/SwitchBoard
 repo_name: Velascat/SwitchBoard
@@ -43,7 +43,6 @@ nav:
     - Observability: observability.md
     - Troubleshooting: troubleshooting.md
   - Project:
-    - Stability: stability.md
     - Roadmap: roadmap.md
 
 markdown_extensions:

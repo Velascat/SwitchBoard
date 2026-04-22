@@ -11,7 +11,7 @@ ControlPlane
   │  task + lane hints
   ▼
 SwitchBoard  (port 20401)
-  │  classify → select → dispatch
+  │  evaluate policy → select lane
   ▼
 Execution lane
   ├── claude_cli    (Claude Code CLI, OAuth/subscription)
@@ -27,9 +27,8 @@ SwitchBoard decides **how** a task runs. It does not decide **what** to work on
 ## What SwitchBoard Is Not
 
 - **Not a provider proxy.** SwitchBoard does not forward HTTP requests to external
-  LLM providers. It selects an execution lane; it does not sit in the request path
-  between a client and an API. 9router, which served a forwarding role, has been
-  removed from the architecture. See
+  LLM providers. It selects an execution lane and stops at `LaneDecision`. 9router,
+  which served a forwarding role, has been removed from the architecture. See
   `WorkStation/docs/architecture/adr/0001-remove-9router.md`.
 
 - **Not a universal auth broker.** SwitchBoard does not hold or manage provider
@@ -127,29 +126,10 @@ Each config file is heavily commented. For a first-time walkthrough see
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/health` | Service health |
-| `GET` | `/v1/models` | Available lane profiles as OpenAI model list |
-| `POST` | `/v1/chat/completions` | Chat completion with lane selection |
-| `GET` | `/admin/decisions/recent` | Last N lane-selection decisions |
-| `GET` | `/admin/decisions/{request_id}` | Single decision lookup by correlation ID |
-| `GET` | `/admin/summary` | Aggregated stats over last N decisions |
-| `GET` | `/admin/adaptive` | Adaptive routing adjustment state |
+| `POST` | `/route` | Canonical `TaskProposal -> LaneDecision` selection |
+| `POST` | `/route-plan` | Full primary/fallback/escalation routing plan |
 
 Full endpoint reference: **[docs/api.md](docs/api.md)**
-
----
-
-## Inspect lane-selection decisions
-
-```bash
-# Last 20 decisions
-python scripts/inspect.py recent
-
-# Aggregated stats over last 100 decisions
-python scripts/inspect.py summary
-
-# Single decision by request ID
-python scripts/inspect.py show <request_id>
-```
 
 ---
 

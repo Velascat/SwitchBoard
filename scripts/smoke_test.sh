@@ -33,42 +33,32 @@ check "GET /health returns 200" "${STATUS}" "200"
 echo "   Response body:"
 curl -s "${BASE_URL}/health" | python3 -m json.tool 2>/dev/null || true
 
-# 2. Model list
+# 2. Route a canonical proposal
 echo ""
-echo "2. GET /v1/models"
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}/v1/models")
-check "GET /v1/models returns 200" "${STATUS}" "200"
-echo "   Response body:"
-curl -s "${BASE_URL}/v1/models" | python3 -m json.tool 2>/dev/null || true
-
-# 3. Chat completion (expect 200 or 502 if 9router not running)
-echo ""
-echo "3. POST /v1/chat/completions"
-PAYLOAD='{"model":"fast","messages":[{"role":"user","content":"Say hello."}]}'
+echo "2. POST /route"
+PAYLOAD='{"task_id":"smoke-1","project_id":"switchboard-smoke","task_type":"documentation","execution_mode":"goal","goal_text":"Refresh architecture wording","target":{"repo_key":"docs","clone_url":"https://example.invalid/docs.git","base_branch":"main","allowed_paths":[]},"priority":"normal","risk_level":"low","constraints":{"allowed_paths":[],"require_clean_validation":true},"validation_profile":{"profile_name":"default","commands":[]},"branch_policy":{"push_on_success":true,"open_pr":false},"labels":[]}'
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-  -X POST "${BASE_URL}/v1/chat/completions" \
+  -X POST "${BASE_URL}/route" \
   -H "Content-Type: application/json" \
   -d "${PAYLOAD}")
-# 200 = success, 502 = SwitchBoard ran correctly but 9router not available
-if [ "${STATUS}" = "200" ] || [ "${STATUS}" = "502" ]; then
-  _green "  PASS  POST /v1/chat/completions routing reached 9router [HTTP ${STATUS}]"
-  PASS=$((PASS + 1))
-else
-  _red   "  FAIL  POST /v1/chat/completions [expected 200 or 502, got ${STATUS}]"
-  FAIL=$((FAIL + 1))
-fi
+check "POST /route returns 200" "${STATUS}" "200"
 echo "   Response body:"
-curl -s -X POST "${BASE_URL}/v1/chat/completions" \
+curl -s -X POST "${BASE_URL}/route" \
   -H "Content-Type: application/json" \
   -d "${PAYLOAD}" | python3 -m json.tool 2>/dev/null || true
 
-# 4. Admin decisions
+# 3. Route plan
 echo ""
-echo "4. GET /admin/decisions/recent"
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}/admin/decisions/recent?n=5")
-check "GET /admin/decisions/recent returns 200" "${STATUS}" "200"
+echo "3. POST /route-plan"
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+  -X POST "${BASE_URL}/route-plan" \
+  -H "Content-Type: application/json" \
+  -d "${PAYLOAD}")
+check "POST /route-plan returns 200" "${STATUS}" "200"
 echo "   Response body:"
-curl -s "${BASE_URL}/admin/decisions/recent?n=5" | python3 -m json.tool 2>/dev/null || true
+curl -s -X POST "${BASE_URL}/route-plan" \
+  -H "Content-Type: application/json" \
+  -d "${PAYLOAD}" | python3 -m json.tool 2>/dev/null || true
 
 # Summary
 echo ""

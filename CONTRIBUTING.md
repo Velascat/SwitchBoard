@@ -9,9 +9,9 @@ SwitchBoard/
 ├── src/switchboard/          # all application code
 │   ├── app.py                # FastAPI factory and lifespan wiring
 │   ├── api/                  # HTTP layer — routes, error helpers
-│   ├── services/             # business logic — classifier, selector, forwarder, ...
+│   ├── services/             # business logic — selector, registries, logging, ...
 │   ├── domain/               # pure data types — SelectionContext, SelectionResult, ...
-│   ├── adapters/             # I/O adapters — file stores, HTTP gateway, retry wrapper
+│   ├── adapters/             # I/O adapters — file stores and config loaders
 │   ├── ports/                # Protocol interfaces (typing only)
 │   ├── config/               # Settings (pydantic-settings) and ConfigValidator
 │   └── observability/        # Logging helpers
@@ -37,10 +37,8 @@ Pure data types: `SelectionContext`, `SelectionResult`, `DecisionRecord`, `Polic
 
 All business logic lives here. Services depend on **port interfaces**, never on concrete adapters. They receive domain objects and return domain objects.
 
-- `RequestClassifier` — raw request + headers → `SelectionContext`
-- `PolicyEngine` — `SelectionContext` + rules → matching rule
-- `Selector` — orchestrates policy engine, capability registry, adaptive routing, A/B experiments, and profile scoring → `SelectionResult`
-- `Forwarder` — `SelectionResult` + request body → response data + decision record
+- `LaneSelector` — canonical `TaskProposal` → `LaneDecision`
+- `DecisionPlanner` — primary route + fallbacks + escalations → `RoutingPlan`
 - `DecisionLogger` — persists `DecisionRecord`
 
 Do not put HTTP parsing, JSON serialisation, or file reading in services.
@@ -51,9 +49,7 @@ Concrete implementations of port interfaces:
 
 - `FilePolicyStore` — reads `policy.yaml`
 - `FileProfileStore` — reads `profiles.yaml`
-- `HttpNineRouterGateway` — legacy forwarding adapter (to be replaced with a
-  lane-dispatch adapter in Phase 3; 9router is removed from the architecture)
-- `RetryingGateway` — wraps any gateway with retry logic
+- `FileCapabilityStore` — reads `capabilities.yaml`
 
 ### API layer (`api/`)
 
@@ -102,7 +98,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 
-# Start (requires 9router running or won't forward, but starts fine)
+# Start selector runtime
 bash scripts/run_dev.sh
 
 # Smoke test
@@ -131,10 +127,9 @@ Before submitting a change, run both commands and fix any issues.
 
 ### Adding a new routing signal
 
-1. Add the field to `SelectionContext` in `domain/selection_context.py`
-2. Populate it in `RequestClassifier.classify()` in `services/classifier.py`
-3. Add a `when` condition handler in `_condition_matches()` in `services/policy_engine.py`
-4. Add tests in `test/unit/test_classifier.py` and `test/unit/test_policy_engine.py`
+1. Add the field to the canonical `TaskProposal` contract when it belongs in the shared proposal boundary
+2. Plumb it into `LaneSelector` / routing policy evaluation
+3. Add tests in the routing and policy suites
 
 ### Adding a new profile field
 

@@ -1,12 +1,6 @@
-"""Smoke test: GET /health returns 200.
-
-This test runs against a live (or test-client) SwitchBoard instance.
-It uses the FastAPI ASGI test transport so it can run without a real server.
-"""
+"""Smoke tests for selector-only health semantics."""
 
 from __future__ import annotations
-
-from unittest.mock import MagicMock
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -16,18 +10,12 @@ from switchboard.app import create_app
 
 @pytest.fixture()
 async def live_client():
-    """Minimal test client with only the state needed for /health."""
     app = create_app()
-
-    mock_settings = MagicMock()
-    mock_settings.nine_router_url = "http://localhost:20128"
-    mock_settings.port = 20401
+    app.state.policy_issues = []
 
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
-        # Inject minimal state
-        app.state.settings = mock_settings
         yield client
 
 
@@ -49,22 +37,14 @@ class TestHealthSmoke:
         assert "version" in data
         assert data["version"] == "0.1.0"
 
-    async def test_health_response_has_nine_router_status(
-        self, live_client: AsyncClient
-    ) -> None:
+    async def test_health_response_has_selector_fields(self, live_client: AsyncClient) -> None:
         resp = await live_client.get("/health")
         data = resp.json()
-        assert "nine_router" in data
-        assert "reachable" in data["nine_router"]
+        assert data["selector_ready"] is True
+        assert "nine_router" not in data
 
-    async def test_health_degraded_when_nine_router_unreachable(
-        self, live_client: AsyncClient
-    ) -> None:
-        """When 9router is not running, status must be 'degraded' (not an error)."""
+    async def test_health_no_longer_reports_proxy_dependency(self, live_client: AsyncClient) -> None:
         resp = await live_client.get("/health")
-        # The status code must still be 200 even when degraded
         assert resp.status_code == 200
         data = resp.json()
-        # 9router is not running in test environment, so expect degraded
-        if not data["nine_router"]["reachable"]:
-            assert data["status"] == "degraded"
+        assert "nine_router" not in data
