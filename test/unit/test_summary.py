@@ -16,7 +16,8 @@ from switchboard.services.decision_logger import DecisionLogger, SummaryStats, m
 def _make_record(
     *,
     request_id: str | None = None,
-    selected_profile: str = "fast",
+    selected_lane: str = "fast",
+    selected_backend: str = "kodo",
     rule_name: str = "default_short_request",
     status: str = "success",
     error_category: str | None = None,
@@ -24,8 +25,8 @@ def _make_record(
 ) -> DecisionRecord:
     return DecisionRecord(
         timestamp="2026-04-20T12:00:00+00:00",
-        selected_profile=selected_profile,
-        downstream_model="gpt-4o-mini",
+        selected_lane=selected_lane,
+        selected_backend=selected_backend,
         rule_name=rule_name,
         status=status,
         error_category=error_category,
@@ -106,15 +107,25 @@ class TestSummarize:
         assert stats.error_category_counts["upstream_timeout"] == 2
         assert stats.error_category_counts["upstream_error"] == 1
 
-    def test_profile_counts_aggregated(self) -> None:
+    def test_lane_counts_aggregated(self) -> None:
         records = [
-            _make_record(selected_profile="fast"),
-            _make_record(selected_profile="fast"),
-            _make_record(selected_profile="capable"),
+            _make_record(selected_lane="fast"),
+            _make_record(selected_lane="fast"),
+            _make_record(selected_lane="capable"),
         ]
         stats = _make_logger(*records).summarize()
-        assert stats.profile_counts["fast"] == 2
-        assert stats.profile_counts["capable"] == 1
+        assert stats.lane_counts["fast"] == 2
+        assert stats.lane_counts["capable"] == 1
+
+    def test_backend_counts_aggregated(self) -> None:
+        records = [
+            _make_record(selected_backend="kodo"),
+            _make_record(selected_backend="kodo"),
+            _make_record(selected_backend="direct_local"),
+        ]
+        stats = _make_logger(*records).summarize()
+        assert stats.backend_counts["kodo"] == 2
+        assert stats.backend_counts["direct_local"] == 1
 
     def test_rule_counts_aggregated(self) -> None:
         records = [
@@ -142,12 +153,12 @@ class TestSummarize:
         assert stats.latency_mean_ms == pytest.approx(10.0)
 
     def test_window_limits_records_used(self) -> None:
-        records = [_make_record(selected_profile="fast") for _ in range(10)]
-        records += [_make_record(selected_profile="capable") for _ in range(5)]
+        records = [_make_record(selected_lane="fast") for _ in range(10)]
+        records += [_make_record(selected_lane="capable") for _ in range(5)]
         stats = _make_logger(*records).summarize(n=5)
         assert stats.total == 5
-        assert stats.profile_counts.get("capable", 0) == 5
-        assert stats.profile_counts.get("fast", 0) == 0
+        assert stats.lane_counts.get("capable", 0) == 5
+        assert stats.lane_counts.get("fast", 0) == 0
 
     def test_no_latency_when_all_errors(self) -> None:
         records = [_make_record(status="error", error_category="internal_error", latency_ms=5.0)]

@@ -9,14 +9,14 @@ from switchboard.services.signal_aggregator import ProfileSignals, SignalAggrega
 
 
 def _record(
-    profile: str,
+    lane: str,
     status: str = "success",
     latency_ms: float | None = 100.0,
 ) -> DecisionRecord:
     return DecisionRecord(
         timestamp="2024-01-01T00:00:00+00:00",
-        selected_profile=profile,
-        downstream_model="gpt-4o",
+        selected_lane=lane,
+        selected_backend="kodo",
         rule_name="test",
         reason="test",
         status=status,
@@ -74,7 +74,7 @@ class TestSignalAggregator:
         result = self.agg.aggregate([])
         assert result == {}
 
-    def test_counts_requests_per_profile(self) -> None:
+    def test_counts_requests_per_lane(self) -> None:
         records = [_record("capable")] * 5 + [_record("fast")] * 3
         result = self.agg.aggregate(records)
         assert result["capable"].total_requests == 5
@@ -100,24 +100,23 @@ class TestSignalAggregator:
         assert len(sig._latencies_ms) == 1
         assert sig._latencies_ms[0] == pytest.approx(100.0)
 
-    def test_skips_records_without_profile(self) -> None:
+    def test_skips_records_without_lane(self) -> None:
         record = DecisionRecord(
             timestamp="2024-01-01T00:00:00+00:00",
-            selected_profile="",
-            profile_name="",
-            downstream_model="gpt-4o",
+            selected_lane="",
+            selected_backend="kodo",
             rule_name="test",
             reason="test",
         )
         result = self.agg.aggregate([record])
         assert result == {}
 
-    def test_falls_back_to_profile_name_field(self) -> None:
+    def test_accepts_legacy_profile_input_but_aggregates_by_lane(self) -> None:
         record = DecisionRecord(
             timestamp="2024-01-01T00:00:00+00:00",
             selected_profile="",
             profile_name="capable",
-            downstream_model="gpt-4o",
+            downstream_model="kodo",
             rule_name="test",
             reason="test",
         )

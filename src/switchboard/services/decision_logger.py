@@ -37,8 +37,10 @@ class SummaryStats:
     total: int = 0
     success_count: int = 0
     error_count: int = 0
-    # profile → request count
-    profile_counts: dict[str, int] = field(default_factory=dict)
+    # lane → request count
+    lane_counts: dict[str, int] = field(default_factory=dict)
+    # backend → request count
+    backend_counts: dict[str, int] = field(default_factory=dict)
     # rule → request count
     rule_counts: dict[str, int] = field(default_factory=dict)
     # error_category → count (errors only)
@@ -99,9 +101,13 @@ class DecisionLogger:
             else:
                 stats.success_count += 1
 
-            profile = r.selected_profile or r.profile_name
-            if profile:
-                stats.profile_counts[profile] = stats.profile_counts.get(profile, 0) + 1
+            if r.selected_lane:
+                stats.lane_counts[r.selected_lane] = stats.lane_counts.get(r.selected_lane, 0) + 1
+
+            if r.selected_backend:
+                stats.backend_counts[r.selected_backend] = (
+                    stats.backend_counts.get(r.selected_backend, 0) + 1
+                )
 
             if r.rule_name:
                 stats.rule_counts[r.rule_name] = stats.rule_counts.get(r.rule_name, 0) + 1
@@ -144,7 +150,7 @@ def make_decision_record(
     context = result.context
     request_id = context.extra.get("request_id") if context and context.extra else None
     tenant_id = context.tenant_id if context else None
-    profile_name = result.profile_name or result.profile
+    selected_lane = result.profile_name or result.profile
 
     context_summary: dict[str, Any] | None = None
     if context is not None:
@@ -163,8 +169,8 @@ def make_decision_record(
         timestamp=datetime.now(UTC).isoformat(),
         client=tenant_id,
         task_type=context.task_type if context else None,
-        selected_profile=profile_name,
-        downstream_model=result.downstream_model,
+        selected_lane=selected_lane,
+        selected_backend=result.downstream_model,
         rule_name=result.rule_name,
         reason=result.reason,
         context_summary=context_summary,
@@ -179,7 +185,6 @@ def make_decision_record(
         scored_profiles=result.scored_profiles,
         request_id=request_id,
         original_model_hint=original_model_hint,
-        profile_name=profile_name,
         latency_ms=latency_ms,
         tenant_id=tenant_id,
         error=error,

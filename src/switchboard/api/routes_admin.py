@@ -44,8 +44,8 @@ class DecisionRecordResponse(BaseModel):
     timestamp: str
     request_id: str | None
     original_model_hint: str
-    profile_name: str
-    downstream_model: str
+    selected_lane: str
+    selected_backend: str
     rule_name: str
     reason: str
     task_type: str | None
@@ -68,7 +68,8 @@ class SummaryResponse(BaseModel):
     total: int
     success_count: int
     error_count: int
-    profile_counts: dict[str, int]
+    lane_counts: dict[str, int]
+    backend_counts: dict[str, int]
     rule_counts: dict[str, int]
     error_category_counts: dict[str, int]
     latency_p50_ms: float | None = None
@@ -81,8 +82,8 @@ def _to_response(r) -> DecisionRecordResponse:
         timestamp=r.timestamp,
         request_id=r.request_id,
         original_model_hint=r.original_model_hint,
-        profile_name=r.profile_name or r.selected_profile,
-        downstream_model=r.downstream_model,
+        selected_lane=r.selected_lane,
+        selected_backend=r.selected_backend,
         rule_name=r.rule_name,
         reason=r.reason,
         task_type=r.task_type,
@@ -150,7 +151,8 @@ async def summary(
         total=stats.total,
         success_count=stats.success_count,
         error_count=stats.error_count,
-        profile_counts=stats.profile_counts,
+        lane_counts=stats.lane_counts,
+        backend_counts=stats.backend_counts,
         rule_counts=stats.rule_counts,
         error_category_counts=stats.error_category_counts,
         latency_p50_ms=stats.latency_p50_ms,

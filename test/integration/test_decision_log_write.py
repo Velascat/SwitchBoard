@@ -1,8 +1,6 @@
 """Acceptance test: JSONL decision records are written to disk.
 
-Verifies that a routed chat request produces a JSONL entry containing the
-selected profile and downstream model — as required by Phase 1 acceptance
-criterion D.
+Verifies that routed requests produce canonical lane/backend decision records.
 """
 
 from __future__ import annotations
@@ -54,10 +52,9 @@ class TestJsonlDecisionSinkDiskIO:
 
         record = DecisionRecord(
             timestamp="2026-04-20T17:00:00Z",
-            selected_profile="fast",
-            downstream_model="gpt-4o-mini",
+            selected_lane="fast",
+            selected_backend="kodo",
             rule_name="default_short_request",
-            profile_name="fast",
         )
         sink.record(record)
         sink.close()
@@ -72,10 +69,9 @@ class TestJsonlDecisionSinkDiskIO:
 
         record = DecisionRecord(
             timestamp="2026-04-20T17:00:00Z",
-            selected_profile="capable",
-            downstream_model="gpt-4o",
+            selected_lane="capable",
+            selected_backend="kodo",
             rule_name="tool_use",
-            profile_name="capable",
         )
         sink.record(record)
         sink.close()
@@ -90,18 +86,17 @@ class TestJsonlDecisionSinkDiskIO:
 
         record = DecisionRecord(
             timestamp="2026-04-20T17:00:00Z",
-            selected_profile="local",
-            downstream_model="llama3",
+            selected_lane="local",
+            selected_backend="direct_local",
             rule_name="low_priority_local",
-            profile_name="local",
             latency_ms=123.4,
         )
         sink.record(record)
         sink.close()
 
         parsed = json.loads(log_file.read_text(encoding="utf-8").strip())
-        assert parsed["selected_profile"] == "local"
-        assert parsed["downstream_model"] == "llama3"
+        assert parsed["selected_lane"] == "local"
+        assert parsed["selected_backend"] == "direct_local"
         assert parsed["rule_name"] == "low_priority_local"
         assert parsed["latency_ms"] == pytest.approx(123.4)
 
@@ -113,10 +108,9 @@ class TestJsonlDecisionSinkDiskIO:
             sink.record(
                 DecisionRecord(
                     timestamp=f"2026-04-20T17:0{i}:00Z",
-                    selected_profile=profile,
-                    downstream_model=f"model-{i}",
+                    selected_lane=profile,
+                    selected_backend=f"backend-{i}",
                     rule_name="test",
-                    profile_name=profile,
                 )
             )
         sink.close()
@@ -124,8 +118,8 @@ class TestJsonlDecisionSinkDiskIO:
         lines = log_file.read_text(encoding="utf-8").splitlines()
         assert len(lines) == 3
 
-        profiles = [json.loads(line)["selected_profile"] for line in lines]
-        assert profiles == ["fast", "capable", "local"]
+        lanes = [json.loads(line)["selected_lane"] for line in lines]
+        assert lanes == ["fast", "capable", "local"]
 
     def test_parent_directory_created_automatically(self, tmp_path: Path) -> None:
         nested = tmp_path / "runtime" / "logs" / "decisions.jsonl"
@@ -133,10 +127,9 @@ class TestJsonlDecisionSinkDiskIO:
         sink.record(
             DecisionRecord(
                 timestamp="2026-04-20T17:00:00Z",
-                selected_profile="fast",
-                downstream_model="gpt-4o-mini",
+                selected_lane="fast",
+                selected_backend="kodo",
                 rule_name="test",
-                profile_name="fast",
             )
         )
         sink.close()
@@ -147,10 +140,9 @@ class TestJsonlDecisionSinkDiskIO:
         sink.record(
             DecisionRecord(
                 timestamp="2026-04-20T17:00:00Z",
-                selected_profile="fast",
-                downstream_model="gpt-4o-mini",
+                selected_lane="fast",
+                selected_backend="kodo",
                 rule_name="test",
-                profile_name="fast",
             )
         )
         sink.close()
@@ -179,8 +171,8 @@ class TestDecisionLoggerWithDisk:
         lines = log_file.read_text(encoding="utf-8").splitlines()
         assert len(lines) == 1
         parsed = json.loads(lines[0])
-        assert parsed["selected_profile"] == "fast"
-        assert parsed["downstream_model"] == "gpt-4o-mini"
+        assert parsed["selected_lane"] == "fast"
+        assert parsed["selected_backend"] == "gpt-4o-mini"
 
     def test_last_n_returns_from_buffer(self, tmp_path: Path) -> None:
         logger = DecisionLogger(None)
@@ -192,7 +184,7 @@ class TestDecisionLoggerWithDisk:
 
         recent = logger.last_n(3)
         assert len(recent) == 3
-        assert recent[-1].selected_profile == "profile_4"
+        assert recent[-1].selected_lane == "profile_4"
 
     def test_decision_record_has_required_phase1_fields(self, tmp_path: Path) -> None:
         log_file = tmp_path / "decisions.jsonl"
@@ -211,13 +203,13 @@ class TestDecisionLoggerWithDisk:
 
         # Required Phase 1 fields per section 3.3
         assert "timestamp" in parsed
-        assert "selected_profile" in parsed
-        assert "downstream_model" in parsed
+        assert "selected_lane" in parsed
+        assert "selected_backend" in parsed
         assert "rule_name" in parsed
         assert "latency_ms" in parsed
 
-        assert parsed["selected_profile"] == "capable"
-        assert parsed["downstream_model"] == "gpt-4o"
+        assert parsed["selected_lane"] == "capable"
+        assert parsed["selected_backend"] == "gpt-4o"
         assert parsed["rule_name"] == "tool_use"
         assert parsed["latency_ms"] == pytest.approx(350.5)
 

@@ -47,8 +47,8 @@ def _record_decision(
             timestamp=datetime.now(UTC).isoformat(),
             client=proposal.project_id,
             task_type=proposal.task_type.value,
-            selected_profile=decision.selected_lane.value,
-            downstream_model=decision.selected_backend.value,
+            selected_lane=decision.selected_lane.value,
+            selected_backend=decision.selected_backend.value,
             rule_name=decision.policy_rule_matched or "fallback",
             reason=decision.rationale or "",
             context_summary={
@@ -60,7 +60,6 @@ def _record_decision(
             },
             request_id=x_request_id,
             original_model_hint=proposal.task_type.value,
-            profile_name=decision.selected_lane.value,
             tenant_id=proposal.project_id,
         )
     )

@@ -1,6 +1,7 @@
 # Profiles
 
-Profiles are named routing abstractions used by policy.
+This page documents legacy selector-era profile material retained only for
+compatibility. The supported `/route` runtime is lane/backend-native.
 
 Typical fields:
 

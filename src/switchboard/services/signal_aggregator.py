@@ -1,4 +1,4 @@
-"""SignalAggregator — aggregate per-profile performance signals from decision history."""
+"""SignalAggregator — aggregate per-lane performance signals from decision history."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class ProfileSignals:
-    """Aggregated performance signals for a single profile over a window of records."""
+    """Aggregated performance signals for a single lane over a window of records."""
 
     profile: str
     total_requests: int = 0
@@ -47,21 +47,21 @@ class ProfileSignals:
 
 
 class SignalAggregator:
-    """Aggregate a list of DecisionRecords into per-profile ProfileSignals."""
+    """Aggregate a list of DecisionRecords into per-lane ProfileSignals."""
 
     def aggregate(self, records: list[DecisionRecord]) -> dict[str, ProfileSignals]:
-        """Return a mapping of profile name → ProfileSignals.
+        """Return a mapping of lane name → ProfileSignals.
 
-        Only profiles with at least one record are included.
+        Only lanes with at least one record are included.
         """
         signals: dict[str, ProfileSignals] = {}
         for record in records:
-            profile = record.selected_profile or record.profile_name
-            if not profile:
+            lane = record.selected_lane
+            if not lane:
                 continue
-            if profile not in signals:
-                signals[profile] = ProfileSignals(profile=profile)
-            sig = signals[profile]
+            if lane not in signals:
+                signals[lane] = ProfileSignals(profile=lane)
+            sig = signals[lane]
             sig.total_requests += 1
             if record.status == "error":
                 sig.error_count += 1
