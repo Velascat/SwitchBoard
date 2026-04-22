@@ -51,7 +51,7 @@ def test_route_returns_lane_decision() -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["selected_lane"] == "aider_local"
-    assert data["selected_backend"] == "kodo"
+    assert data["selected_backend"] == "direct_local"
 
 
 def test_health_has_no_nine_router_dependency() -> None:

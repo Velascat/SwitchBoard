@@ -12,6 +12,7 @@ from control_plane.contracts.common import (
     ValidationProfile,
 )
 from control_plane.contracts.enums import (
+    BackendName,
     ExecutionMode,
     LaneName,
     Priority,
@@ -102,6 +103,7 @@ class TestBasicRouting:
         selector = LaneSelector(policy=DEFAULT_POLICY)
         result = selector.select(_proposal(task_type=TaskType.LINT_FIX, risk_level=RiskLevel.LOW))
         assert result.selected_lane == LaneName.AIDER_LOCAL
+        assert result.selected_backend == BackendName.DIRECT_LOCAL
 
     def test_feature_high_risk_routes_to_claude(self):
         selector = LaneSelector(policy=DEFAULT_POLICY)
@@ -231,6 +233,18 @@ class TestBackendOverrideRules:
         # backend is "kodo" after override; maps to BackendName.KODO
         from control_plane.contracts.enums import BackendName
         assert result.selected_backend == BackendName.KODO
+
+    def test_archon_then_kodo_is_preserved_without_coercion(self):
+        rule = LaneRule(
+            name="structured",
+            priority=10,
+            select_lane="codex_cli",
+            select_backend="archon_then_kodo",
+            when={},
+        )
+        selector = LaneSelector(policy=_minimal_policy(rule))
+        result = selector.select(_proposal(task_type=TaskType.REFACTOR, risk_level=RiskLevel.HIGH))
+        assert result.selected_backend == BackendName.ARCHON_THEN_KODO
 
 
 # ---------------------------------------------------------------------------

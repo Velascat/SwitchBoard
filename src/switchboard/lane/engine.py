@@ -38,15 +38,6 @@ logger = logging.getLogger(__name__)
 _KNOWN_LANES: frozenset[str] = frozenset(m.value for m in LaneName)
 _KNOWN_BACKENDS: frozenset[str] = frozenset(m.value for m in BackendName)
 
-# Synthetic backends that are valid routing targets but not in BackendName enum
-# (e.g. compound strategies). Kept as strings; adapters resolve them.
-_EXTENDED_BACKENDS: frozenset[str] = frozenset({
-    "direct_local",
-    "archon_then_kodo",
-    "openclaw",
-})
-
-
 class LaneSelector:
     """Selects an execution lane and backend for a canonical TaskProposal.
 
@@ -84,7 +75,7 @@ class LaneSelector:
         return LaneDecision(
             proposal_id=proposal.proposal_id,
             selected_lane=LaneName(lane),
-            selected_backend=BackendName(backend) if backend in _KNOWN_BACKENDS else BackendName.KODO,
+            selected_backend=BackendName(backend),
             confidence=confidence,
             policy_rule_matched=rule_name if rule_name != "fallback" else None,
             rationale=rationale,
@@ -134,12 +125,12 @@ class LaneSelector:
 
         Checks:
         - All rule select_lane values are in the known lane universe
-        - All rule select_backend values are in the combined backend universe
+        - All rule select_backend values are in the canonical backend universe
         - Fallback lane/backend are valid
         - No duplicate rule names
         """
         issues: list[str] = []
-        valid_backends = _KNOWN_BACKENDS | _EXTENDED_BACKENDS
+        valid_backends = _KNOWN_BACKENDS
 
         seen_names: set[str] = set()
         for rule in self._policy.rules:
