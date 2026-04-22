@@ -875,13 +875,14 @@
 
 
 <h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
-<p>SwitchBoard's main configuration is selector-oriented:</p>
+<p>SwitchBoard's supported runtime configuration is lane/backend-oriented:</p>
 <ul>
 <li><code>config/policy.yaml</code>: ordered lane-selection rules</li>
-<li><code>config/profiles.yaml</code>: named routing profiles</li>
 <li><code>config/capabilities.yaml</code>: capability metadata</li>
 <li><code>.env</code>: host/port, log level, file paths</li>
 </ul>
+<p><code>config/profiles.yaml</code> remains compatibility-only for legacy selector material and
+is not required for the supported <code>/route</code> runtime.</p>
 <p>There is no upstream provider configuration in the default runtime.</p>
 
 
