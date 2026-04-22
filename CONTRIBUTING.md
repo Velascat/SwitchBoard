@@ -51,7 +51,8 @@ Concrete implementations of port interfaces:
 
 - `FilePolicyStore` — reads `policy.yaml`
 - `FileProfileStore` — reads `profiles.yaml`
-- `HttpNineRouterGateway` — sends requests to 9router
+- `HttpNineRouterGateway` — legacy forwarding adapter (to be replaced with a
+  lane-dispatch adapter in Phase 3; 9router is removed from the architecture)
 - `RetryingGateway` — wraps any gateway with retry logic
 
 ### API layer (`api/`)

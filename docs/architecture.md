@@ -1,6 +1,19 @@
 # Architecture
 
-SwitchBoard follows a **hexagonal architecture** (ports and adapters). The core domain has no dependencies on HTTP, filesystems, or any external library. All I/O is handled by adapters that implement well-defined port interfaces.
+SwitchBoard follows a **hexagonal architecture** (ports and adapters). The core domain
+has no dependencies on HTTP, filesystems, or any external library. All I/O is handled
+by adapters that implement well-defined port interfaces.
+
+**Architectural position:** SwitchBoard is an execution-lane selector. It classifies
+tasks, evaluates policy, and returns a lane assignment (`claude_cli`, `codex_cli`, or
+`aider_local`). It does not proxy API calls to external LLM providers.
+
+**9router:** The `HttpNineRouterGateway` adapter and the `Forwarder` service that
+forwarded requests to 9router are in the process of being replaced with a
+lane-dispatch adapter. 9router has been removed from the architecture. See
+[`WorkStation/docs/architecture/adr/0001-remove-9router.md`](https://github.com/Velascat/WorkStation/tree/main/docs/architecture/adr/0001-remove-9router.md)
+for the full rationale. Until the adapter replacement lands in Phase 3, the
+`HttpNineRouterGateway` code remains present but is not the target architecture.
 
 ---
 
