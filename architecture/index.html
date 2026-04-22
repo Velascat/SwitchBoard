@@ -1202,7 +1202,18 @@
 
 
 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<p>SwitchBoard follows a <strong>hexagonal architecture</strong> (ports and adapters). The core domain has no dependencies on HTTP, filesystems, or any external library. All I/O is handled by adapters that implement well-defined port interfaces.</p>
+<p>SwitchBoard follows a <strong>hexagonal architecture</strong> (ports and adapters). The core domain
+has no dependencies on HTTP, filesystems, or any external library. All I/O is handled
+by adapters that implement well-defined port interfaces.</p>
+<p><strong>Architectural position:</strong> SwitchBoard is an execution-lane selector. It classifies
+tasks, evaluates policy, and returns a lane assignment (<code>claude_cli</code>, <code>codex_cli</code>, or
+<code>aider_local</code>). It does not proxy API calls to external LLM providers.</p>
+<p><strong>9router:</strong> The <code>HttpNineRouterGateway</code> adapter and the <code>Forwarder</code> service that
+forwarded requests to 9router are in the process of being replaced with a
+lane-dispatch adapter. 9router has been removed from the architecture. See
+<a href="https://github.com/Velascat/WorkStation/tree/main/docs/architecture/adr/0001-remove-9router.md"><code>WorkStation/docs/architecture/adr/0001-remove-9router.md</code></a>
+for the full rationale. Until the adapter replacement lands in Phase 3, the
+<code>HttpNineRouterGateway</code> code remains present but is not the target architecture.</p>
 <hr />
 <h2 id="layer-diagram">Layer diagram<a class="headerlink" href="#layer-diagram" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>╔══════════════════════════════════════════════════════════════════════╗
