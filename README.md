@@ -27,7 +27,8 @@ SwitchBoard decides **how** a task runs. It does not decide **what** to work on
 ## What SwitchBoard Is Not
 
 - **Not a provider proxy.** SwitchBoard does not forward HTTP requests to external
-  LLM providers. It selects an execution lane and stops at `LaneDecision`.
+  LLM providers. Its canonical execution handoff stops at `LaneDecision`; richer
+  planning output is exposed separately as auxiliary `RoutingPlan` data.
 
 - **Not a universal auth broker.** SwitchBoard does not hold or manage provider
   credentials. The `claude_cli` and `codex_cli` lanes handle their own OAuth sessions
@@ -155,7 +156,9 @@ and contribution workflow.
 ## Lane Selection (Phase 4)
 
 SwitchBoard implements canonical proposal-based lane selection using the
-platform's `TaskProposal` → `LaneDecision` contract layer.
+platform's `TaskProposal` → `LaneDecision` contract layer. `RoutingPlan`
+remains an allowed auxiliary routing artifact for callers that need fallback
+or escalation visibility.
 
 ```python
 from switchboard.lane.engine import LaneSelector

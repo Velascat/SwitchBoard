@@ -2,8 +2,10 @@
 
 SwitchBoard is the platform's **execution-lane selector**. It accepts a canonical
 `TaskProposal`, evaluates a configured routing policy, and produces a canonical
-`LaneDecision`. It does not execute backends, proxy providers, host models, or
-participate in the runtime request path.
+`LaneDecision`. Auxiliary routing artifacts such as `RoutingPlan` may also be
+served for fallback/escalation visibility. SwitchBoard does not execute
+backends, proxy providers, host models, or participate in the runtime request
+path.
 
 ---
 

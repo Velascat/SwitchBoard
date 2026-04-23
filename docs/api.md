@@ -12,4 +12,5 @@ Accepts a canonical `TaskProposal` and returns a canonical `LaneDecision`.
 
 ## `POST /route-plan`
 
-Accepts a canonical `TaskProposal` and returns the primary route plus fallback and escalation candidates.
+Accepts a canonical `TaskProposal` and returns auxiliary `RoutingPlan` data:
+the primary route plus fallback and escalation candidates.
