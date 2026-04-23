@@ -940,8 +940,10 @@
 <h1 id="switchboard-routing-architecture">SwitchBoard Routing Architecture<a class="headerlink" href="#switchboard-routing-architecture" title="Permanent link">&para;</a></h1>
 <p>SwitchBoard is the platform's <strong>execution-lane selector</strong>. It accepts a canonical
 <code>TaskProposal</code>, evaluates a configured routing policy, and produces a canonical
-<code>LaneDecision</code>. It does not execute backends, proxy providers, host models, or
-participate in the runtime request path.</p>
+<code>LaneDecision</code>. Auxiliary routing artifacts such as <code>RoutingPlan</code> may also be
+served for fallback/escalation visibility. SwitchBoard does not execute
+backends, proxy providers, host models, or participate in the runtime request
+path.</p>
 <hr />
 <h2 id="what-switchboard-does">What SwitchBoard does<a class="headerlink" href="#what-switchboard-does" title="Permanent link">&para;</a></h2>
 <ul>
