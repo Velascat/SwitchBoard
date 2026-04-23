@@ -16,8 +16,6 @@ It evaluates routing policy and returns a canonical lane decision. It does not p
 - [Architecture](architecture.md)
 - [Routing](routing.md)
 - [Policies](policies.md)
-- [Profiles](profiles.md)
-- [Capabilities](capabilities.md)
 - [Observability](observability.md)
 - [Troubleshooting](troubleshooting.md)
 - [Roadmap](roadmap.md)

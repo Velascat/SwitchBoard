@@ -8,12 +8,13 @@
 SwitchBoard/
 ├── src/switchboard/          # all application code
 │   ├── app.py                # FastAPI factory and lifespan wiring
-│   ├── api/                  # HTTP layer — routes, error helpers
-│   ├── services/             # business logic — selector, registries, logging, ...
-│   ├── domain/               # pure data types — SelectionContext, SelectionResult, ...
-│   ├── adapters/             # I/O adapters — file stores and config loaders
+│   ├── api/                  # HTTP layer — canonical route + health endpoints
+│   ├── lane/                 # canonical lane-routing policy and selector logic
+│   ├── services/             # runtime support services such as decision logging
+│   ├── domain/               # pure data types — DecisionRecord, PolicyRule, ...
+│   ├── adapters/             # I/O adapters — decision sink + policy loading helpers
 │   ├── ports/                # Protocol interfaces (typing only)
-│   ├── config/               # Settings (pydantic-settings) and ConfigValidator
+│   ├── config/               # Settings (pydantic-settings)
 │   └── observability/        # Logging helpers
 ├── test/
 │   ├── unit/                 # pure unit tests (no HTTP, no filesystem)
@@ -31,7 +32,7 @@ SwitchBoard uses a hexagonal (ports and adapters) architecture. Understanding th
 
 ### Domain layer (`domain/`)
 
-Pure data types: `SelectionContext`, `SelectionResult`, `DecisionRecord`, `PolicyRule`, `PolicyConfig`. No HTTP, no file I/O, no external dependencies. These are the contracts between layers.
+Pure data types: `DecisionRecord`, `PolicyRule`, `PolicyConfig`. No HTTP, no file I/O, no external dependencies. These are the contracts between layers.
 
 ### Service layer (`services/`)
 
@@ -45,11 +46,9 @@ Do not put HTTP parsing, JSON serialisation, or file reading in services.
 
 ### Adapter layer (`adapters/`)
 
-Concrete implementations of port interfaces:
+Concrete implementations of runtime persistence:
 
-- `FilePolicyStore` — reads `policy.yaml`
-- `FileProfileStore` — reads `profiles.yaml`
-- `FileCapabilityStore` — reads `capabilities.yaml`
+- `JsonlDecisionSink` — writes canonical routing evidence to JSONL
 
 ### API layer (`api/`)
 
@@ -76,7 +75,7 @@ No business logic in route handlers.
 .venv/bin/pytest test/integration/ -q
 
 # Single file
-.venv/bin/pytest test/unit/test_selector.py -v
+.venv/bin/pytest test/unit/test_lane_engine.py -v
 
 # With coverage (requires pytest-cov)
 .venv/bin/pytest --cov=switchboard --cov-report=term-missing -q
@@ -131,10 +130,11 @@ Before submitting a change, run both commands and fix any issues.
 2. Plumb it into `LaneSelector` / routing policy evaluation
 3. Add tests in the routing and policy suites
 
-### Adding a new profile field
+### Changing lane policy
 
-1. Add the field to `config/profiles.yaml` with comments
-2. The field is available to services via `profile_store.get_profiles()[name]` — no code change needed unless you want to use it in routing logic
+1. Edit `config/policy.yaml`
+2. Keep rule names, lane names, and backend names aligned with the canonical contracts
+3. Add or update tests in the lane routing suites
 
 ### Adding a new API endpoint
 
@@ -161,4 +161,4 @@ The codebase was built in phases (1–10). Phase comments in source files (`# Ph
 - Do not put HTTP calls or file I/O in `services/` or `domain/`
 - Do not add new features in Phase 10 — this phase is documentation and externalization only
 - Do not use `HTTPException` in route handlers — use the helpers in `api/errors.py` instead
-- Do not skip validation: all config is validated at startup via `ConfigValidator`
+- Do not reintroduce profile/model-routing code beside the canonical lane router

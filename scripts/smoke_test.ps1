@@ -49,32 +49,18 @@ try {
     $body | ConvertTo-Json -Depth 5 | Write-Host
 } catch { Write-Host "   (could not pretty-print response)" }
 
-# 2. Model list
+# 2. Route selection
 Write-Host ''
-Write-Host '2. GET /v1/models'
-$status = Get-StatusCode -Uri "$BaseUrl/v1/models"
-Invoke-Check 'GET /v1/models returns 200' $status 200
-try {
-    $body = Invoke-RestMethod -Uri "$BaseUrl/v1/models" -UseBasicParsing
-    $body | ConvertTo-Json -Depth 5 | Write-Host
-} catch { Write-Host '   (could not pretty-print response)' }
-
-# 3. Route selection
-Write-Host ''
-Write-Host '3. POST /route'
+Write-Host '2. POST /route'
 $payload = '{"task_id":"smoke-1","project_id":"switchboard-smoke","task_type":"documentation","execution_mode":"goal","goal_text":"Say hello.","target":{"repo_key":"docs","clone_url":"https://example.invalid/docs.git","base_branch":"main","allowed_paths":[]},"priority":"normal","risk_level":"low","constraints":{"allowed_paths":[],"require_clean_validation":true},"validation_profile":{"profile_name":"default","commands":[]},"branch_policy":{"push_on_success":true,"open_pr":false},"labels":[]}'
 $status  = Get-StatusCode -Uri "$BaseUrl/route" -Method 'POST' -Body $payload
 Invoke-Check 'POST /route returns 200' $status 200
 
-# 4. Admin decisions
+# 3. Route plan
 Write-Host ''
-Write-Host '4. GET /admin/decisions/recent'
-$status = Get-StatusCode -Uri "$BaseUrl/admin/decisions/recent?n=5"
-Invoke-Check 'GET /admin/decisions/recent returns 200' $status 200
-try {
-    $body = Invoke-RestMethod -Uri "$BaseUrl/admin/decisions/recent?n=5" -UseBasicParsing
-    $body | ConvertTo-Json -Depth 5 | Write-Host
-} catch { Write-Host '   (could not pretty-print response)' }
+Write-Host '3. POST /route-plan'
+$status = Get-StatusCode -Uri "$BaseUrl/route-plan" -Method 'POST' -Body $payload
+Invoke-Check 'POST /route-plan returns 200' $status 200
 
 # Summary
 Write-Host ''

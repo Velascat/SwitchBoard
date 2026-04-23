@@ -37,8 +37,6 @@ nav:
     - Architecture: architecture.md
     - Request Flow: request-flow.md
     - Policies: policies.md
-    - Profiles: profiles.md
-    - Capabilities: capabilities.md
   - Operations:
     - Observability: observability.md
     - Troubleshooting: troubleshooting.md

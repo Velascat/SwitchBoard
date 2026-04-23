@@ -43,7 +43,6 @@ class AdaptiveStateResponse(BaseModel):
 class DecisionRecordResponse(BaseModel):
     timestamp: str
     request_id: str | None
-    original_model_hint: str
     selected_lane: str
     selected_backend: str
     rule_name: str
@@ -54,13 +53,6 @@ class DecisionRecordResponse(BaseModel):
     error: str | None = None
     latency_ms: float | None = None
     context_summary: dict[str, Any] | None = None
-    rejected_profiles: list[dict[str, Any]] = []
-    adjustment_applied: bool = False
-    adjustment_reason: str | None = None
-    cost_estimate: float | None = None
-    ab_experiment: str | None = None
-    ab_bucket: str | None = None
-    scored_profiles: list[dict] | None = None
 
 
 class SummaryResponse(BaseModel):
@@ -81,7 +73,6 @@ def _to_response(r) -> DecisionRecordResponse:
     return DecisionRecordResponse(
         timestamp=r.timestamp,
         request_id=r.request_id,
-        original_model_hint=r.original_model_hint,
         selected_lane=r.selected_lane,
         selected_backend=r.selected_backend,
         rule_name=r.rule_name,
@@ -92,13 +83,6 @@ def _to_response(r) -> DecisionRecordResponse:
         error=r.error,
         latency_ms=r.latency_ms,
         context_summary=r.context_summary,
-        rejected_profiles=r.rejected_profiles,
-        adjustment_applied=getattr(r, "adjustment_applied", False),
-        adjustment_reason=getattr(r, "adjustment_reason", None),
-        cost_estimate=getattr(r, "cost_estimate", None),
-        ab_experiment=getattr(r, "ab_experiment", None),
-        ab_bucket=getattr(r, "ab_bucket", None),
-        scored_profiles=getattr(r, "scored_profiles", None),
     )
 
 

@@ -111,18 +111,6 @@ class TestSignalAggregator:
         result = self.agg.aggregate([record])
         assert result == {}
 
-    def test_accepts_legacy_profile_input_but_aggregates_by_lane(self) -> None:
-        record = DecisionRecord(
-            timestamp="2024-01-01T00:00:00+00:00",
-            selected_profile="",
-            profile_name="capable",
-            downstream_model="kodo",
-            rule_name="test",
-            reason="test",
-        )
-        result = self.agg.aggregate([record])
-        assert "capable" in result
-
     def test_latencies_collected_for_success_only(self) -> None:
         records = [
             _record("fast", status="success", latency_ms=50.0),

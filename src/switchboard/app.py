@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from switchboard.config import load_settings
 from switchboard.lane.engine import LaneSelector
 from switchboard.lane.planner import DecisionPlanner
+from switchboard.lane.policy import LaneRoutingPolicy
 from switchboard.observability.logging import configure_logging
 from switchboard.services.decision_logger import DecisionLogger
 
@@ -21,9 +22,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Load runtime configuration and attach selector services."""
     settings = load_settings()
     configure_logging(settings.log_level)
+    policy = _load_policy(settings)
 
-    selector = LaneSelector()
-    planner = DecisionPlanner()
+    selector = LaneSelector(policy=policy)
+    planner = DecisionPlanner(policy=policy)
     decision_logger = DecisionLogger(
         settings.resolve_path("decision_log_path") if settings.decision_log_path else None
     )
@@ -38,6 +40,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     decision_logger.close()
+
+
+def _load_policy(settings) -> LaneRoutingPolicy | None:
+    policy_path = settings.resolve_path("policy_path")
+    if not policy_path.exists():
+        return None
+    return LaneRoutingPolicy.from_yaml(policy_path)
 
 
 def create_app() -> FastAPI:

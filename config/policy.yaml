@@ -1,239 +1,187 @@
-# SwitchBoard Policy Configuration
-#
-# Rules are evaluated in ascending priority order (lower number = evaluated first).
-# The first rule whose ``when`` conditions ALL match the SelectionContext wins.
-# If no rule matches, the fallback_profile is used.
-#
-# Condition keys map to SelectionContext attributes:
-#   stream                boolean
-#   tools_present         boolean
-#   requires_tools        boolean
-#   requires_long_context boolean
-#   task_type                    string  — "code" | "analysis" | "planning" | "summarization" | "chat"
-#   complexity                   string  — "low" | "medium" | "high"
-#   cost_sensitivity             string  — "low" | "high"  (from X-SwitchBoard-Cost-Sensitivity header)
-#   latency_sensitivity          string  — "low" | "high"  (from X-SwitchBoard-Latency-Sensitivity header)
-#   priority                     string  (from X-SwitchBoard-Priority header)
-#   tenant_id                    string  (from X-SwitchBoard-Tenant-ID header)
-#   model_hint                   string  (the model field the caller sent)
-#   min_estimated_tokens         integer (context.estimated_tokens >= value)
-#   max_estimated_tokens         integer (context.estimated_tokens <= value)
-#   min_max_tokens               integer (context.max_tokens >= value)
-#   max_max_tokens               integer (context.max_tokens <= value)
-#   requires_structured_output   boolean (true when response_format is json_object or json_schema)
-#   requires_long_context        boolean (true when estimated_tokens > 6 000)
-#   requires_tools               boolean (true when a non-empty tools array is present)
-#
-# List values use "any of" semantics: task_type: ["code", "planning"] matches either.
-
 version: "1"
-fallback_profile: "default"
 
 rules:
-
-  # ------------------------------------------------------------------
-  # Priority 10 — explicit caller overrides (model hint)
-  # ------------------------------------------------------------------
-
-  - name: caller_requests_capable
+  - name: force_local_only
     priority: 10
-    select_profile: capable
-    description: >
-      Caller explicitly requested the capable profile via model hint.
+    select_lane: aider_local
+    select_backend: direct_local
     when:
-      model_hint: ["capable", "gpt-4o", "claude-3-5-sonnet"]
+      local_only: true
+    confidence: 1.0
+    description: Proposal explicitly requires local-only execution.
 
-  - name: caller_requests_local
-    priority: 11
-    select_profile: local
-    description: >
-      Caller explicitly requested the local/private profile.
-    when:
-      model_hint: ["local", "private", "llama3", "ollama"]
-
-  # ------------------------------------------------------------------
-  # Priority 20 — high-priority tenants always get the capable model
-  # ------------------------------------------------------------------
-
-  - name: high_priority_tenant
+  - name: local_low_risk
     priority: 20
-    select_profile: capable
-    description: >
-      Requests from high-priority tenants are always routed to the capable model
-      regardless of estimated token count.
+    select_lane: aider_local
+    select_backend: direct_local
     when:
-      priority: "high"
+      task_type:
+        - lint_fix
+        - documentation
+        - simple_edit
+      max_risk_level: low
+    confidence: 0.95
+    description: Low-risk, bounded task suitable for local execution.
 
-  # ------------------------------------------------------------------
-  # Priority 30 — tool use requires a model with function-calling support
-  # ------------------------------------------------------------------
-
-  - name: tool_use
+  - name: medium_implementation
     priority: 30
-    select_profile: capable
-    description: >
-      Requests that include a tools array need a model with reliable
-      function-calling capability.
+    select_lane: claude_cli
+    select_backend: kodo
     when:
-      tools_present: true
+      task_type:
+        - bug_fix
+        - test_write
+        - dependency_update
+      risk_level:
+        - low
+        - medium
+    confidence: 0.9
+    description: Medium implementation work routes to the premium coding lane.
 
-  # ------------------------------------------------------------------
-  # Priority 35-38 — task type routing
-  # ------------------------------------------------------------------
-
-  - name: coding_task
-    priority: 35
-    select_profile: capable
-    description: >
-      Code generation, debugging, and refactoring tasks route to the capable
-      model for higher quality output.  Detected by code fences or coding
-      keyword phrases in the request.
-    when:
-      task_type: "code"
-
-  - name: planning_task
-    priority: 38
-    select_profile: capable
-    description: >
-      Architecture, design, and planning tasks route to the capable model.
-      Detected by planning keyword phrases in the request.
-    when:
-      task_type: "planning"
-
-  # ------------------------------------------------------------------
-  # Priority 40 — streaming short requests go to the fast model
-  # ------------------------------------------------------------------
-
-  - name: streaming_short
+  - name: premium_structured
     priority: 40
-    select_profile: fast
-    description: >
-      Short streaming requests (≤ 512 estimated tokens) go to the fast
-      low-latency model to minimise time-to-first-token.
+    select_lane: claude_cli
+    select_backend: archon_then_kodo
     when:
-      stream: true
-      max_estimated_tokens: 512
+      task_type:
+        - refactor
+        - feature
+      risk_level:
+        - medium
+        - high
+    confidence: 0.85
+    description: High-complexity structured task uses workflow-backed execution.
 
-  # ------------------------------------------------------------------
-  # Priority 45 — summarization is a fast-model fit
-  # ------------------------------------------------------------------
-
-  - name: summarization_task
-    priority: 45
-    select_profile: fast
-    description: >
-      Summarization requests (≤ 3 000 tokens input) are well-served by the
-      fast model.  Larger summarization tasks fall through to the large_context
-      rule below.
-    when:
-      task_type: "summarization"
-      max_estimated_tokens: 3000
-
-  # ------------------------------------------------------------------
-  # Priority 50 — large context requests go to the capable model
-  # ------------------------------------------------------------------
-
-  - name: large_context
+  - name: high_risk_escalation
     priority: 50
-    select_profile: capable
-    description: >
-      Requests with a large estimated token count (> 4 096) require a
-      model with a large context window.
+    select_lane: claude_cli
+    select_backend: kodo
     when:
-      min_estimated_tokens: 4096
+      risk_level: high
+    confidence: 0.92
+    description: High-risk work escalates to the premium coding lane.
 
-  # ------------------------------------------------------------------
-  # Priority 55 — high complexity goes to capable
-  # ------------------------------------------------------------------
-
-  - name: high_complexity
-    priority: 55
-    select_profile: capable
-    description: >
-      High-complexity requests (> 3 000 tokens, > 8 messages, or tool use)
-      route to the capable model for quality.
-    when:
-      complexity: "high"
-
-  # ------------------------------------------------------------------
-  # Priority 60 — long requested output goes to capable
-  # ------------------------------------------------------------------
-
-  - name: long_output_requested
+  - name: local_catchall
     priority: 60
-    select_profile: capable
-    description: >
-      Caller requested more than 2 048 output tokens; route to the capable
-      model which handles long outputs more reliably.
+    select_lane: aider_local
+    select_backend: direct_local
     when:
-      min_max_tokens: 2048
+      task_type:
+        - lint_fix
+        - documentation
+        - simple_edit
+    confidence: 0.8
+    description: Local-eligible work prefers the local lane when constraints allow it.
 
-  # ------------------------------------------------------------------
-  # Priority 65 — cost-sensitive non-complex requests stay on fast
-  # ------------------------------------------------------------------
-
-  - name: cost_sensitive_non_complex
-    priority: 65
-    select_profile: fast
-    description: >
-      Callers that signal high cost-sensitivity (X-SwitchBoard-Cost-Sensitivity: high)
-      are kept on the fast model as long as the request is not complex.
+backend_rules:
+  - name: codex_kodo_low_risk
+    lane: codex_cli
+    select_backend: kodo
     when:
-      cost_sensitivity: "high"
-      complexity: ["low", "medium"]
+      risk_level:
+        - low
+        - medium
+    description: Prefer lightweight kodo execution for codex lane on low or medium risk.
 
-  # ------------------------------------------------------------------
-  # Priority 70 — low-priority / background tasks go to local model
-  # ------------------------------------------------------------------
+fallback:
+  lane: claude_cli
+  backend: kodo
+  rationale: Default fallback when no lane rule matches.
 
-  - name: low_priority_local
-    priority: 70
-    select_profile: local
-    description: >
-      Low-priority background requests are sent to the local model to
-      minimise cloud API spend.
-    when:
-      priority: "low"
+thresholds:
+  min_confidence_to_select: 0.0
+  local_lane_max_risk: low
 
-  # ------------------------------------------------------------------
-  # Priority 100 — catch-all fast path for ordinary short requests
-  # ------------------------------------------------------------------
+excluded_backends: []
 
-  - name: default_short_request
-    priority: 100
-    select_profile: fast
-    description: >
-      Ordinary short requests (≤ 4 096 estimated tokens, no special requirements)
-      go to the fast model.
-    when:
-      max_estimated_tokens: 4096
+alternative_routes:
+  - name: local_to_remote_fallback
+    lane: claude_cli
+    backend: kodo
+    role: fallback
+    cost_class: medium
+    capability_class: enhanced
+    from_lanes:
+      - aider_local
+    blocked_by_labels:
+      - local_only
+      - no_remote
+    priority: 10
+    confidence: 0.85
+    reason: Premium lane fallback when local execution is unavailable or insufficient.
+    notes: Only use after a local execution attempt fails or is unavailable.
 
-# ---------------------------------------------------------------------------
-# Phase 8 — A/B Experiments
-#
-# Each experiment intercepts requests where the policy selects profile_a
-# and routes a split_percent percentage to profile_b instead.
-#
-# Fields:
-#   name               Unique identifier recorded in decision logs.
-#   profile_a          Control profile (majority of traffic).
-#   profile_b          Treatment profile (split_percent % of traffic).
-#   split_percent      Percentage sent to profile_b (0-100).
-#   enabled            Set to false to pause without removing the config.
-#   applies_to_rules   Restrict to specific rule names (empty = all rules).
-#
-# Example (disabled by default — enable to activate):
-# ---------------------------------------------------------------------------
+  - name: workflow_to_kodo_fallback
+    lane: claude_cli
+    backend: kodo
+    role: fallback
+    cost_class: medium
+    capability_class: enhanced
+    from_lanes:
+      - claude_cli
+    from_backends:
+      - archon_then_kodo
+    blocked_by_labels: []
+    priority: 10
+    confidence: 0.8
+    reason: Lightweight kodo execution if the workflow backend is unavailable.
 
-experiments: []
+  - name: local_to_premium_escalation
+    lane: claude_cli
+    backend: kodo
+    role: escalation
+    cost_class: medium
+    capability_class: enhanced
+    from_lanes:
+      - aider_local
+    applies_when:
+      risk_level:
+        - medium
+        - high
+    blocked_by_labels:
+      - local_only
+      - no_remote
+    priority: 10
+    confidence: 0.9
+    reason: Higher risk warrants escalation to a premium lane.
 
-# To activate an experiment, replace the empty list above with entries like:
-#
-# experiments:
-#   - name: capable_vs_fast_chat
-#     profile_a: capable
-#     profile_b: fast
-#     split_percent: 10
-#     enabled: true
-#     applies_to_rules:
-#       - default_short_request
+  - name: kodo_to_workflow_for_complex_task
+    lane: claude_cli
+    backend: archon_then_kodo
+    role: escalation
+    cost_class: high
+    capability_class: workflow
+    from_lanes:
+      - claude_cli
+    from_backends:
+      - kodo
+    applies_when:
+      task_type:
+        - refactor
+        - feature
+    blocked_by_labels:
+      - local_only
+      - no_remote
+    priority: 10
+    confidence: 0.85
+    reason: Complex structural change benefits from a workflow-backed execution path.
+    notes: Only warranted for refactor or feature work.
+
+  - name: kodo_to_workflow_for_high_risk
+    lane: claude_cli
+    backend: archon_then_kodo
+    role: escalation
+    cost_class: high
+    capability_class: workflow
+    from_lanes:
+      - claude_cli
+    from_backends:
+      - kodo
+    applies_when:
+      risk_level: high
+    blocked_by_labels:
+      - local_only
+      - no_remote
+    priority: 20
+    confidence: 0.88
+    reason: High-risk work benefits from structured workflow orchestration.

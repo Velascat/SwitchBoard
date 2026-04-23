@@ -41,8 +41,8 @@ def _fmt_record(r: dict) -> str:
         f"  timestamp:   {r.get('timestamp', '')}",
         f"  request_id:  {r.get('request_id') or '(none)'}",
         f"  status:      {r.get('status', '')}",
-        f"  profile:     {r.get('profile_name', '')}",
-        f"  model:       {r.get('downstream_model', '')}",
+        f"  lane:        {r.get('selected_lane', '')}",
+        f"  backend:     {r.get('selected_backend', '')}",
         f"  rule:        {r.get('rule_name', '')}",
         f"  reason:      {r.get('reason', '')}",
         f"  latency_ms:  {r.get('latency_ms')}",
@@ -60,9 +60,6 @@ def _fmt_record(r: dict) -> str:
             f" tokens={cs.get('estimated_tokens')}"
             f" tools={cs.get('requires_tools')} long_ctx={cs.get('requires_long_context')}"
         )
-    if r.get("rejected_profiles"):
-        rp = ", ".join(f"{x['profile']}({x['reason']})" for x in r["rejected_profiles"])
-        lines.append(f"  rejected:    {rp}")
     return "\n".join(lines)
 
 
@@ -84,9 +81,13 @@ def cmd_summary(args: list[str]) -> None:
     print(f"Window: last {s['window']} decisions ({s['total']} recorded)")
     print(f"  success:  {s['success_count']}   error: {s['error_count']}")
     print()
-    print("Profiles:")
-    for p, c in sorted(s["profile_counts"].items(), key=lambda x: -x[1]):
-        print(f"  {p:<20} {c}")
+    print("Lanes:")
+    for lane, count in sorted(s["lane_counts"].items(), key=lambda x: -x[1]):
+        print(f"  {lane:<20} {count}")
+    print()
+    print("Backends:")
+    for backend, count in sorted(s["backend_counts"].items(), key=lambda x: -x[1]):
+        print(f"  {backend:<20} {count}")
     print()
     print("Rules:")
     for rule, c in sorted(s["rule_counts"].items(), key=lambda x: -x[1]):

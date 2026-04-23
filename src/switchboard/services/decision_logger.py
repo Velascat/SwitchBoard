@@ -15,14 +15,11 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
 from pathlib import Path
 from statistics import mean, median
-from typing import Any
 
 from switchboard.adapters.jsonl_decision_sink import JsonlDecisionSink
 from switchboard.domain.decision_record import DecisionRecord
-from switchboard.domain.selection_result import SelectionResult
 from switchboard.observability.logging import get_logger
 
 logger = get_logger(__name__)
@@ -131,61 +128,3 @@ class DecisionLogger:
     def close(self) -> None:
         """Close the underlying file handle if open."""
         self._sink.close()
-
-
-# ---------------------------------------------------------------------------
-# Factory helper
-# ---------------------------------------------------------------------------
-
-
-def make_decision_record(
-    *,
-    result: SelectionResult,
-    original_model_hint: str,
-    latency_ms: float | None = None,
-    error: str | None = None,
-    error_category: str | None = None,
-) -> DecisionRecord:
-    """Build a :class:`DecisionRecord` from a :class:`SelectionResult`."""
-    context = result.context
-    request_id = context.extra.get("request_id") if context and context.extra else None
-    tenant_id = context.tenant_id if context else None
-    selected_lane = result.profile_name or result.profile
-
-    context_summary: dict[str, Any] | None = None
-    if context is not None:
-        context_summary = {
-            "task_type": context.task_type,
-            "complexity": context.complexity,
-            "estimated_tokens": context.estimated_tokens,
-            "requires_tools": context.requires_tools,
-            "requires_long_context": context.requires_long_context,
-            "stream": context.stream,
-            "cost_sensitivity": context.cost_sensitivity,
-            "latency_sensitivity": context.latency_sensitivity,
-        }
-
-    return DecisionRecord(
-        timestamp=datetime.now(UTC).isoformat(),
-        client=tenant_id,
-        task_type=context.task_type if context else None,
-        selected_lane=selected_lane,
-        selected_backend=result.downstream_model,
-        rule_name=result.rule_name,
-        reason=result.reason,
-        context_summary=context_summary,
-        rejected_profiles=result.rejected_profiles,
-        status="error" if error else "success",
-        error_category=error_category,
-        adjustment_applied=result.adjustment_applied,
-        adjustment_reason=result.adjustment_reason,
-        cost_estimate=result.cost_estimate,
-        ab_experiment=result.ab_experiment,
-        ab_bucket=result.ab_bucket,
-        scored_profiles=result.scored_profiles,
-        request_id=request_id,
-        original_model_hint=original_model_hint,
-        latency_ms=latency_ms,
-        tenant_id=tenant_id,
-        error=error,
-    )

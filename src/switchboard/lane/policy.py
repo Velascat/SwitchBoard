@@ -8,8 +8,10 @@ consumed by LaneSelector.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Optional
 
+import yaml
 from pydantic import BaseModel, Field
 
 
@@ -225,6 +227,12 @@ class LaneRoutingPolicy(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "LaneRoutingPolicy":
         return cls.model_validate(data)
+
+    @classmethod
+    def from_yaml(cls, path: Path) -> "LaneRoutingPolicy":
+        with path.open("r", encoding="utf-8") as handle:
+            raw = yaml.safe_load(handle) or {}
+        return cls.from_dict(raw)
 
 
 # ---------------------------------------------------------------------------

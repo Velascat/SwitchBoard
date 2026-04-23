@@ -50,17 +50,7 @@ class Settings(BaseSettings):
     policy_path: str = Field(
         default="./config/policy.yaml",
         alias="SWITCHBOARD_POLICY_PATH",
-        description="Path to the policy rules YAML file.",
-    )
-    profiles_path: str = Field(
-        default="./config/profiles.yaml",
-        alias="SWITCHBOARD_PROFILES_PATH",
-        description="Path to the model profiles YAML file.",
-    )
-    capabilities_path: str = Field(
-        default="./config/capabilities.yaml",
-        alias="SWITCHBOARD_CAPABILITIES_PATH",
-        description="Path to the capability registry YAML file.",
+        description="Path to the lane-routing policy YAML file.",
     )
 
     # Decision log

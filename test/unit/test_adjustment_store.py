@@ -12,8 +12,8 @@ from switchboard.services.adjustment_store import AdjustmentStore
 def _record(profile: str = "capable", status: str = "success") -> DecisionRecord:
     return DecisionRecord(
         timestamp="2024-01-01T00:00:00+00:00",
-        selected_profile=profile,
-        downstream_model="gpt-4o",
+        selected_lane=profile,
+        selected_backend="kodo",
         rule_name="test",
         reason="test",
         status=status,

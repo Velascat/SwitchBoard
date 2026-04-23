@@ -30,8 +30,6 @@ check_file "docs/api.md"
 check_file "docs/observability.md"
 check_file "docs/troubleshooting.md"
 check_file "docs/policies.md"
-check_file "docs/profiles.md"
-check_file "docs/capabilities.md"
 check_file "docs/stability.md"
 check_file "docs/roadmap.md"
 check_file "CONTRIBUTING.md"
@@ -39,8 +37,6 @@ check_file "CONTRIBUTING.md"
 # Config templates
 check_file ".env.example"
 check_file "config/policy.yaml"
-check_file "config/profiles.yaml"
-check_file "config/capabilities.yaml"
 
 # Scripts referenced in README / docs
 check_file "scripts/run_dev.sh"

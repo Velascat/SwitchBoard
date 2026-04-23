@@ -59,7 +59,5 @@ def _record_decision(
                 "labels": list(proposal.labels),
             },
             request_id=x_request_id,
-            original_model_hint=proposal.task_type.value,
-            tenant_id=proposal.project_id,
         )
     )

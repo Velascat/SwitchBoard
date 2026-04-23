@@ -10,4 +10,4 @@ The submitted payload is not a valid canonical `TaskProposal`.
 
 ## `POST /route` returns `503`
 
-Routing policy evaluation failed. Check the configured policy, profiles, and capabilities.
+Routing policy evaluation failed. Check the configured lane policy file and validate the lane/backend names it declares.

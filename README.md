@@ -108,14 +108,11 @@ see **[docs/quickstart.md](docs/quickstart.md)**.
 | File | Purpose |
 |------|---------|
 | `config/policy.yaml` | Ordered lane-selection rules — first match wins |
-| `config/profiles.yaml` | Named lane profiles with capability metadata |
-| `config/capabilities.yaml` | Lane capability descriptions |
 | `.env` | Service binding, log level, file paths |
 
 Each config file is heavily commented. For a first-time walkthrough see
-**[docs/configuration.md](docs/configuration.md)**. For full schema reference see
-[docs/policies.md](docs/policies.md), [docs/profiles.md](docs/profiles.md), and
-[docs/capabilities.md](docs/capabilities.md).
+**[docs/configuration.md](docs/configuration.md)**. For the lane-policy schema see
+**[docs/policies.md](docs/policies.md)**.
 
 ---
 
@@ -228,8 +225,6 @@ See **[WorkStation/docs/architecture/routing-fallback-escalation.md](https://git
 | [docs/observability.md](docs/observability.md) | Operator |
 | [docs/troubleshooting.md](docs/troubleshooting.md) | Operator |
 | [docs/policies.md](docs/policies.md) | Policy author |
-| [docs/profiles.md](docs/profiles.md) | Policy author |
-| [docs/capabilities.md](docs/capabilities.md) | Policy author |
 | [docs/stability.md](docs/stability.md) | Evaluator |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor |
 
@@ -238,45 +233,10 @@ Cross-repo architecture (component roles, ADRs, glossary):
 
 ---
 
-## Aider reference client
-
-Aider can be used as a reference client for validating OpenAI-compatible
-connectivity through SwitchBoard. It is **not** required for SwitchBoard to
-function — all lane-selection logic is client-agnostic.
-
-**Bootstrap once (optional):**
-
-```bash
-bash scripts/bootstrap_aider.sh   # creates .venv-aider, installs aider-chat
-```
-
-**Smoke test (one-shot connectivity proof):**
-
-```bash
-make smoke-aider
-# or directly:
-bash scripts/aider_smoke.sh
-bash scripts/aider_smoke.sh --profile capable
-```
-
-**Interactive session:**
-
-```bash
-bash scripts/aider.sh              # uses 'fast' profile by default
-bash scripts/aider.sh --profile capable
-```
-
-SwitchBoard's lane-selection logic contains no Aider-specific code. The
-compatibility tests in `test/integration/test_aider_compat.py` verify that the API
-handles Aider's request format correctly.
-
----
-
 ## Ownership boundary
 
-SwitchBoard owns everything about how lane-selection decisions are made: request
-classification, policy evaluation, lane-selection logic, profile and capability
-schemas, and the Aider reference client scripts that validate API compatibility.
+SwitchBoard owns everything about canonical lane-selection decisions: lane policy,
+lane-selection logic, routing evidence, and service-local configuration.
 
 SwitchBoard does **not** own the Dockerfile or compose service definition used to
 run it in the shared stack — those belong to
