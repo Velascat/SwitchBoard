@@ -19,6 +19,7 @@ dependencies = [
     "pydantic-settings>=2.0",
     "httpx>=0.27.0",
     "pyyaml>=6.0",
+    "control-plane @ git+https://github.com/Velascat/ControlPlane.git",
 ]
 
 [project.optional-dependencies]
@@ -32,6 +33,9 @@ dev = [
 
 [project.scripts]
 switchboard = "switchboard.app:main"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/switchboard"]
