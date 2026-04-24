@@ -12,7 +12,7 @@ help:
 	@echo "  docs-check   verify all doc-referenced files exist"
 
 install:
-	uv sync
+	uv sync --all-extras
 
 run:
 	bash scripts/run_dev.sh
