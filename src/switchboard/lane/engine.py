@@ -23,7 +23,14 @@ import logging
 from typing import Any, Optional
 
 from control_plane.contracts import LaneDecision, TaskProposal
-from control_plane.contracts.enums import BackendName, LaneName
+from control_plane.contracts.enums import (
+    BackendName,
+    ExecutionMode,
+    LaneName,
+    Priority,
+    RiskLevel,
+    TaskType,
+)
 
 from .defaults import DEFAULT_POLICY
 from .explain import DecisionExplanation, DecisionFactor
@@ -37,6 +44,22 @@ logger = logging.getLogger(__name__)
 
 _KNOWN_LANES: frozenset[str] = frozenset(m.value for m in LaneName)
 _KNOWN_BACKENDS: frozenset[str] = frozenset(m.value for m in BackendName)
+
+# Attributes that _proposal_attrs() exposes for rule matching.
+# Any key not in this set can never match a real proposal and makes the rule dead.
+_KNOWN_WHEN_KEYS: frozenset[str] = frozenset({
+    "task_type", "execution_mode", "risk_level", "priority",
+    "max_risk_level", "local_only", "preferred_lane",
+})
+
+# Enum-valued when-keys and their valid value sets.
+_ENUM_WHEN_KEYS: dict[str, frozenset[str]] = {
+    "task_type":       frozenset(m.value for m in TaskType),
+    "execution_mode":  frozenset(m.value for m in ExecutionMode),
+    "risk_level":      frozenset(m.value for m in RiskLevel),
+    "max_risk_level":  frozenset(m.value for m in RiskLevel),
+    "priority":        frozenset(m.value for m in Priority),
+}
 
 class LaneSelector:
     """Selects an execution lane and backend for a canonical TaskProposal.
@@ -126,11 +149,12 @@ class LaneSelector:
         Checks:
         - All rule select_lane values are in the known lane universe
         - All rule select_backend values are in the canonical backend universe
+        - All rule when-clause keys are recognized routing attributes
+        - All rule when-clause values are valid enum members for typed attributes
         - Fallback lane/backend are valid
         - No duplicate rule names
         """
         issues: list[str] = []
-        valid_backends = _KNOWN_BACKENDS
 
         seen_names: set[str] = set()
         for rule in self._policy.rules:
@@ -143,16 +167,21 @@ class LaneSelector:
                     f"Rule '{rule.name}': unknown lane '{rule.select_lane}'. "
                     f"Known: {sorted(_KNOWN_LANES)}"
                 )
-            if rule.select_backend not in valid_backends:
+            if rule.select_backend not in _KNOWN_BACKENDS:
                 issues.append(
                     f"Rule '{rule.name}': unknown backend '{rule.select_backend}'. "
-                    f"Known: {sorted(valid_backends)}"
+                    f"Known: {sorted(_KNOWN_BACKENDS)}"
                 )
+
+            _validate_when_clause(f"Rule '{rule.name}'", rule.when, issues)
+
+        for brule in self._policy.backend_rules:
+            _validate_when_clause(f"BackendRule '{brule.name}'", brule.when, issues)
 
         fb = self._policy.fallback
         if fb.lane not in _KNOWN_LANES:
             issues.append(f"Fallback lane '{fb.lane}' is not a known lane.")
-        if fb.backend not in valid_backends:
+        if fb.backend not in _KNOWN_BACKENDS:
             issues.append(f"Fallback backend '{fb.backend}' is not a known backend.")
 
         return issues
@@ -293,6 +322,28 @@ def _build_factors(
             )
         )
     return factors
+
+
+def _validate_when_clause(
+    label: str, when: dict[str, Any], issues: list[str]
+) -> None:
+    """Append issues to *issues* for any unrecognized or invalid when-clause entries."""
+    for key, val in when.items():
+        if key not in _KNOWN_WHEN_KEYS:
+            issues.append(
+                f"{label}: unrecognized 'when' key '{key}'. "
+                f"Recognized: {sorted(_KNOWN_WHEN_KEYS)}"
+            )
+            continue
+        if key in _ENUM_WHEN_KEYS:
+            valid = _ENUM_WHEN_KEYS[key]
+            values = val if isinstance(val, list) else [val]
+            for v in values:
+                if str(v) not in valid:
+                    issues.append(
+                        f"{label}: invalid value '{v}' for 'when.{key}'. "
+                        f"Valid: {sorted(valid)}"
+                    )
 
 
 def _ruled_out(attrs: dict[str, Any], selected_lane: str, policy: LaneRoutingPolicy) -> list[str]:
