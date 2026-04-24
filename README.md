@@ -69,8 +69,6 @@ into a single, testable, hot-reloadable policy.
   immediately, no redeploy
 - **Adaptive routing** — monitors error rates and latency; automatically demotes
   unhealthy lanes every 5 minutes
-- **A/B experiments** — declarative traffic splitting between lanes with no code
-  changes
 - **Full audit trail** — every lane-selection decision is logged for debugging and
   analysis
 
