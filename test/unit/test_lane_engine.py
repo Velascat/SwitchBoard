@@ -324,6 +324,51 @@ class TestValidatePolicy:
         issues = selector.validate_policy()
         assert any("not_a_lane" in i for i in issues)
 
+    def test_unrecognized_when_key_detected(self):
+        rule = LaneRule(name="r", priority=10, select_lane="claude_cli", select_backend="kodo",
+                        when={"bogus_field": "x"})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert any("bogus_field" in i for i in issues)
+
+    def test_invalid_task_type_value_detected(self):
+        # 'coding' is not a valid TaskType enum value
+        rule = LaneRule(name="r", priority=10, select_lane="claude_cli", select_backend="kodo",
+                        when={"task_type": "coding"})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert any("coding" in i for i in issues)
+
+    def test_valid_task_type_list_accepted(self):
+        rule = LaneRule(name="r", priority=10, select_lane="claude_cli", select_backend="kodo",
+                        when={"task_type": ["bug_fix", "lint_fix"]})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert issues == []
+
+    def test_invalid_value_in_task_type_list_detected(self):
+        rule = LaneRule(name="r", priority=10, select_lane="claude_cli", select_backend="kodo",
+                        when={"task_type": ["bug_fix", "nonexistent"]})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert any("nonexistent" in i for i in issues)
+
+    def test_invalid_risk_level_detected(self):
+        rule = LaneRule(name="r", priority=10, select_lane="claude_cli", select_backend="kodo",
+                        when={"risk_level": "very_high"})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert any("very_high" in i for i in issues)
+
+    def test_invalid_max_risk_level_detected(self):
+        rule = LaneRule(name="r", priority=10, select_lane="aider_local", select_backend="direct_local",
+                        when={"max_risk_level": "critical"})
+        issues = LaneSelector(policy=_minimal_policy(rule)).validate_policy()
+        assert any("critical" in i for i in issues)
+
+    def test_backend_rule_invalid_when_key_detected(self):
+        from switchboard.lane.policy import BackendRule
+        brule = BackendRule(name="br", lane="claude_cli", select_backend="kodo",
+                            when={"unknown_attr": "x"})
+        policy = LaneRoutingPolicy(backend_rules=[brule])
+        issues = LaneSelector(policy=policy).validate_policy()
+        assert any("unknown_attr" in i for i in issues)
+
 
 # ---------------------------------------------------------------------------
 # _proposal_attrs helper
