@@ -149,9 +149,22 @@ Service dependencies are wired in `app.py` lifespan and injected into `app.state
 
 ---
 
-## Phase conventions
+## Commit Style
 
-The codebase was built in phases (1–10). Phase comments in source files (`# Phase 7 — ...`) exist to explain *why* a field was added, not as permanent documentation. When modifying code, you do not need to add new phase comments — treat the existing ones as historical context.
+| Prefix | Use for |
+|--------|---------|
+| `feat:` | new user-facing feature |
+| `fix:` | bug fix |
+| `refactor:` | internal restructure, no behavior change |
+| `docs:` | documentation only |
+| `test:` | test additions or fixes |
+| `chore:` | tooling, CI, dependency updates |
+
+---
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](CODE_OF_CONDUCT.md). By participating you agree to uphold its standards.
 
 ---
 
@@ -159,6 +172,5 @@ The codebase was built in phases (1–10). Phase comments in source files (`# Ph
 
 - Do not put business logic in `api/` route handlers
 - Do not put HTTP calls or file I/O in `services/` or `domain/`
-- Do not add new features in Phase 10 — this phase is documentation and externalization only
 - Do not use `HTTPException` in route handlers — use the helpers in `api/errors.py` instead
 - Do not reintroduce profile/model-routing code beside the canonical lane router
