@@ -97,6 +97,6 @@ config/*.yaml
 .hatch/
 
 # FOB operator state
-.fob/
-!.fob/*.example*
+.console/
+!.console/*.example*
 .aider*
