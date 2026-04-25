@@ -22,8 +22,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Optional
 
-from control_plane.contracts import LaneDecision, TaskProposal
-from control_plane.contracts.enums import (
+from operations_center.contracts import LaneDecision, TaskProposal
+from operations_center.contracts.enums import (
     BackendName,
     ExecutionMode,
     LaneName,

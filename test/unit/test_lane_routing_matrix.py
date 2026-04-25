@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from control_plane.contracts import TaskProposal
-from control_plane.contracts.common import TaskTarget
-from control_plane.contracts.enums import ExecutionMode, Priority, RiskLevel, TaskType
+from operations_center.contracts import TaskProposal
+from operations_center.contracts.common import TaskTarget
+from operations_center.contracts.enums import ExecutionMode, Priority, RiskLevel, TaskType
 
 from switchboard.lane.planner import DecisionPlanner
 from switchboard.lane.routing import EligibilityStatus

@@ -11,7 +11,7 @@ path.
 
 ## What SwitchBoard does
 
-- **Accept** a `TaskProposal` from ControlPlane
+- **Accept** a `TaskProposal` from OperationsCenter
 - **Evaluate** routing factors from the proposal against the lane routing policy
 - **Select** a lane (`aider_local`, `claude_cli`, `codex_cli`)
 - **Select** a backend (`direct_local`, `kodo`, `archon_then_kodo`, `openclaw`)
@@ -34,7 +34,7 @@ path.
   Archon execution semantics.
 
 - **Not a task proposer.** SwitchBoard does not generate, prioritise, or filter
-  TaskProposals. That is ControlPlane's responsibility.
+  TaskProposals. That is OperationsCenter's responsibility.
 
 - **Not an auth broker.** SwitchBoard does not hold or distribute backend credentials.
 
@@ -74,7 +74,7 @@ The following proposal fields are extracted as routing signals:
 | Signal | Source | Description |
 |--------|--------|-------------|
 | `task_type` | `proposal.task_type` | Broad task category (lint_fix, bug_fix, feature, …) |
-| `risk_level` | `proposal.risk_level` | ControlPlane's estimate: low / medium / high |
+| `risk_level` | `proposal.risk_level` | OperationsCenter's estimate: low / medium / high |
 | `priority` | `proposal.priority` | Scheduling priority |
 | `execution_mode` | `proposal.execution_mode` | Execution strategy (goal, fix_pr, …) |
 | `local_only` | `"local_only"` label present | Forces aider_local regardless of other factors |
@@ -170,7 +170,7 @@ After SwitchBoard returns a `LaneDecision`, the lane runner (e.g. kodo) uses
 that path.
 
 ```
-ControlPlane → TaskProposal → SwitchBoard → LaneDecision
+OperationsCenter → TaskProposal → SwitchBoard → LaneDecision
                                                   │
                                                   ▼
                                            lane runner (kodo)

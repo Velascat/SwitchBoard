@@ -2,12 +2,12 @@
 
 **Policy-driven execution-lane selector.**
 
-SwitchBoard sits between ControlPlane and the coding execution backend. It inspects
+SwitchBoard sits between OperationsCenter and the coding execution backend. It inspects
 each task request, evaluates a declarative policy, and selects the appropriate
 execution lane — transparently to the caller.
 
 ```
-ControlPlane
+OperationsCenter
   │  task + lane hints
   ▼
 SwitchBoard  (port 20401)
@@ -20,7 +20,7 @@ Execution lane
 ```
 
 SwitchBoard decides **how** a task runs. It does not decide **what** to work on
-(that is ControlPlane's job) and it does not perform the coding (that is kodo's job).
+(that is OperationsCenter's job) and it does not perform the coding (that is kodo's job).
 
 ---
 
@@ -39,7 +39,7 @@ SwitchBoard decides **how** a task runs. It does not decide **what** to work on
   deployment.
 
 - **Not the decision engine.** SwitchBoard does not decide what work to do next, what
-  repo to observe, or what tasks to create. That is ControlPlane's responsibility.
+  repo to observe, or what tasks to create. That is OperationsCenter's responsibility.
 
 - **Not the workflow harness.** SwitchBoard does not define or execute multi-step
   coding workflows. That is Archon's responsibility.
@@ -160,7 +160,7 @@ or escalation visibility.
 
 ```python
 from switchboard.lane.engine import LaneSelector
-from control_plane.contracts import TaskProposal
+from operations_center.contracts import TaskProposal
 
 selector = LaneSelector()                    # uses default policy
 decision = selector.select(proposal)         # TaskProposal → LaneDecision

@@ -3,7 +3,7 @@
 SwitchBoard is the selector layer in the platform:
 
 ```text
-ControlPlane -> TaskProposal -> SwitchBoard -> LaneDecision
+OperationsCenter -> TaskProposal -> SwitchBoard -> LaneDecision
 ```
 
 It evaluates routing policy and returns a canonical lane decision. It does not proxy provider traffic or execute backends.

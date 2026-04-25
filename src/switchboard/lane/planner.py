@@ -17,8 +17,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Optional
 
-from control_plane.contracts import TaskProposal
-from control_plane.contracts.enums import BackendName, LaneName
+from operations_center.contracts import TaskProposal
+from operations_center.contracts.enums import BackendName, LaneName
 
 from .defaults import DEFAULT_POLICY
 from .engine import LaneSelector, _proposal_attrs

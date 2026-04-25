@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from control_plane.contracts import TaskProposal
-from control_plane.contracts.common import BranchPolicy, ExecutionConstraints, TaskTarget, ValidationProfile
-from control_plane.contracts.enums import ExecutionMode, LaneName, Priority, RiskLevel, TaskType
+from operations_center.contracts import TaskProposal
+from operations_center.contracts.common import BranchPolicy, ExecutionConstraints, TaskTarget, ValidationProfile
+from operations_center.contracts.enums import ExecutionMode, LaneName, Priority, RiskLevel, TaskType
 
 from switchboard.lane.defaults import DEFAULT_POLICY
 from switchboard.lane.planner import DecisionPlanner
@@ -269,7 +269,7 @@ def test_lane_selector_plan_routes_returns_routing_plan():
 
 def test_lane_selector_plan_routes_primary_matches_select():
     from switchboard.lane.engine import LaneSelector
-    from control_plane.contracts.enums import LaneName
+    from operations_center.contracts.enums import LaneName
     selector = LaneSelector()
     proposal = _proposal(task_type=TaskType.LINT_FIX, risk_level=RiskLevel.LOW)
     decision = selector.select(proposal)
