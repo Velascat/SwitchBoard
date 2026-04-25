@@ -947,7 +947,7 @@ path.</p>
 <hr />
 <h2 id="what-switchboard-does">What SwitchBoard does<a class="headerlink" href="#what-switchboard-does" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Accept</strong> a <code>TaskProposal</code> from ControlPlane</li>
+<li><strong>Accept</strong> a <code>TaskProposal</code> from OperationsCenter</li>
 <li><strong>Evaluate</strong> routing factors from the proposal against the lane routing policy</li>
 <li><strong>Select</strong> a lane (<code>aider_local</code>, <code>claude_cli</code>, <code>codex_cli</code>)</li>
 <li><strong>Select</strong> a backend (<code>direct_local</code>, <code>kodo</code>, <code>archon_then_kodo</code>, <code>openclaw</code>)</li>
@@ -974,7 +974,7 @@ path.</p>
 </li>
 <li>
 <p><strong>Not a task proposer.</strong> SwitchBoard does not generate, prioritise, or filter
-  TaskProposals. That is ControlPlane's responsibility.</p>
+  TaskProposals. That is OperationsCenter's responsibility.</p>
 </li>
 <li>
 <p><strong>Not an auth broker.</strong> SwitchBoard does not hold or distribute backend credentials.</p>
@@ -1023,7 +1023,7 @@ path.</p>
 <tr>
 <td><code>risk_level</code></td>
 <td><code>proposal.risk_level</code></td>
-<td>ControlPlane's estimate: low / medium / high</td>
+<td>OperationsCenter's estimate: low / medium / high</td>
 </tr>
 <tr>
 <td><code>priority</code></td>
@@ -1144,7 +1144,7 @@ The default policy lives in <code>src/switchboard/lane/defaults.py</code>.</p>
 <code>LaneDecision.selected_lane</code> and <code>LaneDecision.selected_backend</code> to prepare an
 <code>ExecutionRequest</code> and invoke the appropriate adapter. SwitchBoard is not in
 that path.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ControlPlane → TaskProposal → SwitchBoard → LaneDecision
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>OperationsCenter → TaskProposal → SwitchBoard → LaneDecision
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>                                                  │
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>                                                  ▼
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                                           lane runner (kodo)
