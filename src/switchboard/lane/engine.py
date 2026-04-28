@@ -20,7 +20,7 @@ external providers. It selects a lane and a backend and returns the decision.
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from operations_center.contracts import LaneDecision, TaskProposal
 from operations_center.contracts.enums import (
@@ -35,6 +35,7 @@ from operations_center.contracts.enums import (
 from .defaults import DEFAULT_POLICY
 from .explain import DecisionExplanation, DecisionFactor
 from .policy import LaneRoutingPolicy
+from .routing import RoutingPlan
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +75,7 @@ class LaneSelector:
         issues = selector.validate_policy()
     """
 
-    def __init__(self, policy: Optional[LaneRoutingPolicy] = None) -> None:
+    def __init__(self, policy: LaneRoutingPolicy | None = None) -> None:
         self._policy = policy or DEFAULT_POLICY
 
     # ------------------------------------------------------------------
@@ -131,7 +132,7 @@ class LaneSelector:
             summary=summary,
         )
 
-    def plan_routes(self, proposal: "TaskProposal") -> "RoutingPlan":
+    def plan_routes(self, proposal: TaskProposal) -> RoutingPlan:
         """Return a full RoutingPlan including fallback and escalation alternatives.
 
         Delegates to DecisionPlanner, which uses the same policy as this selector.
@@ -139,7 +140,6 @@ class LaneSelector:
         not just the primary route.
         """
         from .planner import DecisionPlanner
-        from .routing import RoutingPlan
         planner = DecisionPlanner(policy=self._policy)
         return planner.plan(proposal)
 
@@ -287,7 +287,7 @@ def _is_local_only(proposal: TaskProposal) -> bool:
     return "local_only" in proposal.labels
 
 
-def _preferred_lane(proposal: TaskProposal) -> Optional[str]:
+def _preferred_lane(proposal: TaskProposal) -> str | None:
     """Extract preferred lane from labels (e.g. 'prefer:aider_local')."""
     for label in proposal.labels:
         if label.startswith("prefer:"):

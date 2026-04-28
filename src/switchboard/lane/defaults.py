@@ -19,10 +19,9 @@ from .policy import (
     BackendRule,
     DecisionThresholds,
     FallbackPolicy,
-    LaneRule,
     LaneRoutingPolicy,
+    LaneRule,
 )
-
 
 DEFAULT_POLICY = LaneRoutingPolicy(
     version="1",

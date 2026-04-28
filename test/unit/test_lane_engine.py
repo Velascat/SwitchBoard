@@ -3,13 +3,9 @@
 from __future__ import annotations
 
 import pytest
-
 from operations_center.contracts import LaneDecision, TaskProposal
 from operations_center.contracts.common import (
-    BranchPolicy,
-    ExecutionConstraints,
     TaskTarget,
-    ValidationProfile,
 )
 from operations_center.contracts.enums import (
     BackendName,
@@ -25,10 +21,9 @@ from switchboard.lane.engine import LaneSelector, _proposal_attrs
 from switchboard.lane.policy import (
     BackendRule,
     FallbackPolicy,
-    LaneRule,
     LaneRoutingPolicy,
+    LaneRule,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -2,17 +2,15 @@
 
 from __future__ import annotations
 
-import pytest
-
 from operations_center.contracts import TaskProposal
-from operations_center.contracts.common import BranchPolicy, ExecutionConstraints, TaskTarget, ValidationProfile
-from operations_center.contracts.enums import ExecutionMode, LaneName, Priority, RiskLevel, TaskType
+from operations_center.contracts.common import (
+    TaskTarget,
+)
+from operations_center.contracts.enums import ExecutionMode, Priority, RiskLevel, TaskType
 
-from switchboard.lane.defaults import DEFAULT_POLICY
 from switchboard.lane.planner import DecisionPlanner
-from switchboard.lane.policy import AlternativeRoute, FallbackPolicy, LaneRoutingPolicy
+from switchboard.lane.policy import FallbackPolicy, LaneRoutingPolicy
 from switchboard.lane.routing import EligibilityStatus, RoutingPlan
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -269,7 +267,6 @@ def test_lane_selector_plan_routes_returns_routing_plan():
 
 def test_lane_selector_plan_routes_primary_matches_select():
     from switchboard.lane.engine import LaneSelector
-    from operations_center.contracts.enums import LaneName
     selector = LaneSelector()
     proposal = _proposal(task_type=TaskType.LINT_FIX, risk_level=RiskLevel.LOW)
     decision = selector.select(proposal)

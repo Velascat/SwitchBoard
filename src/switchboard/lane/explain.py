@@ -7,8 +7,6 @@ inspectable without embedding internal scoring details in the result.
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -20,7 +18,7 @@ class DecisionFactor(BaseModel):
     influence: str = Field(
         description="One of: selected_lane, selected_backend, ruled_out_alternative, confirmed_choice"
     )
-    note: Optional[str] = None
+    note: str | None = None
 
     model_config = {"frozen": True}
 
@@ -32,7 +30,7 @@ class DecisionExplanation(BaseModel):
     LaneDecision. Explanation is for logging, debugging, and audit.
     """
 
-    rule_matched: Optional[str] = Field(
+    rule_matched: str | None = Field(
         default=None,
         description="Policy rule name that fired, or None if fallback was used.",
     )
@@ -48,7 +46,7 @@ class DecisionExplanation(BaseModel):
         default=False,
         description="True when no policy rule matched and the default fallback was applied.",
     )
-    fallback_recommendation: Optional[str] = Field(
+    fallback_recommendation: str | None = Field(
         default=None,
         description="Suggested alternative if the selected lane becomes unavailable.",
     )

@@ -2,17 +2,12 @@
 
 from __future__ import annotations
 
-import pytest
-
 from switchboard.lane.policy import (
     BackendRule,
-    DecisionThresholds,
-    FallbackPolicy,
-    LaneRule,
     LaneRoutingPolicy,
+    LaneRule,
     _risk_at_or_below,
 )
-
 
 # ---------------------------------------------------------------------------
 # _risk_at_or_below

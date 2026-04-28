@@ -15,10 +15,9 @@ Callers that only need the primary route should continue using LaneSelector.sele
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from operations_center.contracts import TaskProposal
-from operations_center.contracts.enums import BackendName, LaneName
 
 from .defaults import DEFAULT_POLICY
 from .engine import LaneSelector, _proposal_attrs
@@ -26,8 +25,6 @@ from .escalation import EscalationPolicyEngine
 from .fallback import FallbackPolicyEngine
 from .policy import LaneRoutingPolicy
 from .routing import (
-    CostClass,
-    CapabilityClass,
     EligibilityStatus,
     RouteCandidate,
     RoutingPlan,
@@ -57,7 +54,7 @@ class DecisionPlanner:
     by their respective engines using the policy's alternative_routes.
     """
 
-    def __init__(self, policy: Optional[LaneRoutingPolicy] = None) -> None:
+    def __init__(self, policy: LaneRoutingPolicy | None = None) -> None:
         self._policy = policy or DEFAULT_POLICY
         self._selector = LaneSelector(policy=self._policy)
         self._fallback_engine = FallbackPolicyEngine()

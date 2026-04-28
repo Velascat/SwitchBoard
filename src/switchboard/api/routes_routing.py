@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Header, Request
-
 from operations_center.contracts import LaneDecision, TaskProposal
+
 from switchboard.domain.decision_record import DecisionRecord
 from switchboard.lane.routing import RoutingPlan
 

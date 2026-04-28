@@ -9,7 +9,7 @@ consumed by LaneSelector.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, Field
@@ -167,9 +167,7 @@ class AlternativeRoute(BaseModel):
         """Return True if this alternative applies to the given primary route."""
         if self.from_lanes and primary_lane not in self.from_lanes:
             return False
-        if self.from_backends and primary_backend not in self.from_backends:
-            return False
-        return True
+        return not (self.from_backends and primary_backend not in self.from_backends)
 
     def is_blocked_by(self, labels: list[str]) -> bool:
         """Return True if any proposal label hard-blocks this alternative."""
@@ -225,11 +223,11 @@ class LaneRoutingPolicy(BaseModel):
         )
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "LaneRoutingPolicy":
+    def from_dict(cls, data: dict[str, Any]) -> LaneRoutingPolicy:
         return cls.model_validate(data)
 
     @classmethod
-    def from_yaml(cls, path: Path) -> "LaneRoutingPolicy":
+    def from_yaml(cls, path: Path) -> LaneRoutingPolicy:
         with path.open("r", encoding="utf-8") as handle:
             raw = yaml.safe_load(handle) or {}
         return cls.from_dict(raw)

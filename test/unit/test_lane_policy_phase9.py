@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import pytest
+from pydantic import ValidationError
 
 from switchboard.lane.defaults import DEFAULT_POLICY
 from switchboard.lane.policy import AlternativeRoute, LaneRoutingPolicy
-
 
 # ---------------------------------------------------------------------------
 # AlternativeRoute construction
@@ -14,7 +14,7 @@ from switchboard.lane.policy import AlternativeRoute, LaneRoutingPolicy
 
 
 def test_alternative_route_requires_name():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         AlternativeRoute(lane="claude_cli", backend="kodo", role="fallback")
 
 

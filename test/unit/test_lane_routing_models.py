@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+from pydantic import ValidationError
 
 from switchboard.lane.routing import (
     CapabilityClass,
@@ -15,7 +16,6 @@ from switchboard.lane.routing import (
     route_capability_class,
     route_cost_class,
 )
-
 
 # ---------------------------------------------------------------------------
 # Enum values
@@ -72,7 +72,7 @@ def test_route_candidate_construction():
 
 def test_route_candidate_is_frozen():
     c = _candidate()
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         c.lane = "aider_local"
 
 
@@ -84,9 +84,9 @@ def test_route_candidate_notes_optional():
 
 
 def test_route_candidate_confidence_range():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         _candidate(confidence=1.5)
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         _candidate(confidence=-0.1)
 
 
@@ -109,7 +109,7 @@ def test_fallback_plan_with_candidates():
 
 def test_fallback_plan_is_frozen():
     plan = FallbackPlan()
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         plan.reasoning = "changed"
 
 
@@ -164,7 +164,7 @@ def test_routing_plan_construction():
 
 def test_routing_plan_is_frozen():
     plan = _routing_plan()
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         plan.policy_summary = "changed"
 
 

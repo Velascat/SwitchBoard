@@ -13,10 +13,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from .policy import AlternativeRoute, LaneRoutingPolicy
+from .policy import LaneRoutingPolicy
 from .routing import (
-    CostClass,
-    CapabilityClass,
     EligibilityStatus,
     FallbackPlan,
     RouteCandidate,

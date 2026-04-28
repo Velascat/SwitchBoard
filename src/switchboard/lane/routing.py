@@ -12,18 +12,16 @@ for callers that need alternative path awareness.
 
 from __future__ import annotations
 
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
-
 
 # ---------------------------------------------------------------------------
 # Classification enums
 # ---------------------------------------------------------------------------
 
 
-class CostClass(str, Enum):
+class CostClass(StrEnum):
     """Relative cost bucket for a route.
 
     Not an exact number — exists to make routing explanations legible and
@@ -34,7 +32,7 @@ class CostClass(str, Enum):
     HIGH = "high"
 
 
-class CapabilityClass(str, Enum):
+class CapabilityClass(StrEnum):
     """Relative capability bucket for a route.
 
     Encodes the kind of execution capability the lane/backend combination
@@ -46,7 +44,7 @@ class CapabilityClass(str, Enum):
     WORKFLOW = "workflow"    # structured multi-step workflow orchestration
 
 
-class EligibilityStatus(str, Enum):
+class EligibilityStatus(StrEnum):
     """Why a route candidate is or is not eligible.
 
     Later orchestration layers must distinguish:
@@ -86,7 +84,7 @@ class RouteCandidate(BaseModel):
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
     estimated_cost_class: CostClass
     estimated_capability_class: CapabilityClass
-    notes: Optional[str] = None
+    notes: str | None = None
 
     model_config = {"frozen": True}
 

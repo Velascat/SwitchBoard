@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from switchboard.lane.defaults import DEFAULT_POLICY
 from switchboard.lane.escalation import EscalationPolicyEngine
 from switchboard.lane.policy import AlternativeRoute, FallbackPolicy, LaneRoutingPolicy
