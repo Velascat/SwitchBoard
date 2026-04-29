@@ -20,7 +20,7 @@ dependencies = [
     "httpx>=0.27.0",
     "pyyaml>=6.0",
     "operations-center @ git+https://github.com/Velascat/OperationsCenter.git",
-    "execution-contract-protocol @ git+https://github.com/Velascat/ExecutionContractProtocol.git",
+    "cxrp @ git+https://github.com/Velascat/ExecutionContractProtocol.git",
 ]
 
 [project.optional-dependencies]
