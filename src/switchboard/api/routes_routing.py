@@ -1,12 +1,23 @@
-"""Canonical routing endpoints for selector-only SwitchBoard."""
+"""Canonical routing endpoints for selector-only SwitchBoard.
+
+The ``/route`` endpoint emits the ECP v0.2 ``LaneDecision`` envelope on
+the wire. SwitchBoard's selector still produces an OC-narrowed
+``LaneDecision`` internally (typed enums for policy and audit); the ECP
+mapper translates at the response boundary.
+"""
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 
 from fastapi import APIRouter, Header, Request
 from operations_center.contracts import LaneDecision, TaskProposal
 
+from switchboard.adapters.ecp_mapper import (
+    serialize_ecp_lane_decision,
+    to_ecp_lane_decision,
+)
 from switchboard.domain.decision_record import DecisionRecord
 from switchboard.lane.routing import RoutingPlan
 
@@ -18,11 +29,11 @@ async def route_task(
     proposal: TaskProposal,
     request: Request,
     x_request_id: str | None = Header(default=None),
-) -> LaneDecision:
+) -> dict[str, Any]:
     selector = request.app.state.selector
     decision = selector.select(proposal)
     _record_decision(request, proposal, decision, x_request_id=x_request_id)
-    return decision
+    return serialize_ecp_lane_decision(to_ecp_lane_decision(decision))
 
 
 @router.post("/route-plan", response_model=RoutingPlan, summary="Return primary, fallback, and escalation routes")

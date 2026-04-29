@@ -13,6 +13,7 @@ into the wire shape ECP guarantees.
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Any
 
 from ecp.contracts import LaneAlternative
@@ -64,3 +65,22 @@ def to_ecp_lane_decision(
             for alt in oc_decision.alternatives_considered
         ],
     )
+
+
+def serialize_ecp_lane_decision(ecp: EcpLaneDecision) -> dict[str, Any]:
+    """Render an ECP ``LaneDecision`` into a JSON-shaped dict.
+
+    Mirrors ``BaseContract.to_dict()`` but recursively unwraps nested
+    dataclasses (``LaneAlternative``) and Enum values so the output is
+    suitable for direct return from a FastAPI route handler.
+    """
+    payload = ecp.to_dict()
+    payload["lane"] = (
+        payload["lane"].value if hasattr(payload["lane"], "value") else payload["lane"]
+    )
+    payload["alternatives"] = [asdict(alt) for alt in ecp.alternatives]
+    for alt in payload["alternatives"]:
+        alt["lane"] = (
+            alt["lane"].value if hasattr(alt["lane"], "value") else alt["lane"]
+        )
+    return payload

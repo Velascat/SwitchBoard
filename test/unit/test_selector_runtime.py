@@ -45,13 +45,18 @@ def test_default_runtime_has_no_proxy_route() -> None:
     assert response.status_code == 404
 
 
-def test_route_returns_lane_decision() -> None:
+def test_route_returns_ecp_lane_decision() -> None:
+    """``/route`` emits ECP v0.2 envelope: abstract lane category plus
+    open-string executor/backend."""
     with TestClient(create_app()) as client:
         response = client.post("/route", json=_proposal())
     assert response.status_code == 200
     data = response.json()
-    assert data["selected_lane"] == "aider_local"
-    assert data["selected_backend"] == "direct_local"
+    assert data["schema_version"] == "0.2"
+    assert data["contract_kind"] == "lane_decision"
+    assert data["lane"] == "coding_agent"
+    assert data["executor"] == "aider_local"
+    assert data["backend"] == "direct_local"
 
 
 def test_health_has_no_nine_router_dependency() -> None:
