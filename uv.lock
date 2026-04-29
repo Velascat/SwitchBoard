@@ -75,7 +75,7 @@ wheels = [
 [[package]]
 name = "cxrp"
 version = "0.2.0"
-source = { git = "https://github.com/Velascat/ExecutionContractProtocol.git#565de766f44a9e52dfb5746c6eb4a72707aa451f" }
+source = { git = "https://github.com/Velascat/CxRP.git#565de766f44a9e52dfb5746c6eb4a72707aa451f" }
 dependencies = [
     { name = "jsonschema" },
 ]
@@ -718,7 +718,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "cxrp", git = "https://github.com/Velascat/ExecutionContractProtocol.git" },
+    { name = "cxrp", git = "https://github.com/Velascat/CxRP.git" },
     { name = "fastapi", specifier = ">=0.111.0" },
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27.0" },
