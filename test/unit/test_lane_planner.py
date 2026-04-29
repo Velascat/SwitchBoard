@@ -115,7 +115,7 @@ def test_local_low_risk_task_routes_to_local():
         _proposal(task_type=TaskType.LINT_FIX, risk_level=RiskLevel.LOW)
     )
     assert plan.primary.lane == "aider_local"
-    assert plan.primary.backend == "direct_local"
+    assert plan.primary.backend == "aider_local"
 
 
 def test_local_task_has_remote_fallback():

@@ -100,7 +100,7 @@ class TestBasicRouting:
         selector = LaneSelector(policy=DEFAULT_POLICY)
         result = selector.select(_proposal(task_type=TaskType.LINT_FIX, risk_level=RiskLevel.LOW))
         assert result.selected_lane == LaneName.AIDER_LOCAL
-        assert result.selected_backend == BackendName.DIRECT_LOCAL
+        assert result.selected_backend == BackendName.AIDER_LOCAL
 
     def test_feature_high_risk_routes_to_claude(self):
         selector = LaneSelector(policy=DEFAULT_POLICY)

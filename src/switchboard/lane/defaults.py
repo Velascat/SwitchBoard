@@ -35,7 +35,7 @@ DEFAULT_POLICY = LaneRoutingPolicy(
             name="force_local_only",
             priority=10,
             select_lane="aider_local",
-            select_backend="direct_local",
+            select_backend="aider_local",
             when={"local_only": True},
             confidence=1.0,
             description="Proposal explicitly requires local-only execution.",
@@ -48,7 +48,7 @@ DEFAULT_POLICY = LaneRoutingPolicy(
             name="local_low_risk",
             priority=20,
             select_lane="aider_local",
-            select_backend="direct_local",
+            select_backend="aider_local",
             when={
                 "task_type": ["lint_fix", "documentation", "simple_edit"],
                 "max_risk_level": "low",
@@ -113,7 +113,7 @@ DEFAULT_POLICY = LaneRoutingPolicy(
             name="local_catchall",
             priority=60,
             select_lane="aider_local",
-            select_backend="direct_local",
+            select_backend="aider_local",
             when={
                 "task_type": ["lint_fix", "documentation", "simple_edit"],
             },
