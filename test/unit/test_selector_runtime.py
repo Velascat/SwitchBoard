@@ -45,8 +45,8 @@ def test_default_runtime_has_no_proxy_route() -> None:
     assert response.status_code == 404
 
 
-def test_route_returns_ecp_lane_decision() -> None:
-    """``/route`` emits ECP v0.2 envelope: abstract lane category plus
+def test_route_returns_cxrp_lane_decision() -> None:
+    """``/route`` emits CxRP v0.2 envelope: abstract lane category plus
     open-string executor/backend."""
     with TestClient(create_app()) as client:
         response = client.post("/route", json=_proposal())
