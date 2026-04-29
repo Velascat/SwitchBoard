@@ -1,14 +1,14 @@
-"""Map SwitchBoard's internal LaneDecision (rich, Pydantic) to ECP's
+"""Map SwitchBoard's internal LaneDecision (rich, Pydantic) to CxRP's
 canonical LaneDecision envelope.
 
 SwitchBoard's selector emits an `operations_center.contracts.LaneDecision`
-populated with OC's narrowed enums (LaneName, BackendName). ECP defines the
+populated with OC's narrowed enums (LaneName, BackendName). CxRP defines the
 *envelope*: an abstract `lane: LaneType` category plus open-string `executor`
 and `backend` fields that consumers may narrow internally.
 
 This mapper is the boundary translator. It does not invoke selection,
 adapters, or providers — it only restructures an already-produced decision
-into the wire shape ECP guarantees.
+into the wire shape CxRP guarantees.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from dataclasses import asdict
 from typing import Any
 
 from cxrp.contracts import LaneAlternative
-from cxrp.contracts import LaneDecision as EcpLaneDecision
+from cxrp.contracts import LaneDecision as CxrpLaneDecision
 from cxrp.vocabulary.lane import LaneType
 from operations_center.contracts import LaneDecision as OcLaneDecision
 
@@ -32,16 +32,16 @@ def _category_for(oc_lane_value: str) -> LaneType:
     return _OC_LANE_TO_ECP_CATEGORY.get(oc_lane_value, LaneType.CODING_AGENT)
 
 
-def to_ecp_lane_decision(
+def to_cxrp_lane_decision(
     oc_decision: OcLaneDecision,
     *,
     extra_metadata: dict[str, Any] | None = None,
-) -> EcpLaneDecision:
-    """Translate an OC LaneDecision into the ECP envelope shape.
+) -> CxrpLaneDecision:
+    """Translate an OC LaneDecision into the CxRP envelope shape.
 
-    OC's `selected_lane` (e.g. ``claude_cli``) becomes ECP's `executor`.
-    OC's `selected_backend` (e.g. ``kodo``) becomes ECP's `backend`.
-    The abstract ECP `lane` category is derived from the OC lane via
+    OC's `selected_lane` (e.g. ``claude_cli``) becomes CxRP's `executor`.
+    OC's `selected_backend` (e.g. ``kodo``) becomes CxRP's `backend`.
+    The abstract CxRP `lane` category is derived from the OC lane via
     `_OC_LANE_TO_ECP_CATEGORY`.
     """
     metadata: dict[str, Any] = {
@@ -50,7 +50,7 @@ def to_ecp_lane_decision(
     if extra_metadata:
         metadata.update(extra_metadata)
 
-    return EcpLaneDecision(
+    return CxrpLaneDecision(
         decision_id=oc_decision.decision_id,
         proposal_id=oc_decision.proposal_id,
         created_at=oc_decision.decided_at,
@@ -67,18 +67,18 @@ def to_ecp_lane_decision(
     )
 
 
-def serialize_ecp_lane_decision(ecp: EcpLaneDecision) -> dict[str, Any]:
-    """Render an ECP ``LaneDecision`` into a JSON-shaped dict.
+def serialize_cxrp_lane_decision(cxrp: CxrpLaneDecision) -> dict[str, Any]:
+    """Render an CxRP ``LaneDecision`` into a JSON-shaped dict.
 
     Mirrors ``BaseContract.to_dict()`` but recursively unwraps nested
     dataclasses (``LaneAlternative``) and Enum values so the output is
     suitable for direct return from a FastAPI route handler.
     """
-    payload = ecp.to_dict()
+    payload = cxrp.to_dict()
     payload["lane"] = (
         payload["lane"].value if hasattr(payload["lane"], "value") else payload["lane"]
     )
-    payload["alternatives"] = [asdict(alt) for alt in ecp.alternatives]
+    payload["alternatives"] = [asdict(alt) for alt in cxrp.alternatives]
     for alt in payload["alternatives"]:
         alt["lane"] = (
             alt["lane"].value if hasattr(alt["lane"], "value") else alt["lane"]
