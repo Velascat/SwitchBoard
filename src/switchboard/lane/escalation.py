@@ -81,7 +81,7 @@ class EscalationPolicyEngine:
                         backend=alt.backend,
                         priority=alt.priority,
                         reason=(
-                            f"Escalation route blocked by constraint label(s): "
+                            "Escalation route blocked by constraint label(s): "
                             f"{', '.join(blocking_labels)}"
                         ),
                         eligibility_status=EligibilityStatus.BLOCKED_BY_CONSTRAINT,

@@ -76,7 +76,7 @@ class FallbackPolicyEngine:
                         backend=alt.backend,
                         priority=alt.priority,
                         reason=(
-                            f"Fallback route blocked by constraint label(s): "
+                            "Fallback route blocked by constraint label(s): "
                             f"{', '.join(blocking_labels)}"
                         ),
                         eligibility_status=EligibilityStatus.BLOCKED_BY_CONSTRAINT,
