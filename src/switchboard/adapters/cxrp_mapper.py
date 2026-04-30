@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Copyright (C) 2026 Velascat
 """Map SwitchBoard's internal LaneDecision (rich, Pydantic) to CxRP's
 canonical LaneDecision envelope.

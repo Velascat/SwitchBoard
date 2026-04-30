@@ -250,4 +250,4 @@ For the full platform ownership model see `WorkStation/docs/architecture/ownersh
 
 ## License
 
-GNU Affero General Public License v3.0 — see [LICENSE](LICENSE).
+GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later) — see [LICENSE](LICENSE).
