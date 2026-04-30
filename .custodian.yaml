@@ -5,3 +5,9 @@ tests_root: test
 # Minimum baseline — runs Custodian's generic C1-C8 only.
 # Add `plugins:` and `detectors:` here when this repo grows its own
 # `_custodian/` overlay layer (see OperationsCenter for a worked example).
+
+audit:
+  # C2: planner.py contains print() only inside a docstring usage example.
+  exclude_paths:
+    C2:
+      - src/switchboard/lane/planner.py
