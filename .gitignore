@@ -100,3 +100,6 @@ config/*.yaml
 .console/
 !.console/*.example*
 .aider*
+
+# Warehouse data (generated artifacts gitignored via .warehouse/yard/*/.gitignore)
+.warehouse/yard/

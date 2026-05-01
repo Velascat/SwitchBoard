@@ -45,3 +45,7 @@ audit:
       - src/switchboard/ports/decision_sink.py
       - src/switchboard/services/adjustment_store.py
       - src/switchboard/services/decision_logger.py
+
+tools:
+  ruff: true
+  vulture: true
