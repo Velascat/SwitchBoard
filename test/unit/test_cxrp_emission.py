@@ -81,6 +81,7 @@ def test_mapper_output_validates_against_ecp_schema():
     cxrp = to_cxrp_lane_decision(_make_oc_decision())
     payload = _serialize_for_schema(cxrp)
     validate_contract("lane_decision", payload)
+    assert payload["lane"] is not None
 
 
 def test_mapper_confidence_stays_within_bounds():
