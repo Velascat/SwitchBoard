@@ -21,6 +21,8 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any
 
+__all__ = ["get_tracer"]
+
 
 class _NoOpSpan:
     """A span that does nothing."""
