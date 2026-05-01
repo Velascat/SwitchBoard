@@ -7,7 +7,10 @@ tests_root: test
 # `_custodian/` overlay layer (see OperationsCenter for a worked example).
 
 audit:
-  # C2: planner.py contains print() only inside a docstring usage example.
   exclude_paths:
-    C2:
-      - src/switchboard/lane/planner.py
+    D1:
+      # get_tracer is a public OTEL-compatible API, intentionally dead until
+      # OTEL is wired in. errors.py helpers are pre-written FastAPI helpers
+      # awaiting route wiring.
+      - src/switchboard/observability/tracing.py
+      - src/switchboard/api/errors.py
