@@ -14,3 +14,29 @@ audit:
       # awaiting route wiring.
       - src/switchboard/observability/tracing.py
       - src/switchboard/api/errors.py
+    T1:
+      # FastAPI API layer: route handlers and response models are tested via
+      # HTTP (TestClient/AsyncClient) rather than direct function calls, so
+      # symbol names never appear in test files even when routes are covered.
+      - src/switchboard/api/errors.py
+      - src/switchboard/api/routes_health.py
+      - src/switchboard/api/routes_routing.py
+      - src/switchboard/api/routes_admin.py
+      # App infrastructure (lifespan, main) tested via HTTP smoke tests;
+      # Settings loaded at runtime from config files.
+      - src/switchboard/app.py
+      - src/switchboard/config/__init__.py
+      # JsonlDecisionSink is tested transitively through DecisionLogger tests;
+      # serialize_cxrp_lane_decision is tested through CxRP emission tests.
+      - src/switchboard/adapters/jsonl_decision_sink.py
+      - src/switchboard/adapters/cxrp_mapper.py
+      # Lane explanation models are produced by the engine and tested
+      # transitively through engine + routing integration tests.
+      - src/switchboard/lane/explain.py
+      - src/switchboard/lane/policy.py
+      - src/switchboard/domain/capability_model.py
+      # Observability infrastructure (logging, metrics, tracing) is wired at
+      # app startup; not unit-tested directly.
+      - src/switchboard/observability/logging.py
+      - src/switchboard/observability/metrics.py
+      - src/switchboard/observability/tracing.py
