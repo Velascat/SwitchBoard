@@ -101,5 +101,8 @@ config/*.yaml
 !.console/*.example*
 .aider*
 
+# Custodian plugin directory (generated/managed by OpsCenter in managed repos)
+_custodian/
+
 # Warehouse data (generated artifacts gitignored via .warehouse/yard/*/.gitignore)
 .warehouse/yard/
