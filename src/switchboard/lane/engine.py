@@ -299,9 +299,9 @@ def _preferred_lane(proposal: TaskProposal) -> str | None:
 
 def _build_factors(
     attrs: dict[str, Any],
-    lane: str,
-    backend: str,
-    rule_name: str,
+    _lane: str,
+    _backend: str,
+    _rule_name: str,
 ) -> list[DecisionFactor]:
     factors: list[DecisionFactor] = []
     for key in ("task_type", "risk_level", "priority", "execution_mode"):
