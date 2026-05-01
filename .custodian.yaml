@@ -40,3 +40,8 @@ audit:
       - src/switchboard/observability/logging.py
       - src/switchboard/observability/metrics.py
       - src/switchboard/observability/tracing.py
+      # Port protocols and return-value dataclasses tested through their
+      # containing services; these types appear in service signatures not tests.
+      - src/switchboard/ports/decision_sink.py
+      - src/switchboard/services/adjustment_store.py
+      - src/switchboard/services/decision_logger.py
