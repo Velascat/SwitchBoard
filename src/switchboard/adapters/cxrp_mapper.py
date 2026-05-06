@@ -52,12 +52,23 @@ def to_cxrp_lane_decision(
     if extra_metadata:
         metadata.update(extra_metadata)
 
+    # Phase 5 — emit the named ExecutionTargetEnvelope alongside the
+    # legacy scattered fields. Consumers that have migrated will read
+    # execution_target; legacy consumers continue to read executor/backend.
+    from cxrp.contracts.execution_target import ExecutionTargetEnvelope
+    cxrp_lane = _category_for(oc_decision.selected_lane.value)
+    envelope = ExecutionTargetEnvelope(
+        lane=cxrp_lane,
+        backend=oc_decision.selected_backend.value,
+        executor=oc_decision.selected_lane.value,
+        runtime_binding=None,  # SB doesn't bind runtime; OC does
+    )
     return CxrpLaneDecision(
         decision_id=oc_decision.decision_id,
         proposal_id=oc_decision.proposal_id,
         created_at=oc_decision.decided_at,
         metadata=metadata,
-        lane=_category_for(oc_decision.selected_lane.value),
+        lane=cxrp_lane,
         executor=oc_decision.selected_lane.value,
         backend=oc_decision.selected_backend.value,
         rationale=oc_decision.rationale or "",
@@ -66,6 +77,7 @@ def to_cxrp_lane_decision(
             LaneAlternative(lane=_category_for(alt.value), executor=alt.value)
             for alt in oc_decision.alternatives_considered
         ],
+        execution_target=envelope,
     )
 
 
