@@ -50,7 +50,7 @@ def test_mapper_returns_ecp_lane_decision():
     cxrp = to_cxrp_lane_decision(_make_oc_decision())
     assert isinstance(cxrp, CxrpLaneDecision)
     assert cxrp.contract_kind == "lane_decision"
-    assert cxrp.schema_version == "0.2"
+    assert cxrp.schema_version == "0.3"
 
 
 def test_mapper_separates_category_from_executor_and_backend():

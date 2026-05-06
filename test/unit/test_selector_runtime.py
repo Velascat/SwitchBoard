@@ -54,7 +54,7 @@ def test_route_returns_cxrp_lane_decision() -> None:
         response = client.post("/route", json=_proposal())
     assert response.status_code == 200
     data = response.json()
-    assert data["schema_version"] == "0.2"
+    assert data["schema_version"] == "0.3"
     assert data["contract_kind"] == "lane_decision"
     assert data["lane"] == "coding_agent"
     assert data["executor"] == "aider_local"

@@ -52,15 +52,15 @@ def to_cxrp_lane_decision(
     if extra_metadata:
         metadata.update(extra_metadata)
 
-    # Phase 5 — emit the named ExecutionTargetEnvelope alongside the
-    # legacy scattered fields. Consumers that have migrated will read
-    # execution_target; legacy consumers continue to read executor/backend.
+    # Schema 0.3 — backend/executor are typed CxRP enums on the wire.
+    # Convert OC's same-valued enums by .value lookup.
+    from cxrp.contracts import BackendName as CxrpBackendName, ExecutorName as CxrpExecutorName
     from cxrp.contracts.execution_target import ExecutionTargetEnvelope
     cxrp_lane = _category_for(oc_decision.selected_lane.value)
+    cxrp_executor = CxrpExecutorName(oc_decision.selected_lane.value)
+    cxrp_backend = CxrpBackendName(oc_decision.selected_backend.value)
     envelope = ExecutionTargetEnvelope(
-        lane=cxrp_lane,
-        backend=oc_decision.selected_backend.value,
-        executor=oc_decision.selected_lane.value,
+        lane=cxrp_lane, backend=cxrp_backend, executor=cxrp_executor,
         runtime_binding=None,  # SB doesn't bind runtime; OC does
     )
     return CxrpLaneDecision(
@@ -69,12 +69,12 @@ def to_cxrp_lane_decision(
         created_at=oc_decision.decided_at,
         metadata=metadata,
         lane=cxrp_lane,
-        executor=oc_decision.selected_lane.value,
-        backend=oc_decision.selected_backend.value,
+        executor=cxrp_executor,
+        backend=cxrp_backend,
         rationale=oc_decision.rationale or "",
         confidence=oc_decision.confidence,
         alternatives=[
-            LaneAlternative(lane=_category_for(alt.value), executor=alt.value)
+            LaneAlternative(lane=_category_for(alt.value), executor=CxrpExecutorName(alt.value))
             for alt in oc_decision.alternatives_considered
         ],
         execution_target=envelope,
