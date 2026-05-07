@@ -16,6 +16,7 @@ from switchboard.lane.engine import LaneSelector
 from switchboard.lane.planner import DecisionPlanner
 from switchboard.lane.policy import LaneRoutingPolicy
 from switchboard.observability.logging import configure_logging
+from switchboard.services.adjustment_store import AdjustmentStore
 from switchboard.services.decision_logger import DecisionLogger
 
 
@@ -26,11 +27,26 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     configure_logging(settings.log_level)
     policy = _load_policy(settings)
 
-    selector = LaneSelector(policy=policy)
-    planner = DecisionPlanner(policy=policy)
     decision_logger = DecisionLogger(
         settings.resolve_path("decision_log_path") if settings.decision_log_path else None
     )
+    adjustment_store = AdjustmentStore()
+
+    def _adjustment_query(lane: str) -> str | None:
+        """Return the AdjustmentEngine action for ``lane``, or ``None``.
+
+        Refreshes the store from recent decisions on demand (TTL-gated) so
+        the next request sees up-to-date health signals without bookkeeping
+        in the request path.
+        """
+        if not adjustment_store.enabled:
+            return None
+        adjustment_store.maybe_refresh(decision_logger.last_n(adjustment_store.window_size))
+        adj = adjustment_store.get_adjustment(lane)
+        return adj.action if adj is not None else None
+
+    selector = LaneSelector(policy=policy, adjustment_query=_adjustment_query)
+    planner = DecisionPlanner(policy=policy, adjustment_query=_adjustment_query)
 
     app.state.settings = settings
     app.state.selector = selector
@@ -38,6 +54,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.policy_issues = selector.validate_policy()
     app.state.decision_log = decision_logger
     app.state.decision_logger = decision_logger
+    app.state.adjustment_store = adjustment_store
 
     yield
 
@@ -53,6 +70,7 @@ def _load_policy(settings) -> LaneRoutingPolicy | None:
 
 def create_app() -> FastAPI:
     """Create and configure the SwitchBoard API application."""
+    from switchboard.api.routes_admin import router as admin_router
     from switchboard.api.routes_health import router as health_router
     from switchboard.api.routes_routing import router as routing_router
 
@@ -72,6 +90,7 @@ def create_app() -> FastAPI:
 
     app.include_router(health_router)
     app.include_router(routing_router)
+    app.include_router(admin_router)
 
     return app
 

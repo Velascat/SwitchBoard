@@ -17,6 +17,7 @@ Callers that only need the primary route should continue using LaneSelector.sele
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from typing import Any
 
 from operations_center.contracts import TaskProposal
@@ -56,9 +57,26 @@ class DecisionPlanner:
     by their respective engines using the policy's alternative_routes.
     """
 
-    def __init__(self, policy: LaneRoutingPolicy | None = None) -> None:
+    def __init__(
+        self,
+        policy: LaneRoutingPolicy | None = None,
+        adjustment_query: Callable[[str], str | None] | None = None,
+    ) -> None:
+        """Initialise the planner.
+
+        ``adjustment_query`` has the same shape and semantics as
+        ``LaneSelector.adjustment_query`` — see that doc for details. It is
+        forwarded to the internal selector so demoted lanes are skipped at
+        primary-selection time. Fallback and escalation candidates are
+        marked DEPRIORITIZED if their lane is currently demoted, but they
+        remain in the plan so callers see the full picture.
+        """
         self._policy = policy or DEFAULT_POLICY
-        self._selector = LaneSelector(policy=self._policy)
+        self._adjustment_query = adjustment_query
+        self._selector = LaneSelector(
+            policy=self._policy,
+            adjustment_query=adjustment_query,
+        )
         self._fallback_engine = FallbackPolicyEngine()
         self._escalation_engine = EscalationPolicyEngine()
 
@@ -85,11 +103,13 @@ class DecisionPlanner:
         fallback_plan, fallback_blocked = self._fallback_engine.evaluate(
             attrs, lane, backend, self._policy, labels
         )
+        self._mark_demoted(fallback_plan.candidates)
 
         # Step 3: Evaluate escalation alternatives
         escalation_plan, escalation_blocked = self._escalation_engine.evaluate(
             attrs, lane, backend, self._policy, labels
         )
+        self._mark_demoted(escalation_plan.candidates)
 
         # Combine all blocked candidates
         all_blocked = fallback_blocked + escalation_blocked
@@ -119,6 +139,36 @@ class DecisionPlanner:
             escalation_reasoning=escalation_plan.reasoning,
             blocked_reasoning=blocked_reasoning,
         )
+
+    def _mark_demoted(self, candidates: list[RouteCandidate]) -> None:
+        """Mark currently-eligible candidates whose lane is health-demoted as DEPRIORITIZED.
+
+        Demoted candidates remain in the plan — operators (and downstream
+        execution layers) can still observe them and override if needed —
+        but their eligibility is downgraded so the natural sort puts them
+        last. Candidates already in non-eligible states (BLOCKED_*, etc.)
+        are left untouched.
+        """
+        if self._adjustment_query is None:
+            return
+        for i, cand in enumerate(candidates):
+            if cand.eligibility_status != EligibilityStatus.ELIGIBLE:
+                continue
+            try:
+                action = self._adjustment_query(cand.lane)
+            except Exception:
+                logger.exception("adjustment_query failed for lane=%s", cand.lane)
+                continue
+            if action == "demote":
+                reason = (
+                    f"{cand.reason} [health-demoted]"
+                    if cand.reason
+                    else "health-demoted"
+                )
+                candidates[i] = cand.model_copy(update={
+                    "eligibility_status": EligibilityStatus.DEPRIORITIZED,
+                    "reason": reason,
+                })
 
 
 # ---------------------------------------------------------------------------
