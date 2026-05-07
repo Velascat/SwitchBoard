@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import pytest
 from operations_center.contracts import TaskProposal
 from operations_center.contracts.common import TaskTarget
 from operations_center.contracts.enums import (

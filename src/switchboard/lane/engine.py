@@ -22,7 +22,8 @@ external providers. It selects a lane and a backend and returns the decision.
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from operations_center.contracts import LaneDecision, TaskProposal
 from operations_center.contracts.enums import (

@@ -17,7 +17,8 @@ Callers that only need the primary route should continue using LaneSelector.sele
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from operations_center.contracts import TaskProposal
 
