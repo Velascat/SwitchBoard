@@ -14,8 +14,6 @@
       
       
       
-        <link rel="next" href="quickstart/">
-      
       
         
       
@@ -76,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#switchboard" class="md-skip">
+        <a href="#switchboard-documentation" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              SwitchBoard Documentation
             
           </span>
         </div>
@@ -255,37 +253,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="index.md" class="md-nav__link">
         
   
   
@@ -301,37 +272,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#core-docs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Core docs
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -851,10 +791,76 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#core-docs" class="md-nav__link">
+  <a href="#get-started" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core docs
+        Get started
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        History
       
     </span>
   </a>
@@ -881,22 +887,46 @@
   
 
 
-<h1 id="switchboard">SwitchBoard<a class="headerlink" href="#switchboard" title="Permanent link">&para;</a></h1>
-<p>SwitchBoard is the selector layer in the platform:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>OperationsCenter -&gt; TaskProposal -&gt; SwitchBoard -&gt; LaneDecision
-</code></pre></div>
-<p>It evaluates routing policy and returns a canonical lane decision. It does not proxy provider traffic or execute backends.</p>
-<h2 id="core-docs">Core docs<a class="headerlink" href="#core-docs" title="Permanent link">&para;</a></h2>
+<h1 id="switchboard-documentation">SwitchBoard Documentation<a class="headerlink" href="#switchboard-documentation" title="Permanent link">&para;</a></h1>
+<p>Index for the <code>docs/</code> tree. The README covers what SwitchBoard is and the
+execution-lane model; this directory holds API reference, configuration
+detail, runtime behaviour, and historical migration notes.</p>
+<h2 id="get-started">Get started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="quickstart/">Quickstart</a></li>
-<li><a href="configuration/">Configuration</a></li>
-<li><a href="api/">API</a></li>
-<li><a href="architecture/">Architecture</a></li>
-<li><a href="routing/">Routing</a></li>
-<li><a href="policies/">Policies</a></li>
-<li><a href="observability/">Observability</a></li>
-<li><a href="troubleshooting/">Troubleshooting</a></li>
-<li><a href="roadmap/">Roadmap</a></li>
+<li><a href="quickstart/">quickstart.md</a> — Install, configure, start, smoke-test.</li>
+</ul>
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="architecture/">architecture.md</a> — Internal structure, layers, data flow.</li>
+<li><a href="request-flow/">request-flow.md</a> — Lifecycle of a routing request from
+  ingress to <code>LaneDecision</code>.</li>
+</ul>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="configuration/">configuration.md</a> — Config keys and environment variables.</li>
+<li><a href="policies/">policies.md</a> — Routing policy schema and evaluation order.</li>
+<li><a href="routing/">routing.md</a> — Routing algorithm in depth.</li>
+<li><a href="routing-examples/">routing-examples.md</a> — Worked examples of policy outcomes.</li>
+<li><a href="lanes/">lanes.md</a> — Per-lane behaviour: claude_cli, codex_cli, aider_local.</li>
+</ul>
+<h2 id="api">API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="api/">api.md</a> — HTTP surface: endpoints, request/response shapes, errors.</li>
+</ul>
+<h2 id="operate">Operate<a class="headerlink" href="#operate" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="observability/">observability.md</a> — Logs, metrics, decision audit trail.</li>
+<li><a href="stability/">stability.md</a> — Adaptive demotion behaviour and tuning.</li>
+<li><a href="troubleshooting/">troubleshooting.md</a> — Common failures and how to diagnose.</li>
+</ul>
+<h2 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="roadmap/">roadmap.md</a> — Planned work, out-of-scope items.</li>
+</ul>
+<h2 id="history">History<a class="headerlink" href="#history" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="history/switchboard-selector-cutover/">history/switchboard-selector-cutover.md</a> —
+  Selector-cutover historical notes.</li>
 </ul>
 
 
