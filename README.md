@@ -218,8 +218,8 @@ What SwitchBoard still does **not** own:
 - Workflow step sequencing (that is Archon's job)
 - Whether or when to act on a fallback/escalation (that is the execution layer's decision)
 
-See **[WorkStation/docs/architecture/routing-fallback-escalation.md](https://github.com/Velascat/WorkStation/blob/main/docs/architecture/routing-fallback-escalation.md)** for architecture and
-**[WorkStation/docs/architecture/routing-fallback-escalation-examples.md](https://github.com/Velascat/WorkStation/blob/main/docs/architecture/routing-fallback-escalation-examples.md)** for examples.
+See **[WorkStation/docs/architecture/routing/routing-fallback-escalation.md](https://github.com/Velascat/WorkStation/blob/main/docs/architecture/routing/routing-fallback-escalation.md)** for architecture and
+**[WorkStation/docs/architecture/routing/routing-fallback-escalation-examples.md](https://github.com/Velascat/WorkStation/blob/main/docs/architecture/routing/routing-fallback-escalation-examples.md)** for examples.
 
 ---
 
@@ -255,7 +255,7 @@ run it in the shared stack — those belong to
 [WorkStation](https://github.com/Velascat/WorkStation). SwitchBoard's `.env.example`
 documents the environment contract that WorkStation satisfies at runtime.
 
-For the full platform ownership model see `WorkStation/docs/architecture/ownership.md`.
+For the full platform ownership model see `WorkStation/docs/architecture/system/ownership.md`.
 
 ---
 
