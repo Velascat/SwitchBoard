@@ -25,7 +25,7 @@ Default routing rules (from `switchboard/lane/defaults.py`):
 
 **Fallback:** If Ollama is unavailable, alternatives include `claude_cli + kodo` (see `local_to_remote_fallback` in defaults).
 
-**Infrastructure:** Requires a running Ollama instance at `http://localhost:11434` with `qwen2.5-coder:3b` pulled. See [WorkStation docs](../../../WorkStation/docs/local_aider_lane.md).
+**Infrastructure:** Requires a running Ollama instance at `http://localhost:11434` with `qwen2.5-coder:3b` pulled. See [WorkStation docs](../../../WorkStation/docs/operations/local_aider_lane.md).
 
 ## claude_cli
 
