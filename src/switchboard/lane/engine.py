@@ -22,7 +22,7 @@ external providers. It selects a lane and a backend and returns the decision.
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Callable
 
 from operations_center.contracts import LaneDecision, TaskProposal
 from operations_center.contracts.enums import (
@@ -77,8 +77,27 @@ class LaneSelector:
         issues = selector.validate_policy()
     """
 
-    def __init__(self, policy: LaneRoutingPolicy | None = None) -> None:
+    def __init__(
+        self,
+        policy: LaneRoutingPolicy | None = None,
+        adjustment_query: Callable[[str], str | None] | None = None,
+    ) -> None:
+        """Initialise the selector.
+
+        Args:
+            policy:           routing policy to evaluate (default: DEFAULT_POLICY).
+            adjustment_query: optional callable mapping a lane name to its
+                              current AdjustmentEngine action — ``"demote"``,
+                              ``"neutral"``, ``"promote"``, or ``None`` if no
+                              signal is available. When a rule's lane is
+                              demoted, the rule is treated like an excluded
+                              backend: skipped, recorded as an alternative,
+                              and selection continues. ``None`` (the default)
+                              disables health-aware routing entirely — same
+                              behaviour as before this hook landed.
+        """
         self._policy = policy or DEFAULT_POLICY
+        self._adjustment_query = adjustment_query
 
     # ------------------------------------------------------------------
     # Public API
@@ -142,7 +161,10 @@ class LaneSelector:
         not just the primary route.
         """
         from .planner import DecisionPlanner
-        planner = DecisionPlanner(policy=self._policy)
+        planner = DecisionPlanner(
+            policy=self._policy,
+            adjustment_query=self._adjustment_query,
+        )
         return planner.plan(proposal)
 
     def validate_policy(self) -> list[str]:
@@ -216,6 +238,14 @@ class LaneSelector:
                 )
                 alternatives.append(rule.select_lane)
                 continue
+            if self._is_demoted(rule.select_lane):
+                logger.debug(
+                    "Rule '%s' matched but lane '%s' is health-demoted",
+                    rule.name,
+                    rule.select_lane,
+                )
+                alternatives.append(rule.select_lane)
+                continue
             matched_rule = rule
             break
 
@@ -247,6 +277,17 @@ class LaneSelector:
                 alternatives.append(rule.select_lane)
 
         return lane, backend, matched_rule.name, matched_rule.confidence, alternatives
+
+    def _is_demoted(self, lane: str) -> bool:
+        """True iff ``adjustment_query`` reports this lane as currently demoted."""
+        if self._adjustment_query is None:
+            return False
+        try:
+            action = self._adjustment_query(lane)
+        except Exception:
+            logger.exception("adjustment_query failed for lane=%s", lane)
+            return False
+        return action == "demote"
 
     def _build_rationale(
         self,
