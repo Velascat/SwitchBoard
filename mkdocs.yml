@@ -31,17 +31,22 @@ nav:
   - Home: README.md
   - Get Started:
     - Quickstart: quickstart.md
-    - Configuration: configuration.md
+    - Configuration: reference/configuration.md
+  - Routing:
+    - Routing: routing/routing.md
+    - Routing Examples: routing/routing-examples.md
+    - Request Flow: routing/request-flow.md
+    - Lanes: routing/lanes.md
+    - Policies: routing/policies.md
   - Reference:
-    - API: api.md
-    - Architecture: architecture.md
-    - Request Flow: request-flow.md
-    - Policies: policies.md
-  - Operations:
-    - Observability: observability.md
-    - Troubleshooting: troubleshooting.md
-  - Project:
-    - Roadmap: roadmap.md
+    - API: reference/api.md
+  - Operate:
+    - Observability: operate/observability.md
+    - Troubleshooting: operate/troubleshooting.md
+    - Stability: operate/stability.md
+  - System:
+    - Architecture: system/architecture.md
+    - Roadmap: system/roadmap.md
 
 markdown_extensions:
   - admonition

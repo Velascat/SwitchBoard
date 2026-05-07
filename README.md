@@ -121,8 +121,8 @@ see **[docs/quickstart.md](docs/quickstart.md)**.
 | `.env` | Service binding, log level, file paths |
 
 Each config file is heavily commented. For a first-time walkthrough see
-**[docs/configuration.md](docs/configuration.md)**. For the lane-policy schema see
-**[docs/policies.md](docs/policies.md)**.
+**[docs/reference/configuration.md](docs/reference/configuration.md)**. For the lane-policy schema see
+**[docs/routing/policies.md](docs/routing/policies.md)**.
 
 ---
 
@@ -134,7 +134,7 @@ Each config file is heavily commented. For a first-time walkthrough see
 | `POST` | `/route` | Canonical `TaskProposal -> LaneDecision` selection |
 | `POST` | `/route-plan` | Full primary/fallback/escalation routing plan |
 
-Full endpoint reference: **[docs/api.md](docs/api.md)**
+Full endpoint reference: **[docs/reference/api.md](docs/reference/api.md)**
 
 ---
 
@@ -179,8 +179,8 @@ explanation = selector.explain(proposal)     # for logging/audit
 issues = selector.validate_policy()          # [] = policy is valid
 ```
 
-See **[docs/routing.md](docs/routing.md)** for the full routing architecture and
-**[docs/routing-examples.md](docs/routing-examples.md)** for concrete routing examples.
+See **[docs/routing/routing.md](docs/routing/routing.md)** for the full routing architecture and
+**[docs/routing/routing-examples.md](docs/routing/routing-examples.md)** for concrete routing examples.
 
 ---
 
@@ -227,17 +227,17 @@ See **[WorkStation/docs/architecture/routing/routing-fallback-escalation.md](htt
 
 | Document | Audience |
 |----------|----------|
-| [docs/routing.md](docs/routing.md) | Integrator / policy author (Phase 4) |
-| [docs/routing-examples.md](docs/routing-examples.md) | Policy author / debugger |
+| [docs/routing/routing.md](docs/routing/routing.md) | Integrator / policy author (Phase 4) |
+| [docs/routing/routing-examples.md](docs/routing/routing-examples.md) | Policy author / debugger |
 | [docs/quickstart.md](docs/quickstart.md) | First-time user |
-| [docs/configuration.md](docs/configuration.md) | First-time operator |
-| [docs/architecture.md](docs/architecture.md) | Contributor / deep dive |
-| [docs/request-flow.md](docs/request-flow.md) | Contributor / integrator |
-| [docs/api.md](docs/api.md) | Integrator |
-| [docs/observability.md](docs/observability.md) | Operator |
-| [docs/troubleshooting.md](docs/troubleshooting.md) | Operator |
-| [docs/policies.md](docs/policies.md) | Policy author |
-| [docs/stability.md](docs/stability.md) | Evaluator |
+| [docs/reference/configuration.md](docs/reference/configuration.md) | First-time operator |
+| [docs/system/architecture.md](docs/system/architecture.md) | Contributor / deep dive |
+| [docs/routing/request-flow.md](docs/routing/request-flow.md) | Contributor / integrator |
+| [docs/reference/api.md](docs/reference/api.md) | Integrator |
+| [docs/operate/observability.md](docs/operate/observability.md) | Operator |
+| [docs/operate/troubleshooting.md](docs/operate/troubleshooting.md) | Operator |
+| [docs/routing/policies.md](docs/routing/policies.md) | Policy author |
+| [docs/operate/stability.md](docs/operate/stability.md) | Evaluator |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor |
 
 Cross-repo architecture (component roles, ADRs, glossary):

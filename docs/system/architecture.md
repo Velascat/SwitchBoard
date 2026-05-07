@@ -19,4 +19,4 @@ TaskProposal -> SwitchBoard -> LaneDecision
 - `POST /route`
 - `POST /route-plan`
 
-See [README.md](../README.md) and [docs/routing.md](routing.md) for the current routing model.
+See [README.md](../README.md) and [docs/routing/routing.md](../routing/routing.md) for the current routing model.

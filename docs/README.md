@@ -1,40 +1,46 @@
 # SwitchBoard Documentation
 
 Index for the `docs/` tree. The README covers what SwitchBoard is and the
-execution-lane model; this directory holds API reference, configuration
-detail, runtime behaviour, and historical migration notes.
+execution-lane model; this directory is subgrouped by concern: `routing/`,
+`reference/`, `operate/`, `system/`, `history/`.
 
 ## Get started
 
 - [quickstart.md](quickstart.md) — Install, configure, start, smoke-test.
 
-## Architecture
+## Routing
 
-- [architecture.md](architecture.md) — Internal structure, layers, data flow.
-- [request-flow.md](request-flow.md) — Lifecycle of a routing request from
-  ingress to `LaneDecision`.
+- [routing/routing.md](routing/routing.md) — Routing algorithm in depth.
+- [routing/routing-examples.md](routing/routing-examples.md) — Worked examples
+  of policy outcomes.
+- [routing/request-flow.md](routing/request-flow.md) — Lifecycle of a routing
+  request from ingress to `LaneDecision`.
+- [routing/lanes.md](routing/lanes.md) — Per-lane behaviour: claude_cli,
+  codex_cli, aider_local.
+- [routing/policies.md](routing/policies.md) — Routing policy schema and
+  evaluation order.
 
-## Configuration
+## Reference
 
-- [configuration.md](configuration.md) — Config keys and environment variables.
-- [policies.md](policies.md) — Routing policy schema and evaluation order.
-- [routing.md](routing.md) — Routing algorithm in depth.
-- [routing-examples.md](routing-examples.md) — Worked examples of policy outcomes.
-- [lanes.md](lanes.md) — Per-lane behaviour: claude_cli, codex_cli, aider_local.
-
-## API
-
-- [api.md](api.md) — HTTP surface: endpoints, request/response shapes, errors.
+- [reference/api.md](reference/api.md) — HTTP surface: endpoints,
+  request/response shapes, errors.
+- [reference/configuration.md](reference/configuration.md) — Config keys
+  and environment variables.
 
 ## Operate
 
-- [observability.md](observability.md) — Logs, metrics, decision audit trail.
-- [stability.md](stability.md) — Adaptive demotion behaviour and tuning.
-- [troubleshooting.md](troubleshooting.md) — Common failures and how to diagnose.
+- [operate/observability.md](operate/observability.md) — Logs, metrics,
+  decision audit trail.
+- [operate/troubleshooting.md](operate/troubleshooting.md) — Common failures
+  and how to diagnose.
+- [operate/stability.md](operate/stability.md) — Adaptive demotion behaviour
+  and tuning.
 
-## Roadmap
+## System
 
-- [roadmap.md](roadmap.md) — Planned work, out-of-scope items.
+- [system/architecture.md](system/architecture.md) — Internal structure,
+  layers, data flow.
+- [system/roadmap.md](system/roadmap.md) — Planned work, out-of-scope items.
 
 ## History
 

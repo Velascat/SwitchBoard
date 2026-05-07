@@ -194,4 +194,4 @@ Assignment is deterministic: the same `X-Request-ID` always lands in the same bu
 Check `GET /admin/decisions/recent` to see which rule triggered for recent requests.
 Each decision record includes `rule_name` — if it shows `"fallback"`, no rule matched.
 
-See [troubleshooting.md](troubleshooting.md) for more.
+See [troubleshooting.md](../operate/troubleshooting.md) for more.

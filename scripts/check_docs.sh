@@ -24,14 +24,14 @@ echo ""
 
 # Docs referenced from README
 check_file "docs/quickstart.md"
-check_file "docs/configuration.md"
-check_file "docs/architecture.md"
-check_file "docs/api.md"
-check_file "docs/observability.md"
-check_file "docs/troubleshooting.md"
-check_file "docs/policies.md"
-check_file "docs/stability.md"
-check_file "docs/roadmap.md"
+check_file "docs/reference/configuration.md"
+check_file "docs/system/architecture.md"
+check_file "docs/reference/api.md"
+check_file "docs/operate/observability.md"
+check_file "docs/operate/troubleshooting.md"
+check_file "docs/routing/policies.md"
+check_file "docs/operate/stability.md"
+check_file "docs/system/roadmap.md"
 check_file "CONTRIBUTING.md"
 
 # Config templates
