@@ -26,6 +26,15 @@ ExecutorRuntime).
 
 ---
 
+## What SwitchBoard Is
+
+- Policy-driven lane selection from a declarative `config/policy.yaml`
+- Hot-reloadable routing — edits apply without redeploy
+- Adaptive demotion of unhealthy lanes based on observed error rate / latency
+- Full audit trail of every lane-selection decision
+- HTTP service exposing `LaneDecision` for OperationsCenter to consume
+- Stateless: no model hosting, no provider auth, no execution
+
 ## What SwitchBoard Is Not
 
 - **Not a provider proxy.** SwitchBoard does not forward HTTP requests to external
