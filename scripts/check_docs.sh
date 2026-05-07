@@ -44,7 +44,7 @@ check_file "scripts/smoke_test.sh"
 check_file "scripts/inspect.py"
 
 # Site
-check_file "docs/index.md"
+check_file "docs/README.md"
 check_file "mkdocs.yml"
 check_file ".github/workflows/docs.yml"
 check_file ".github/workflows/ci.yml"
