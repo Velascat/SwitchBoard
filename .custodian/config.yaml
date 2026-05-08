@@ -7,6 +7,9 @@ tests_root: test
 # `_custodian/` overlay layer (see OperationsCenter for a worked example).
 
 audit:
+  cross_repo:
+    platform_manifest_repo: ../PlatformManifest
+
   exclude_paths:
     D1:
       # get_tracer is a public OTEL-compatible API, intentionally dead until
