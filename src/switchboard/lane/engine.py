@@ -92,8 +92,9 @@ class LaneSelector:
                               ``"neutral"``, ``"promote"``, or ``None`` if no
                               signal is available. When a rule's lane is
                               demoted, the rule is treated like an excluded
-                              backend: skipped, recorded as an alternative,
-                              and selection continues. ``None`` (the default)
+                              backend candidate: skipped, recorded as an
+                              alternative, and selection continues.
+                              ``None`` (the default)
                               disables health-aware routing entirely — same
                               behaviour as before this hook landed.
         """

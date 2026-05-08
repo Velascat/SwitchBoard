@@ -45,6 +45,37 @@ audit:
       - src/switchboard/ports/decision_sink.py
       - src/switchboard/services/adjustment_store.py
       - src/switchboard/services/decision_logger.py
+      - src/switchboard/lane/catalog_advisor.py
+      - src/switchboard/ports/executor_catalog.py
+    T6:
+      # FastAPI API layer + adapters + observability — exercised via TestClient
+      # and CxRP emission tests, not by name-import.
+      - "src/switchboard/api/**"
+      - "src/switchboard/adapters/**"
+      - "src/switchboard/observability/**"
+      - "src/switchboard/ports/**"
+      - "src/switchboard/services/**"
+      - src/switchboard/app.py
+      - src/switchboard/lane/explain.py
+      - src/switchboard/lane/policy.py
+      - src/switchboard/lane/catalog_advisor.py
+      - src/switchboard/domain/capability_model.py
+    T7:
+      - "src/switchboard/api/**"
+      - "src/switchboard/adapters/**"
+      - "src/switchboard/observability/**"
+      - "src/switchboard/ports/**"
+      - "src/switchboard/services/**"
+      - "src/switchboard/lane/**"
+      - "src/switchboard/domain/**"
+      - "src/switchboard/config/**"
+      - src/switchboard/app.py
+  # K1 phantoms in routing policy docs: `complexity`, `profile_b`,
+  # `split_percent` are routing-policy vocabulary, not Python symbols.
+  common_words:
+    - complexity
+    - profile_b
+    - split_percent
 
 tools:
   ruff: true
