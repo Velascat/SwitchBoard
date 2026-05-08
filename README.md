@@ -57,6 +57,10 @@ ExecutorRuntime).
 
 ---
 
+## Architecture
+
+SwitchBoard is a thin policy boundary: requests come in, a lane is selected from `config/policy.yaml`, and an `ExecutionRequest` envelope routes downstream to the chosen runner. The lane catalog is fixed (see **Execution Lanes** below); cost/quality tradeoffs are config edits, not code changes. Configuration loads from `config/policy.yaml` + environment overlays — see the **Configuration** and **API** sections later for the full surface.
+
 ## Execution Lanes
 
 | Lane | Runner | Auth | Cost |
