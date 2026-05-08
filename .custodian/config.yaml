@@ -49,3 +49,15 @@ audit:
 tools:
   ruff: true
   vulture: true
+
+# ---------------------------------------------------------------------------
+# Privacy / boundary enforcement (Custodian B-class)
+# ---------------------------------------------------------------------------
+# Names listed here cause Custodian B1 to fail any tracked file that
+# mentions them. Default excludes (.console/**, config/managed_repos/local/**,
+# docs/history/**, tools/audit/report/**, .custodian/config.yaml itself)
+# spare operator-private and historical surfaces.
+privacy:
+  private_repo_names:
+    - VideoFoundry
+    - videofoundry
