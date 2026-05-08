@@ -92,6 +92,9 @@ secrets/
 # Live config (copy from *.example.* to use locally)
 config/*.yaml
 !config/*.example.yaml
+# policy.yaml is the shared default routing policy — tracked intentionally.
+# Override at runtime via SWITCHBOARD_POLICY_PATH env var.
+!config/policy.yaml
 
 # Hatch
 .hatch/
