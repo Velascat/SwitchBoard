@@ -70,6 +70,12 @@ audit:
       - "src/switchboard/domain/**"
       - "src/switchboard/config/**"
       - src/switchboard/app.py
+    D11:
+      # routes_admin enable/disable/reset is the standard CRUD trio.
+      # lane/escalation + lane/fallback both implement evaluate() — strategy
+      # pattern, intentional shape similarity.
+      - src/switchboard/api/routes_admin.py
+      - "src/switchboard/lane/**"
   # K1 phantoms in routing policy docs: `complexity`, `profile_b`,
   # `split_percent` are routing-policy vocabulary, not Python symbols.
   common_words:
