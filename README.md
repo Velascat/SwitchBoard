@@ -57,6 +57,34 @@ ExecutorRuntime).
 
 ---
 
+## Quick Start
+
+**Prerequisites:** Python 3.11+. No other services required for local dev/test.
+
+```bash
+# 1. Clone and install
+git clone https://github.com/Velascat/SwitchBoard
+cd SwitchBoard
+python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+
+# 2. Configure
+cp .env.example .env
+# Edit .env — see .env.example for all available variables
+
+# 3. Start
+bash scripts/run_dev.sh
+
+# 4. Verify
+bash scripts/smoke_test.sh
+```
+
+For a detailed walkthrough including verification steps and the first real request,
+see **[docs/quickstart.md](docs/quickstart.md)**.
+
+---
+
 ## Architecture
 
 SwitchBoard is a thin policy boundary: requests come in, a lane is selected from `config/policy.yaml`, and an `ExecutionRequest` envelope routes downstream to the chosen runner. The lane catalog is fixed (see **Execution Lanes** below); cost/quality tradeoffs are config edits, not code changes. Configuration loads from `config/policy.yaml` + environment overlays — see the **Configuration** and **API** sections later for the full surface.
@@ -86,34 +114,6 @@ into a single, testable, hot-reloadable policy.
   unhealthy lanes every 5 minutes
 - **Full audit trail** — every lane-selection decision is logged for debugging and
   analysis
-
----
-
-## Quick Start
-
-**Prerequisites:** Python 3.11+. No other services required for local dev/test.
-
-```bash
-# 1. Clone and install
-git clone https://github.com/Velascat/SwitchBoard
-cd SwitchBoard
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-
-# 2. Configure
-cp .env.example .env
-# Edit .env — see .env.example for all available variables
-
-# 3. Start
-bash scripts/run_dev.sh
-
-# 4. Verify
-bash scripts/smoke_test.sh
-```
-
-For a detailed walkthrough including verification steps and the first real request,
-see **[docs/quickstart.md](docs/quickstart.md)**.
 
 ---
 
