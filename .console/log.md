@@ -38,3 +38,7 @@ truth; pre-push catches regressions before they hit GitHub.
 ## 2026-05-10 — Custodian pre-push command resolution
 
 - Updated the pre-push guard to prefer system `custodian-multi`, with repo venv and sibling Custodian venv fallbacks.
+
+## 2026-05-10 — GitHub Pages owner URL migration
+
+- Updated the MkDocs `site_url` from the old GitHub Pages owner URL to `https://protocolwarden.github.io/SwitchBoard/`.
