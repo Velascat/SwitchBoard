@@ -46,3 +46,11 @@ truth; pre-push catches regressions before they hit GitHub.
 ## 2026-05-13 — Custodian audit cleanup (phase 1)
 
 - RUFF: fixed import sorting (I001) and modernised str+Enum to StrEnum (UP042) across contracts/enums.py and api/routes_routing.py, adapters/cxrp_mapper.py, contracts/common.py, contracts/proposal.py, contracts/routing.py, lane/catalog_advisor.py.
+
+## 2026-05-13 — Contracts test coverage (custodian audit phase 2)
+
+- Added per-module contract tests in `test/unit/switchboard/contracts/`: `test_enums.py` (7), `test_common.py` (13), `test_proposal.py` (7), `test_routing.py` (6) — 33 tests total, all pass.
+- Added `test/unit/switchboard/__init__.py` and `test/unit/switchboard/contracts/__init__.py` (empty).
+- Removed old consolidated `test/unit/test_contracts.py`.
+- Updated `.custodian/config.yaml`: removed contracts/ from T1/T6/T7 exclusions; updated deferred-test comments.
+- custodian audit: 0 T1/T6/T7 findings (1 pre-existing RUFF path ghost unrelated to this change).
