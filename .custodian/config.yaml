@@ -10,6 +10,30 @@ audit:
   cross_repo:
     platform_manifest_repo: ../PlatformManifest
 
+  # F3-exempt: contracts/ Pydantic fields consumed by external callers via
+  # serialisation/deserialisation, not dot-accessed inside this repo.
+  f3_exempt:
+    - allowed_base_branches
+    - allowed_paths
+    - branch_policy
+    - branch_prefix
+    - commands
+    - constraints
+    - constraints_text
+    - fail_fast
+    - max_changed_files
+    - priority
+    - risk_level
+    - execution_mode
+    - open_pr
+    - proposed_at
+    - proposer
+    - push_on_success
+    - require_clean_validation
+    - skip_baseline_validation
+    - timeout_seconds
+    - validation_profile
+
   exclude_paths:
     D1:
       # get_tracer is a public OTEL-compatible API, intentionally dead until
@@ -18,6 +42,8 @@ audit:
       - src/switchboard/observability/tracing.py
       - src/switchboard/api/errors.py
     T1:
+      # contracts/ models are new — unit tests are planned (Ticket 4).
+      - "src/switchboard/contracts/**"
       # FastAPI API layer: route handlers and response models are tested via
       # HTTP (TestClient/AsyncClient) rather than direct function calls, so
       # symbol names never appear in test files even when routes are covered.
@@ -51,6 +77,8 @@ audit:
       - src/switchboard/lane/catalog_advisor.py
       - src/switchboard/ports/executor_catalog.py
     T6:
+      # contracts/ modules are new — unit tests are planned (Ticket 4).
+      - "src/switchboard/contracts/**"
       # FastAPI API layer + adapters + observability — exercised via TestClient
       # and CxRP emission tests, not by name-import.
       - "src/switchboard/api/**"
@@ -64,6 +92,8 @@ audit:
       - src/switchboard/lane/catalog_advisor.py
       - src/switchboard/domain/capability_model.py
     T7:
+      # contracts/ modules are new — unit tests are planned (Ticket 4).
+      - "src/switchboard/contracts/**"
       - "src/switchboard/api/**"
       - "src/switchboard/adapters/**"
       - "src/switchboard/observability/**"
