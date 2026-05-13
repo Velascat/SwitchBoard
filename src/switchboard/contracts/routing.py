@@ -8,8 +8,7 @@ The cxrp_mapper translates this into the CxRP envelope at the API boundary.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -17,7 +16,7 @@ from .enums import BackendName, LaneName
 
 
 def _utcnow() -> datetime:
-    return datetime.now(tz=timezone.utc)
+    return datetime.now(tz=UTC)
 
 
 def _new_id() -> str:
@@ -32,11 +31,11 @@ class LaneDecision(BaseModel):
     selected_backend: BackendName = Field(description="Backend within the lane")
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
 
-    policy_rule_matched: Optional[str] = Field(default=None)
-    rationale: Optional[str] = Field(default=None)
+    policy_rule_matched: str | None = Field(default=None)
+    rationale: str | None = Field(default=None)
     alternatives_considered: list[LaneName] = Field(default_factory=list)
 
     decided_at: datetime = Field(default_factory=_utcnow)
-    switchboard_version: Optional[str] = Field(default=None)
+    switchboard_version: str | None = Field(default=None)
 
     model_config = {"frozen": True}

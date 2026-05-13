@@ -3,8 +3,6 @@
 """Shared value objects embedded in SwitchBoard's TaskProposal."""
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -18,7 +16,7 @@ class TaskTarget(BaseModel):
 
 
 class ExecutionConstraints(BaseModel):
-    max_changed_files: Optional[int] = Field(default=None)
+    max_changed_files: int | None = Field(default=None)
     timeout_seconds: int = Field(default=300, ge=1)
     allowed_paths: list[str] = Field(default_factory=list)
     require_clean_validation: bool = Field(default=True)

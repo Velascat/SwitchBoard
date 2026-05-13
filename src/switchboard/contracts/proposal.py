@@ -9,8 +9,7 @@ by convention — a mismatch surfaces as an integration test failure.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -19,7 +18,7 @@ from .enums import ExecutionMode, Priority, RiskLevel, TaskType
 
 
 def _utcnow() -> datetime:
-    return datetime.now(tz=timezone.utc)
+    return datetime.now(tz=UTC)
 
 
 def _new_id() -> str:
@@ -34,7 +33,7 @@ class TaskProposal(BaseModel):
     task_type: TaskType = Field(description="Broad category of the proposed work")
     execution_mode: ExecutionMode = Field(description="Execution strategy for the run")
     goal_text: str = Field(description="Natural-language description of what to accomplish")
-    constraints_text: Optional[str] = Field(default=None)
+    constraints_text: str | None = Field(default=None)
 
     target: TaskTarget = Field(description="Repository and branch context")
 
@@ -47,7 +46,7 @@ class TaskProposal(BaseModel):
     branch_policy: BranchPolicy = Field(default_factory=BranchPolicy)
 
     proposed_at: datetime = Field(default_factory=_utcnow)
-    proposer: Optional[str] = Field(default=None)
+    proposer: str | None = Field(default=None)
     labels: list[str] = Field(default_factory=list)
 
     model_config = {"frozen": True}

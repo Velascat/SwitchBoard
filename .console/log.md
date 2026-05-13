@@ -42,3 +42,7 @@ truth; pre-push catches regressions before they hit GitHub.
 ## 2026-05-10 — GitHub Pages owner URL migration
 
 - Updated the MkDocs `site_url` from the old GitHub Pages owner URL to `https://protocolwarden.github.io/SwitchBoard/`.
+
+## 2026-05-13 — Custodian audit cleanup (phase 1)
+
+- RUFF: fixed import sorting (I001) and modernised str+Enum to StrEnum (UP042) across contracts/enums.py and api/routes_routing.py, adapters/cxrp_mapper.py, contracts/common.py, contracts/proposal.py, contracts/routing.py, lane/catalog_advisor.py.

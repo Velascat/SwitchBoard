@@ -20,7 +20,6 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from switchboard.contracts import LaneDecision
-
 from switchboard.ports.executor_catalog import ExecutorCatalog
 
 

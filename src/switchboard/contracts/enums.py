@@ -11,10 +11,10 @@ surfaces as a test or integration failure, not a compile-time error.
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class TaskType(str, Enum):
+class TaskType(StrEnum):
     LINT_FIX = "lint_fix"
     BUG_FIX = "bug_fix"
     SIMPLE_EDIT = "simple_edit"
@@ -26,13 +26,13 @@ class TaskType(str, Enum):
     UNKNOWN = "unknown"
 
 
-class LaneName(str, Enum):
+class LaneName(StrEnum):
     CLAUDE_CLI = "claude_cli"
     CODEX_CLI = "codex_cli"
     AIDER_LOCAL = "aider_local"
 
 
-class BackendName(str, Enum):
+class BackendName(StrEnum):
     DIRECT_LOCAL = "direct_local"
     AIDER_LOCAL = "aider_local"
     KODO = "kodo"
@@ -42,20 +42,20 @@ class BackendName(str, Enum):
     DEMO_STUB = "demo_stub"
 
 
-class ExecutionMode(str, Enum):
+class ExecutionMode(StrEnum):
     GOAL = "goal"
     FIX_PR = "fix_pr"
     TEST_CAMPAIGN = "test_campaign"
     IMPROVE_CAMPAIGN = "improve_campaign"
 
 
-class RiskLevel(str, Enum):
+class RiskLevel(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
 
 
-class Priority(str, Enum):
+class Priority(StrEnum):
     LOW = "low"
     NORMAL = "normal"
     HIGH = "high"

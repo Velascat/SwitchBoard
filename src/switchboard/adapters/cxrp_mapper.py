@@ -20,6 +20,7 @@ from typing import Any
 from cxrp.contracts import LaneAlternative
 from cxrp.contracts import LaneDecision as CxrpLaneDecision
 from cxrp.vocabulary.lane import LaneType
+
 from switchboard.contracts import LaneDecision as SbLaneDecision
 
 _OC_LANE_TO_ECP_CATEGORY: dict[str, LaneType] = {

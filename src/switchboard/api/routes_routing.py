@@ -14,12 +14,12 @@ from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Header, Request
-from switchboard.contracts import LaneDecision, TaskProposal
 
 from switchboard.adapters.cxrp_mapper import (
     serialize_cxrp_lane_decision,
     to_cxrp_lane_decision,
 )
+from switchboard.contracts import LaneDecision, TaskProposal
 from switchboard.domain.decision_record import DecisionRecord
 from switchboard.lane.catalog_advisor import advise as catalog_advise
 from switchboard.lane.routing import RoutingPlan
