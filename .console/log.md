@@ -61,3 +61,8 @@ truth; pre-push catches regressions before they hit GitHub.
 - Added CLAUDE.md to .gitignore
 - Added .custodian/tmp*.yaml to .gitignore
 - Deleted stale .custodian/tmpdcawiirf.yaml temp file
+
+## 2026-05-13 — Track .console source files
+
+- Fixed gitignore now exposes task.md, guidelines.md, backlog.md as trackable
+- These are source-of-truth session files; committing them into version control
