@@ -100,12 +100,19 @@ config/*.yaml
 .hatch/
 
 # OperatorConsole state
-.console/
-!.console/*.example*
+.console/*
+!.console/task.md
+!.console/guidelines.md
+!.console/backlog.md
+!.console/log.md
+CLAUDE.md
 .aider*
 
 # Custodian plugin directory (generated/managed by OpsCenter in managed repos)
 _custodian/
+
+# Custodian temp configs (written during audit runs, not source)
+.custodian/tmp*.yaml
 
 # Warehouse data (generated artifacts gitignored via .warehouse/yard/*/.gitignore)
 .warehouse/yard/

@@ -54,3 +54,10 @@ truth; pre-push catches regressions before they hit GitHub.
 - Removed old consolidated `test/unit/test_contracts.py`.
 - Updated `.custodian/config.yaml`: removed contracts/ from T1/T6/T7 exclusions; updated deferred-test comments.
 - custodian audit: 0 T1/T6/T7 findings (1 pre-existing RUFF path ghost unrelated to this change).
+
+## 2026-05-13 — Fix .gitignore console policy
+
+- Changed .console/ (blanket) to .console/* with !.console/{task,guidelines,backlog,log}.md exceptions
+- Added CLAUDE.md to .gitignore
+- Added .custodian/tmp*.yaml to .gitignore
+- Deleted stale .custodian/tmpdcawiirf.yaml temp file
